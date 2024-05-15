@@ -53,4 +53,15 @@ public class MemberService {
 	public MemberDTO getInfo(String id) {
 		return mdao.selectOne(id);
 	}
+	
+	public String follow(String memberId, int influencerNo) {
+		int result = mdao.checkAlready(memberId, influencerNo);
+		if(result == 1) {
+			return "already";
+		}
+		else {
+			mdao.follow(memberId, influencerNo);
+			return "success";
+		}
+	}
 }

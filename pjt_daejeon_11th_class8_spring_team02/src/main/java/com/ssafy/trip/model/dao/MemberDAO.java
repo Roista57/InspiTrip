@@ -3,6 +3,7 @@ package com.ssafy.trip.model.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.ssafy.trip.model.dto.InfluencerDTO;
 import com.ssafy.trip.model.dto.MemberDTO;
 
 @Mapper
@@ -14,5 +15,6 @@ public interface MemberDAO {
 	MemberDTO idCheck(String memberId);
 	
 	MemberDTO selectOne(String memberId);
-	
+	int checkAlready(@Param("mid")String memberId, @Param("ino") int influencerNo);
+	int follow(@Param("mid")String memberId, @Param("ino") int influencerNo);
 }

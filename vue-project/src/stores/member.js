@@ -2,20 +2,18 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { method } from "lodash";
 
 const { VITE_VUE_API_URL } = import.meta.env;
 
 export const useMemberStore = defineStore("member", () => {
   const router = useRouter();
   const token = ref("");
-<<<<<<< HEAD
 
   const isLogin = ref(false);
 
-=======
   const imageFile = ref(); // 이미지 파일 저장하는 변수
   const idCheckState = ref("fail"); // 아이디의 중복을 체크하는 변수
->>>>>>> 936b4ee109944a0ae660aa58f1a32a3f10d204e5
   const member = ref({
     id: null,
     pw: null,
@@ -26,19 +24,39 @@ export const useMemberStore = defineStore("member", () => {
     img: null,
   });
 
+  const follow = (ino) =>{
+    if(isLogin.value){
+      axios({
+        url:VITE_VUE_API_URL+`member/follow/${member.value.id}/${ino}`,
+        method:"POST",
+        headers: { Authorization: `Bearer ${token.value}` },
+      })
+      .then((resp)=>resp.data).then(data=>{
+        console.log(data)
+        if(data=="already"){
+          window.alert("이미 팔로우 하셨습니다")
+        }
+        else if(data == "success"){
+          window.alert("팔로우 완료!")
+        }
+      })
+    }
+
+  }
+
   const uploadImage = async () => {
     console.log("uploadImage >> " + imageFile.value);
     const formData = new FormData();
     if (imageFile != null) {
       formData.append("image", imageFile.value);
-      await fetch("http://localhost:3000/upload", {
+      await fetch("http://localhost:3000/upload/member", {
         method: "POST",
         body: formData,
       })
         .then((response) => response.text())
         .then((data) => {
           console.log("Success:", data);
-          member.value.img = `http://localhost:3000/uploads/${data}`;
+          member.value.img = `http://localhost:3000/member/${data}`;
           console.log("uploadImage >> " + member.value);
         })
         .catch((error) => {
@@ -189,5 +207,6 @@ export const useMemberStore = defineStore("member", () => {
     idCheckMember,
     idCheckState,
     imageFile,
+    follow
   };
 });

@@ -93,6 +93,13 @@ public class MemberController {
 		return "fail"; // 아이디 중복됨
 	}
 
+	@PostMapping("/follow/{memberId}/{influencerNo}")
+	@Operation(summary = "팔로우기능", description = "유저가 해당 인플루언서를 팔로우합니다.")
+	public String follow(@PathVariable("memberId") String memberId, @PathVariable("influencerNo") int influencerNo) {
+		String result = mservice.follow(memberId, influencerNo);
+		return result;
+	}
+
 	@PostMapping("/info/{memberId}")
 	@Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
 	public MemberDTO info(@PathVariable("memberId") String memberId) {

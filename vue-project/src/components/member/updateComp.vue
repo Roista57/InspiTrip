@@ -89,7 +89,7 @@ const cancel = () => {
             type="radio"
             class="form-check-input"
             name="gender"
-            value="1"
+            value="m"
             v-model="memberStore.member.gender"
           />남자
           <label class="form-check-label"></label>
@@ -99,7 +99,7 @@ const cancel = () => {
             type="radio"
             class="form-check-input"
             name="gender"
-            value="2"
+            value="f"
             v-model="memberStore.member.gender"
           />여자
           <label class="form-check-label"></label>

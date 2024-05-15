@@ -1,58 +1,62 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const cors = require("cors");
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const multer = require('multer');
+
 const app = express();
 const PORT = 3000;
 
-function formatDate(date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // 1을 더하는 이유는 getMonth()가 0부터 시작하기 때문
-  const day = date.getDate().toString().padStart(2, "0");
-  return `${year}${month}${day}`;
-}
-
-function generateRandomNumber(length) {
-  let randomNumber = "";
-  for (let i = 0; i < length; i++) {
-    randomNumber += Math.floor(Math.random() * 10); // 0부터 9까지의 숫자를 생성
-  }
-  return randomNumber;
-}
-
-// 디렉토리 설정 및 확인
-const uploadDir = "./public/uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const currentDate = new Date();
-    const formattedDate = formatDate(currentDate);
-    const randomEightDigitNumber = generateRandomNumber(8);
-    const fileExtension = path.extname(file.originalname); // 파일 확장자 추출
-    const newFileName = `${formattedDate}-${randomEightDigitNumber}${fileExtension}`; // 새로운 파일명 생성
-    cb(null, newFileName); // 새로운 파일명 사용
-  },
-});
-
-const upload = multer({ storage: storage });
-
+// CORS 설정
 app.use(cors());
-app.use(express.static("public"));
 
-app.post("/upload", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("");
-  }
-  res.send(`${req.file.filename}`); // 새로운 파일명을 응답에 사용
+// 이미지 업로드를 위한 multer 설정
+const upload = multer({ dest: 'uploads/' });
+
+// 이미지 업로드를 처리하는 엔드포인트
+app.post('/upload/:folder', upload.single('image'), (req, res) => {
+    const folder = req.params.folder;
+    
+    // 요청으로부터 이미지 파일을 받음
+    const imageFile = req.file;
+    
+    if (!imageFile) {
+        return res.status(400).send('No image uploaded');
+    }
+    
+    const imageName = Math.random().toString(36).substring(7) + path.extname(imageFile.originalname);
+    const uploadPath = `./uploads/${folder}`;
+
+    // 폴더가 없는 경우 폴더 생성
+    if (!fs.existsSync(uploadPath)){
+        fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    
+    // 이미지를 서버에 저장
+    fs.renameSync(imageFile.path, `${uploadPath}/${imageName}`);
+    
+    // 저장된 이미지 파일 이름을 응답으로 보냄
+    res.send(imageName);
 });
 
+// 이미지를 제공하는 엔드포인트
+app.get('/:folder/:filename', (req, res) => {
+    const folder = req.params.folder;
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, `./uploads/${folder}/${filename}`);
+    
+    // 파일이 존재하는지 확인
+    fs.exists(filePath, (exists) => {
+        if (exists) {
+            // 파일을 스트림으로 응답에 보냄
+            res.sendFile(filePath);
+        } else {
+            res.status(404).send('File not found');
+        }
+    });
+});
+
+// 서버 시작
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });

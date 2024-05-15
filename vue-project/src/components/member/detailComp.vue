@@ -19,9 +19,9 @@ const update = computed(() => {
 
 const gender = computed(() => {
   if (memberStore.member.gender == "m") {
-    memberStore.member.gender = "1";
+    return "1";
   } else {
-    memberStore.member.gender = "2";
+    return "2";
   }
 });
 </script>
@@ -80,7 +80,7 @@ const gender = computed(() => {
             class="form-check-input"
             name="gender"
             value="1"
-            :v-model="gender"
+            v-model="gender"
           />남자
           <label class="form-check-label"></label>
         </div>
@@ -90,7 +90,7 @@ const gender = computed(() => {
             class="form-check-input"
             name="gender"
             value="2"
-            :v-model="gender"
+            v-model="gender"
           />여자
           <label class="form-check-label"></label>
         </div>
@@ -106,10 +106,16 @@ const gender = computed(() => {
         />
       </div>
       <div class="input-groupt">
-        <img :src="memberStore.member.img" alt="없어요" style="width: 100px; height: 100px" />
+        <img
+          :src="memberStore.member.img"
+          alt="없어요"
+          style="width: 100px; height: 100px"
+        />
       </div>
       <div>
-        <button type="button" class="btn btn-outline-success" @click="update">수정하기</button>
+        <button type="button" class="btn btn-outline-success" @click="update">
+          수정하기
+        </button>
         <button type="button" class="btn btn-outline-danger">삭제하기</button>
       </div>
     </form>
