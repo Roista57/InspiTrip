@@ -1,0 +1,56 @@
+package com.ssafy.trip.model.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ssafy.trip.model.dao.MemberDAO;
+import com.ssafy.trip.model.dto.MemberDTO;
+
+@Service
+public class MemberService {
+	@Autowired
+	private MemberDAO mdao;
+
+	// 회원 가입
+	public boolean memberInsert(MemberDTO memberDTO) {
+		if (mdao.insert(memberDTO) == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	// 회원 정보 수정
+	public boolean memberUpdate(MemberDTO memberDTO) {
+		if (mdao.update(memberDTO) == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	// 회원 탙퇴
+	public boolean memberDelete(MemberDTO memberDTO) {
+		if (mdao.delete(memberDTO) == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	// 회원 로그인
+	public MemberDTO login(String memberId, String memberPw) {
+		if (mdao.login(memberId, memberPw) == null)
+			return null;
+		return getInfo(memberId);
+	}
+
+	// 아이디 중복 확인
+	public boolean idCheck(String memberId) {
+		if (mdao.idCheck(memberId) != null) {
+			return false; // 아이디 사용할 수 없음
+		}
+		return true; // 아이디 사용 가능
+	}
+
+	public MemberDTO getInfo(String id) {
+		return mdao.selectOne(id);
+	}
+}

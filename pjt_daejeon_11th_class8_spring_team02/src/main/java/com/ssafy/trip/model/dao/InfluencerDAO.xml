@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.trip.model.dao.InfluencerDAO">
+	<select id="selectOne">
+		select *
+		from influencers
+		where no = #{no}
+	</select>
+
+	<select id="selectAll">
+		select *
+		from influencers
+	</select>
+
+	<insert id="addTemp">
+		insert into influencers_temp(name, img, content, url)
+		values (#{name}, #{img}, #{content}, #{url})
+	</insert>
+
+	<insert id="acceptInfluencer">
+		insert into influencers(no, name, img, content, url)
+		values (#{no}, #{name}, #{img}, #{content}, #{url})
+	</insert>
+
+	<select id="selectTempOne">
+		select *
+		from influencers_temp
+		where no = #{no}
+	</select>
+
+	<delete id="deleteTemp">
+		delete from influencers_temp
+		where no = #{no}
+	</delete>
+
+	<insert id="addVisit">
+		insert into visits(mid, ino, ano, url)
+		values (#{mid},
+		#{ino}, #{ano}, #{url})
+	</insert>
+
+	<select id="selectList"
+		resultType="com.ssafy.trip.model.dto.VisitDTO">
+		select *
+		from visits
+		where ano = #{ano}
+	</select>
+</mapper>

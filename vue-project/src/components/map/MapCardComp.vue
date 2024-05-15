@@ -1,0 +1,160 @@
+<script setup>
+import { ref, watch } from "vue";
+import { usesidoGugunStore } from "@/stores/sidoGugun";
+import { useMarkerStore } from "@/stores/marker";
+
+const sidoGugun = usesidoGugunStore();
+const marker = useMarkerStore();
+
+const selectedType = ref(0);
+const selectedSido = ref("1");
+const selectedGugun = ref("1");
+
+const contentTypes = ref([
+  {
+    value: 0,
+    contentType: "전체",
+  },
+  {
+    value: 12,
+    contentType: "관광지",
+  },
+  {
+    value: 14,
+    contentType: "문화시설",
+  },
+  {
+    value: 15,
+    contentType: "축제공연행사",
+  },
+  {
+    value: 25,
+    contentType: "여행코스",
+  },
+  {
+    value: 28,
+    contentType: "레포츠",
+  },
+  {
+    value: 32,
+    contentType: "숙박",
+  },
+  {
+    value: 38,
+    contentType: "쇼핑",
+  },
+  {
+    value: 39,
+    contentType: "음식점",
+  },
+]);
+
+const searchSido = () => {
+  marker.getMarkerBySido(selectedSido.value, selectedGugun.value);
+};
+
+watch(selectedType, () => {
+  console.log(selectedType.value + "selected");
+  marker.selectedType = selectedType.value;
+}
+,{immediate:true});
+
+watch(
+  selectedSido,
+  () => {
+    console.log(selectedSido.value);
+    selectedGugun.value = 1;
+    sidoGugun.getGugun(selectedSido.value);
+  },
+  { immediate: true }
+);
+
+const select = (select) => {
+  marker.selectOne(select);
+};
+</script>
+
+<template>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-5">
+        <select
+          id="sido"
+          class="form-select"
+          aria-label="Default select example"
+          v-model="selectedSido"
+        >
+          <option
+            v-for="sido in sidoGugun.sido"
+            :key="sido.sidoCode"
+            :value="sido.sidoCode"
+          >
+            {{ sido.sidoName }}
+          </option>
+        </select>
+      </div>
+      <div class="col-5">
+        <select
+          id="sido"
+          class="form-select"
+          aria-label="Default select example"
+          v-model="selectedGugun"
+        >
+          <option
+            v-for="gugun in sidoGugun.gugun"
+            :key="gugun.gunguCode"
+            :value="gugun.gunguCode"
+          >
+            {{ gugun.gunguName }}
+          </option>
+        </select>
+      </div>
+      <div class="col-2">
+        <button @click="searchSido">검색</button>
+      </div>
+    </div>
+    <span class="m-1" v-for="content in contentTypes" :key="content.value">
+      <input
+        type="radio"
+        name="type"
+        :id="content.contentType"
+        :value="content.value"
+        v-model="selectedType"
+      />
+      <label :for="content.contentType">{{ content.contentType}} </label>
+    </span>
+    <div class="overflow-auto" style="max-width: 800px; max-height: 800px">
+      <div class="row d-flex justify-content-center" style="max-width: 720px">
+        <div
+          class="card col-5 m-3"
+          v-for="item in marker.markers"
+          :key="item.contentId"
+        >
+          <img
+            class="card-img-top mt-1"
+            :src="
+              (item.image =
+                item.image == '' ? 'src/assets/noImage.png' : item.image)
+            "
+            alt="Card image"
+            style="height: 200px"
+          />
+          <div class="card-body">
+            <h4 class="card-title">{{ item.title }}</h4>
+            <p class="card-text">{{ item.address }}</p>
+            <a
+              href="#"
+              class="btn btn-primary"
+              @click="select(item)"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              >See detail</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped></style>
