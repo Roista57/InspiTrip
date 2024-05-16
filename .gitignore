@@ -1,8 +1,5 @@
 /.metadata/
-<<<<<<< HEAD
 img.7z
-venv/
-.idea/
-=======
+youtube-crawling/venv/
+youtube-crawling/.idea/
 image-express/uploads/
->>>>>>> 731b81198df5530b111f7cb1dfa14d6b12dac6fe
