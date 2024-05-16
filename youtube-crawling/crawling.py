@@ -95,7 +95,7 @@ def get_influence_videos(influence):
                                   f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
                                   f", '{attr_info['latitude']}', '{attr_info['longitude']}')\n")
             except StaleElementReferenceException:
-                print(f"{element.get_attribute('href')} >> Element has become stale. Skipping.")
+                print(f"{url} >> Element has become stale. Skipping.")
             except NoSuchElementException:
                 print("Element no longer exists.")
             except TimeoutException:
