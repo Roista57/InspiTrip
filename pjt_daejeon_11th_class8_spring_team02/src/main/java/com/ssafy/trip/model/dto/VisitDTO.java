@@ -6,16 +6,20 @@ public class VisitDTO {
 	private int ino;
 	private int ano;
 	private String url;
+	private String iName;
+	private String iImg;
 
 	public VisitDTO() {
 	}
 
-	public VisitDTO(int no, String mid, int ino, int ano, String url) {
+	public VisitDTO(int no, String mid, int ino, int ano, String url, String iName, String iImg) {
 		this.no = no;
 		this.mid = mid;
 		this.ino = ino;
 		this.ano = ano;
 		this.url = url;
+		this.iName = iName;
+		this.iImg = iImg;
 	}
 
 	public int getNo() {
@@ -58,4 +62,21 @@ public class VisitDTO {
 		this.url = url;
 	}
 
+	public String getIName() {
+		return iName;
+	}
+
+	public void setIName(String iName) {
+		this.iName = iName;
+	}
+
+	public String getIImg() {
+		return iImg;
+	}
+
+	public void setIImg(String iImg) {
+		this.iImg = iImg;
+	}
+	
+	
 }
