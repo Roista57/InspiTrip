@@ -1,2 +1,4 @@
 /.metadata/
 img.7z
+venv/
+.idea/

@@ -7,30 +7,60 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, TimeoutException
 from tqdm import tqdm
 from openai import OpenAI
 import json
+from collections import Counter
+import mysql.connector
+from mysql.connector import Error
 import requests
 from bs4 import BeautifulSoup
 
+# Database configuration
+config = {
+    'host': 'localhost',
+    'user': 'ssafy',
+    'password': 'ssafy',
+    'database': 'mukbang'
+}
+
 client = OpenAI(
     # This is the default and can be omitted
-    api_key='sk-proj-sREvm3SAVX1OhED6vEonT3BlbkFJr1II370dgYddqy9ft98o',
+    # api_key='sk-proj-sREvm3SAVX1OhED6vEonT3BlbkFJr1II370dgYddqy9ft98o',
+    api_key='sk-proj-Xd6G750GNpD0VL2DcjmkT3BlbkFJ2gYvg7yLTGT7Sf0DCQxN'
 )
 
 # WebDriver 설정 (Chrome 사용)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
+attr_info = {
+    'content_type_id': 39,
+    'title': '',
+    'addr1': '',
+    'zipcode': '',
+    'tel': '',
+    'first_image': '',
+    'readcount': 0,
+    'sido_code': '',
+    'gugun_code': '',
+    'latitude': '',
+    'longitude': '',
+    'bookingUrl': '',
+}
 
-def get_influence_videos():
-    influence = '@tzuyang6145'
+attr_desc = {
+    'content_id': '',
+    'overview': '',
+}
+
+# influence를 매개변수로 받아 채널에 있는 모든 영상의 제목과 영상 링크를 가져옴
+def get_influence_videos(influence):
     channel = 'https://www.youtube.com'
 
     # 원하는 웹 페이지 열기
     driver.get(f"{channel}/{influence}/videos")
 
-    # Initialize the last position
     last_position = driver.execute_script("return window.pageYOffset;")
 
     while True:
@@ -47,13 +77,36 @@ def get_influence_videos():
     # 스크롤 완료 후 요소 찾기
     elements = driver.find_elements(By.CSS_SELECTOR, '#video-title-link')
 
-    with open(f"influence-{influence}.txt", "w", encoding='utf-8') as file:
+    with open(f"influence/{influence}.txt", "w", encoding='utf-8') as file:
         for element in tqdm(elements, desc="총 영상"):
             file.write(f"{element.get_attribute('title')} | {element.get_attribute('href')}\n")
 
-    time.sleep(10)
-    driver.quit()
+    file_path = f"influence/{influence}.txt"
+    with open(file_path, "r", encoding='utf-8') as file:
+        # Read and process each line in the file
+        for line in file:
+            # Each line contains the title and URL separated by " | "
+            title, url = line.strip().split(" | ")
+            try:
+                get_script(url)
+                with open("filelists.txt", "a", encoding='utf-8') as outfile:
+                    outfile.write(f"('{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
+                                  f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
+                                  f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
+                                  f", '{attr_info['latitude']}', '{attr_info['longitude']}')\n")
+            except StaleElementReferenceException:
+                print(f"{element.get_attribute('href')} >> Element has become stale. Skipping.")
+            except NoSuchElementException:
+                print("Element no longer exists.")
+            except TimeoutException:
+                print("Element loading timed out.")
+            except Exception as e:
+                print(e)
 
+    time.sleep(10)
+    # driver.quit()
+
+# 유튜브 영상 링크를 매개변수로 받아서 해당 영상의 스크립트를 읽어옴
 def get_script(url):
     driver.get(url)
     time.sleep(5)
@@ -71,6 +124,7 @@ def get_script(url):
     text = '\n'.join(element.text for element in elements)
     print(text)
 
+    # json_string = '{ "address": "서울특별시 종로구 성균관로 41 1층", "title": "명륜진사갈비"}'
     json_string = extract_store_details(text)
     print(json_string)
 
@@ -82,16 +136,20 @@ def get_script(url):
     get_address(query)
 
     time.sleep(1)
-    driver.quit()
+    # driver.quit()
 
 
+# 영상의 스크립트를 GPT-3.5를 이용해서 JSON 형식의 도로명 주소와 가게 이름을 추출
 def extract_store_details(text):
-    prompt = f"아래의 영상의 스크립트에서 도로명 주소와 가게 이름을 {{ address : 추출한 도로명 주소, title: 추출한 가게 이름}} JSON 형식으로 답변해주세요.\n{text}\n"
+    prompt = f"아래의 영상의 스크립트에서 도로명 주소와 가게 이름을 {{ address : 추출한 도로명 주소, title: 추출한 가게 이름}} JSON 형식으로 작성해주세요.\n{text}\n"
     completion = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}])
     return completion.choices[0].message.content
 
 
+# 도로명 주소와 가게 이름을 합쳐 네이버 블로그 검색 API를 이용해서 10개의 블로그 링크를 추출
+# 추출한 블로그 링크에 들어가 네이버 맵 API에 적용한 JSON 정보를 가져옴
 def get_address(text):
+    data_list = []
     client_id = "W7BNIP_PLwywT8bdWutH"
     client_secret = "tl301N72in"
     encText = urllib.parse.quote(text)
@@ -105,6 +163,7 @@ def get_address(text):
         response_body = response.read()
         data = json.loads(response_body.decode('utf-8'))
         items = data['items']
+
         for item in items:
             print(item['link'])
             driver.get(item['link'])
@@ -112,18 +171,123 @@ def get_address(text):
             try:
                 iframe = driver.find_element(By.TAG_NAME, 'iframe')
                 driver.switch_to.frame(iframe)
-
                 # html_content = driver.execute_script("return document.documentElement.outerHTML;")
                 # print(html_content)
                 map_info = driver.find_element(By.CSS_SELECTOR, 'div.se-module.se-module-map-text > a')
                 print(map_info.get_attribute('data-linkdata'))
+                data = json.loads(map_info.get_attribute('data-linkdata'))
+                data_list.append(f"{data['placeId']},{data['name']},{data['address']},{data['latitude']},{data['longitude']},{data['tel']},{data['bookingUrl']}")
+
             except NoSuchElementException:
                 print("해당 요소를 찾을 수 없습니다.")
+
+        # Counter 객체를 사용하여 데이터 카운팅
+        counter = Counter(data_list)
+
+        # 가장 많이 나타나는 데이터 찾기
+        most_common_data = counter.most_common(1)[0][0]
+        print(most_common_data)
+        split_common = most_common_data.split(',')
+
+        placeId = split_common[0]
+        attr_info['title'] = split_common[1]
+        attr_info['latitude'] = split_common[3]
+        attr_info['longitude'] = split_common[4]
+        attr_info['tel'] = split_common[5]
+        attr_info['bookingUrl'] = split_common[6]
+        get_map_info(placeId)
     else:
         print("Error Code:" + rescode)
 
-url = f"https://www.youtube.com/watch?v=qYKCtBTpPNc"
-get_script(url)
-# text = '용산구 한강대로 덕순루'
-# get_address(text)
+
+# 네이버 지도에 placeId를 입력하여 해당 가게에 대한 정보를 가져옵니다.
+def get_map_info(placeId):
+    url = f"https://map.naver.com/p/entry/place/{placeId}"
+    driver.get(url)
+    time.sleep(5)
+    try:
+        iframe = driver.find_element(By.ID, 'entryIframe')
+        driver.switch_to.frame(iframe)
+        driver.find_element(By.CSS_SELECTOR, '.PkgBl').click()
+        time.sleep(2)
+        elements = driver.find_elements(By.CSS_SELECTOR, '.vV_z_ > .Y31Sf > .nQ7Lh')
+        road_address = elements[0].text.replace('도로명', '').replace('복사', '')
+        time.sleep(2)
+        # html_content = driver.execute_script("return document.documentElement.outerHTML;")
+        # print(html_content)
+        time.sleep(1)
+        print("도로명 주소: "+road_address)
+        attr_info['addr1'] = road_address
+        print("지번: " + elements[1].text.replace('지번', '').replace('복사', ''))
+        export_zipcode = elements[2].text.replace('우편번호', '').replace('우', '').replace('복사', '').replace('\n', '')
+        print("우편번호: " + export_zipcode)
+        attr_info['zipcode'] = export_zipcode
+        get_google_image()
+        # time.sleep(1000)
+    except NoSuchElementException:
+        print("해당 요소를 찾을 수 없습니다.")
+    finally:
+        codes = get_codes_from_address(attr_info['addr1'])
+        print(codes)
+        print(attr_info)
+
+
+# 해당 가게에 대한 정보를 검색하여 가장 첫번째에 나오는 이미지를 가져옵니다.
+def get_google_image():
+    driver.get(f"https://www.google.co.kr/imghp?hl=ko&ogbl")
+    time.sleep(1)
+    driver.find_element(By.CSS_SELECTOR, '#APjFqb').send_keys(f"{attr_info['addr1']} {attr_info['title']}")
+    time.sleep(0.5)
+    driver.find_element(By.CSS_SELECTOR, '.Tg7LZd').click()
+    time.sleep(1)
+    image_container = driver.find_element(By.CSS_SELECTOR, '#rcnt')
+    img_a = driver.find_element(By.CSS_SELECTOR,
+                                '#rso > div > div > div.wH6SXe.u32vCb > div > div > div:nth-child(1) > div.czzyk.XOEbc > h3 > a').click()
+    time.sleep(2)
+    first_image = driver.find_element(By.CSS_SELECTOR,
+                                      '#Sva75c > div.A8mJGd.NDuZHe.OGftbe-N7Eqid-H9tDt > div.LrPjRb > div.AQyBn > div.tvh9oe.BIB1wf > c-wiz > div > div > div > div > div.v6bUne > div.p7sI2.PUxBg > a > img.sFlh5c.pT0Scc.iPVvYb').get_attribute(
+        'src')
+    print(first_image)
+    attr_info['first_image'] = first_image
+
+
+def get_codes_from_address(address):
+    # Attempt to connect to the database
+    try:
+        connection = mysql.connector.connect(**config)
+        if connection.is_connected():
+            cursor = connection.cursor()
+
+            # Parse the address for the district and city names
+            address_parts = address.split()
+            city = address_parts[0]
+            district = address_parts[1]
+
+            # Prepare and execute the SQL query
+            query_sido = "SELECT sido_code FROM sido WHERE sido_name = %s"
+            query_gugun = "SELECT gugun_code FROM gugun WHERE gugun_name = %s"
+
+            cursor.execute(query_sido, (city,))
+            sido_result = cursor.fetchone()
+
+            cursor.execute(query_gugun, (district,))
+            gugun_result = cursor.fetchone()
+
+            # Check if the results exist
+            if sido_result and gugun_result:
+                attr_info['sido_code'] = sido_result[0]
+                attr_info['gugun_code'] = gugun_result[0]
+                return {"sido_code": sido_result[0], "gugun_code": gugun_result[0]}
+            else:
+                return "No matching records found."
+    except Error as e:
+        return f"Error: {str(e)}"
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+
+influence = '@tzuyang6145'
+get_influence_videos(influence)
 
