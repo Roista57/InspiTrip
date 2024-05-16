@@ -53,11 +53,14 @@ const searchSido = () => {
   marker.getMarkerBySido(selectedSido.value, selectedGugun.value);
 };
 
-watch(selectedType, () => {
-  console.log(selectedType.value + "selected");
-  marker.selectedType = selectedType.value;
-}
-,{immediate:true});
+watch(
+  selectedType,
+  () => {
+    console.log(selectedType.value + "selected");
+    marker.selectedType = selectedType.value;
+  },
+  { immediate: true }
+);
 
 watch(
   selectedSido,
@@ -84,11 +87,7 @@ const select = (select) => {
           aria-label="Default select example"
           v-model="selectedSido"
         >
-          <option
-            v-for="sido in sidoGugun.sido"
-            :key="sido.sidoCode"
-            :value="sido.sidoCode"
-          >
+          <option v-for="sido in sidoGugun.sido" :key="sido.sidoCode" :value="sido.sidoCode">
             {{ sido.sidoName }}
           </option>
         </select>
@@ -100,11 +99,7 @@ const select = (select) => {
           aria-label="Default select example"
           v-model="selectedGugun"
         >
-          <option
-            v-for="gugun in sidoGugun.gugun"
-            :key="gugun.gunguCode"
-            :value="gugun.gunguCode"
-          >
+          <option v-for="gugun in sidoGugun.gugun" :key="gugun.gunguCode" :value="gugun.gunguCode">
             {{ gugun.gunguName }}
           </option>
         </select>
@@ -121,21 +116,15 @@ const select = (select) => {
         :value="content.value"
         v-model="selectedType"
       />
-      <label :for="content.contentType">{{ content.contentType}} </label>
+      <label :for="content.contentType">{{ content.contentType }} </label>
     </span>
     <div class="overflow-auto" style="max-width: 800px; max-height: 800px">
       <div class="row d-flex justify-content-center" style="max-width: 720px">
-        <div
-          class="card col-5 m-3"
-          v-for="item in marker.markers"
-          :key="item.contentId"
-        >
+        <div class="card col-5 m-3" v-for="item in marker.markers" :key="item.contentId">
           <img
             class="card-img-top mt-1"
-            :src="
-              (item.image =
-                item.image == '' ? 'src/assets/noImage.png' : item.image)
-            "
+            :src="`http://localhost:3000/attr/${item.contentId}/first_image.webp`"
+            onerror="this.onerror=null; this.src='src/assets/noimage.png';"
             alt="Card image"
             style="height: 200px"
           />

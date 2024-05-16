@@ -41,8 +41,9 @@
 
 	<select id="selectList"
 		resultType="com.ssafy.trip.model.dto.VisitDTO">
-		select *
-		from visits
+		select v.no, v.mid, v.ino, v.ano, v.url, i.name as 'iName', i.img as 'iImg'
+		from visits v join influencers i
+		on v.ino = i.no
 		where ano = #{ano}
 	</select>
 </mapper>
