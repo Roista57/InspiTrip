@@ -40,11 +40,51 @@ public class AttractionService {
 	}
 
 	public List<AttractionDto> getAttractionListByLocation(SearchInfoDto attr) {
+		
+		float rate = 0.0045f;
+		
+		switch (attr.getLevel()){
+		case 1:{
+			rate = 0.0018f;
+			break;
+		}
+		case 2:{
+			rate = 0.0027f;
+			break;
+		}
+		case 3: {
+			rate = 0.0045f;
+			break;
+		}
+		case 4: {
+			rate = 0.009f;
+			break;
+		}
+		case 5:{
+			rate = 0.0225f;
+			break;
+		}
+		case 6:{
+			rate = 0.045f;
+			break;
+		}
+//		case 7:{
+//			rate = 0.09f;
+//			break;
+//		}
+//		case 8:{
+//			rate = 0.18f;
+//			break;
+//		}
+		default:
+			rate = 0.0045f;
+			break;
+		}
 
-		BigDecimal minLatitue = attr.getLatitude().subtract(BigDecimal.valueOf(0.0045));
-		BigDecimal maxLatitue = attr.getLatitude().add(BigDecimal.valueOf(0.0045));
-		BigDecimal minLongitue = attr.getLongitude().subtract(BigDecimal.valueOf(0.0045));
-		BigDecimal maxLongitue = attr.getLongitude().add(BigDecimal.valueOf(0.0045));
+		BigDecimal minLatitue = attr.getLatitude().subtract(BigDecimal.valueOf(rate));
+		BigDecimal maxLatitue = attr.getLatitude().add(BigDecimal.valueOf(rate));
+		BigDecimal minLongitue = attr.getLongitude().subtract(BigDecimal.valueOf(rate));
+		BigDecimal maxLongitue = attr.getLongitude().add(BigDecimal.valueOf(rate));
 
 		List<AttractionDto> result;
 

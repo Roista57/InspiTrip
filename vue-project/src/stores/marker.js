@@ -1,4 +1,4 @@
-import { ref, computed, watch} from "vue";
+import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
@@ -7,6 +7,7 @@ const URL = import.meta.env.VITE_VUE_API_URL;
 export const useMarkerStore = defineStore("marker", () => {
   const markers = ref([]);
   const selectedType = ref(0);
+  const level = ref(3);
 
   const centerLat = ref(37.566826);
   const centerLng = ref(126.9786567);
@@ -16,13 +17,16 @@ export const useMarkerStore = defineStore("marker", () => {
   });
   const markerInfluencer = ref([]);
 
-  watch(()=>selectedType.value,()=>{
-    console.log(selectedType.value)
-    getMarkerByLatLong(centerLat.value, centerLng.value);
-  })
+  watch(
+    () => selectedType.value,
+    () => {
+      console.log(selectedType.value);
+      getMarkerByLatLong(centerLat.value, centerLng.value);
+    }
+  );
 
-  const getMarkerByLatLong = (lat, lng) => {
-    axios({
+  const getMarkerByLatLong = async (lat, lng) => {
+    await axios({
       method: "POST",
       url: URL + "attr/list/location",
       data: {
@@ -32,7 +36,7 @@ export const useMarkerStore = defineStore("marker", () => {
         gunguCode: 0,
         latitude: lat,
         longitude: lng,
-        level: 0,
+        level: level.value,
       },
     }).then((resp) => {
       console.log(resp.data);
@@ -54,17 +58,18 @@ export const useMarkerStore = defineStore("marker", () => {
         longitude: 0,
         level: 0,
       },
-    }).then((resp) =>{
-      console.log(resp.data);
-      markers.value = [];
-      markers.value = resp.data;
-      console.log(selectedType.value + "searched")
-    }).
-    then(()=>{
-      centerLat.value = (markers.value)[0].latitude;
-      centerLng.value = (markers.value)[0].longitude;
-      console.log(centerLat.value, centerLng.value);
-    });
+    })
+      .then((resp) => {
+        console.log(resp.data);
+        markers.value = [];
+        markers.value = resp.data;
+        console.log(selectedType.value + "searched");
+      })
+      .then(() => {
+        centerLat.value = markers.value[0].latitude;
+        centerLng.value = markers.value[0].longitude;
+        console.log(centerLat.value, centerLng.value);
+      });
   };
 
   const selectOne = (item) => {
@@ -83,6 +88,7 @@ export const useMarkerStore = defineStore("marker", () => {
     getMarkerBySido,
     selectOne,
     markerInfluencer,
-    selectedType
+    selectedType,
+    level,
   };
 });

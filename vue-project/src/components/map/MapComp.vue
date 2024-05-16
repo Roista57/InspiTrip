@@ -1,6 +1,6 @@
 <script setup>
 import { useMarkerStore } from "@/stores/marker";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 import { Modal } from "bootstrap";
 
@@ -18,7 +18,7 @@ const latlng = ref({});
 watch(
   () => latlng.value,
   () => {
-    marker.getMarkerByLatLong(latlng.value.getLat(), latlng.value.getLng());
+    marker.getMarkerByLatLong(latlng.value.getLat(), latlng.value.getLng(), map.value.getLevel());
   },
   { deep: true }
 );
@@ -40,6 +40,16 @@ const onClickKakaoMapMarker = (item) => {
   myModal.show();
 };
 
+const markerss = computed(() => {
+  console.log(marker.markers.length);
+
+  let position = marker.markers.map(function (item) {
+    // 마커를 배열 단위로 묶음
+    return { lat: item.latitude, lng: item.longitude };
+  });
+  return { positions: position };
+});
+
 const onLoadKakaoMap = (mapRef) => {
   map.value = mapRef;
   latlng.value = map.value.getCenter();
@@ -48,6 +58,8 @@ const onLoadKakaoMap = (mapRef) => {
   // 지도 타입 컨트롤을 지도에 표시합니다
   map.value.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
+  console.log("sasaf" + JSON.stringify(markerss.value[0]));
+
   kakao.maps.event.addListener(map.value, "dragend", function (mouseEvent) {
     // 클릭한 위도, 경도 정보를 가져옵니다
     const tmpLatlng = map.value.getCenter();
@@ -55,16 +67,26 @@ const onLoadKakaoMap = (mapRef) => {
     marker.centerLng = tmpLatlng.getLng();
     latlng.value = tmpLatlng;
   });
+  kakao.maps.event.addListener(map.value, "zoom_changed", function () {
+    console.log(map.value.getLevel);
+    const tmpLatlng = map.value.getCenter();
+    marker.centerLat = tmpLatlng.getLat();
+    marker.centerLng = tmpLatlng.getLng();
+    marker.level = map.value.getLevel();
+    latlng.value = tmpLatlng;
+  });
 };
 </script>
 
 <template>
   <KakaoMap
-    :lat="coordinate.lat"
-    :lng="coordinate.lng"
+    :lat="marker.centerLat"
+    :lng="marker.centerLng"
     :draggable="true"
+    :level="marker.level"
     width="100%"
     height="900px"
+    v-if="marker.level < 5"
     @onLoadKakaoMap="onLoadKakaoMap"
   >
     <KakaoMapMarker
@@ -75,6 +97,20 @@ const onLoadKakaoMap = (mapRef) => {
       :clickable="true"
       @onClickKakaoMapMarker="onClickKakaoMapMarker(item)"
     ></KakaoMapMarker>
+  </KakaoMap>
+
+  <KakaoMap
+    :lat="marker.centerLat"
+    :lng="marker.centerLng"
+    :draggable="true"
+    :level="marker.level"
+    width="100%"
+    height="900px"
+    v-if="marker.level >= 5"
+    :markerCluster="{ markers: markerss.positions }"
+    :key="markerss.positions.toString()"
+    @onLoadKakaoMap="onLoadKakaoMap"
+  >
   </KakaoMap>
 </template>
 
