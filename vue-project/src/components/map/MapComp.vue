@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
     :draggable="true"
     :level="marker.level"
     width="100%"
-    height="900px"
+    height="100%"
     v-if="marker.level < 5"
     @onLoadKakaoMap="onLoadKakaoMap"
   >
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
     :draggable="true"
     :level="marker.level"
     width="100%"
-    height="900px"
+    height="100%"
     v-if="marker.level >= 5"
     :markerCluster="{ markers: markerss.positions }"
     :key="markerss.positions.toString()"

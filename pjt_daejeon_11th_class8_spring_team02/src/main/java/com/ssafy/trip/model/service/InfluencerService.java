@@ -2,6 +2,8 @@ package com.ssafy.trip.model.service;
 
 import java.util.List;
 
+import java.net.URL;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,21 @@ public class InfluencerService {
 		super();
 		this.idao = idao;
 	}
+	
+    public static String extractChannelId(String url) {
+        try {
+            URL youtubeURL = new URL(url);
+            String path = youtubeURL.getPath();
+            if (path.startsWith("/channel/")) {
+                return path.substring("/channel/".length());
+            } else {
+                throw new IllegalArgumentException("URL does not contain a channel ID.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 	public InfluencerDTO find(int no) {
 		return idao.selectOne(no);
@@ -34,6 +51,9 @@ public class InfluencerService {
 	@Transactional
 	public int accept(int no) {
 		InfluencerDTO tmp = idao.selectTempOne(no);
+		String youtubeURL = tmp.getUrl();
+		tmp.setYoutubeId(extractChannelId(youtubeURL));
+		System.out.println(tmp.getYoutubeId());
 		idao.deleteTemp(no);
 		int result = idao.acceptInfluencer(tmp);
 		return result;

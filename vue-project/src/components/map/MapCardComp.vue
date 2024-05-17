@@ -14,15 +14,15 @@ const select = (select) => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" style="height: 820px">
     <router-view></router-view>
-    <div class="overflow-auto mt-3" style="max-width: 800px; max-height: 800px">
+    <div class="overflow-auto mt-3" style="max-width: 800px; height: 620px">
       <div class="row d-flex justify-content-center" style="max-width: 720px">
         <div class="card col-5 m-3" v-for="item in marker.markers" :key="item.contentId">
           <img
             class="card-img-top mt-1"
             :src="`http://localhost:3000/attr/${item.contentId}/first_image.webp`"
-            onerror="this.onerror=null; this.src='src/assets/noimage.png';"
+            :onerror="`this.onerror='/src/assets/noImage.png'; this.src='${item.image}';`"
             alt="이미지가 없습니다"
             style="height: 200px"
           />

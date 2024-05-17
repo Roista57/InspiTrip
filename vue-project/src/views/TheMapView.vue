@@ -26,10 +26,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container-fluid bg-warning" height="900px">
+  <div class="container-fluid bg-warning">
     <div class="row" width="100%">
-      <div class="col-5" height="900px">
-        <div class="d-flex gap-2 justify-content-center py-5">
+      <div class="col-5">
+        <div class="d-flex gap-2 justify-content-center">
           <router-link :to="{ name: 'map-normal' }">
             <button
               :class="
@@ -89,11 +89,14 @@ onMounted(() => {
             <div class="col-sm-5">
               <img
                 :src="`http://localhost:3000/attr/${marker.selectedMarker.contentId}/first_image.webp`"
-                alt=""
-                style="height: 300px"
+                :onerror="`this.onerror='/src/assets/noImage.png'; this.src='${marker.selectedMarker.image}';`"
+                alt="이미지가없습니다"
+                style="height: 300px; max-width: 300px"
               />
             </div>
-            <div class="col-sm-5 text-center">{{ marker.selectedMarker.overview }}</div>
+            <div class="col-sm-5 text-center scrollable-div overflow-auto border p-3">
+              {{ marker.selectedMarker.overview }}
+            </div>
             <div class="col-sm-1"></div>
           </div>
         </div>
@@ -101,8 +104,8 @@ onMounted(() => {
         <div class="container mt-4">
           <div class="row">
             <div class="col-2"></div>
-            <div class="radio card col-4">선택</div>
-            <div class="card col-4">선택</div>
+            <div class="card col-4">인플루언서</div>
+            <div class="card col-4">유저리뷰</div>
             <div class="col-2"></div>
           </div>
         </div>
@@ -133,5 +136,8 @@ onMounted(() => {
 
 .flex-md-row {
   flex-direction: column; /* 중간 크기 스크린 이상일 때 세로로 나열 */
+}
+.scrollable-div {
+  height: 300px; /* 원하는 높이로 설정 */
 }
 </style>

@@ -24,8 +24,8 @@
 	</insert>
 
 	<insert id="acceptInfluencer">
-		insert into influencers(name, img, content, url)
-		values (#{name}, #{img}, #{content}, #{url})
+		insert into influencers(name,youtube_id, img, content, url)
+		values (#{name}, #{youtubeId}, #{img}, #{content}, #{url})
 	</insert>
 
 	<select id="selectTempOne">

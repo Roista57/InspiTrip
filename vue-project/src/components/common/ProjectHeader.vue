@@ -17,7 +17,7 @@ const logined = computed(async () => {
 <template>
   <div class="b-example-divider"></div>
 
-  <header class="p-3 mb-3 border-bottom">
+  <header class="p-3 mb border-bottom">
     <div class="container">
       <div
         class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"

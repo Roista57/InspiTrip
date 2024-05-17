@@ -19,7 +19,8 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <div class="row">
+    <input type="checkbox" checked data-toggle="toggle" data-size="sm" />
+    <div class="row scrollable-div overflow-auto">
       <InfluencerListComp
         v-for="item in influencer.influencerList"
         :key="item.no"
@@ -30,4 +31,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.scrollable-div {
+  height: 150px; /* 원하는 높이로 설정 */
+}
+</style>

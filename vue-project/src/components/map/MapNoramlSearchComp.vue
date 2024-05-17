@@ -84,45 +84,49 @@ const searchSido = () => {
 </script>
 
 <template>
-  <div class="row">
-    <div class="col-5">
-      <select
-        id="sido"
-        class="form-select"
-        aria-label="Default select example"
-        v-model="selectedSido"
-      >
-        <option v-for="sido in sidoGugun.sido" :key="sido.sidoCode" :value="sido.sidoCode">
-          {{ sido.sidoName }}
-        </option>
-      </select>
+  <div class="d-flex flex-column justify-content-between" style="height: 150px">
+    <div class="row pt-4">
+      <div class="col-5">
+        <select
+          id="sido"
+          class="form-select"
+          aria-label="Default select example"
+          v-model="selectedSido"
+        >
+          <option v-for="sido in sidoGugun.sido" :key="sido.sidoCode" :value="sido.sidoCode">
+            {{ sido.sidoName }}
+          </option>
+        </select>
+      </div>
+      <div class="col-5">
+        <select
+          id="sido"
+          class="form-select"
+          aria-label="Default select example"
+          v-model="selectedGugun"
+        >
+          <option v-for="gugun in sidoGugun.gugun" :key="gugun.gunguCode" :value="gugun.gunguCode">
+            {{ gugun.gunguName }}
+          </option>
+        </select>
+      </div>
+      <div class="col-2">
+        <button @click="searchSido">검색</button>
+      </div>
     </div>
-    <div class="col-5">
-      <select
-        id="sido"
-        class="form-select"
-        aria-label="Default select example"
-        v-model="selectedGugun"
-      >
-        <option v-for="gugun in sidoGugun.gugun" :key="gugun.gunguCode" :value="gugun.gunguCode">
-          {{ gugun.gunguName }}
-        </option>
-      </select>
-    </div>
-    <div class="col-2">
-      <button @click="searchSido">검색</button>
+    <div class="pb-4">
+      <span class="m-1" v-for="content in contentTypes" :key="content.value">
+        <input
+          type="radio"
+          name="type"
+          :id="content.contentType"
+          :value="content.value"
+          v-model="selectedType"
+        />
+        <label :for="content.contentType">{{ content.contentType }} </label>
+      </span>
     </div>
   </div>
-  <span class="m-1" v-for="content in contentTypes" :key="content.value">
-    <input
-      type="radio"
-      name="type"
-      :id="content.contentType"
-      :value="content.value"
-      v-model="selectedType"
-    />
-    <label :for="content.contentType">{{ content.contentType }} </label>
-  </span>
 </template>
 
 <style scoped></style>
