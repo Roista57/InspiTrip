@@ -417,11 +417,12 @@ def get_influencers_youtube_id():
 if __name__ == "__main__":
     # Todo : DB에서 인플풀언서 데이터 리스트 받아서 처리
     influencers = get_influencers_youtube_id()
-    print(influencers)
     # influence = '@tzuyang6145'
     for influence in influencers:
-        get_influence_videos(influence[0])
-        read_text_file(influence[0])
+        influence = influence[0].replace("'", "").replace("(", "").replace(")", "")
+        print(influence)
+        get_influence_videos(influence)
+        read_text_file(influence)
 
     # get_map_info2('1810003724')
 
