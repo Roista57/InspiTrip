@@ -22,6 +22,10 @@ public class InfluencerService {
 	public InfluencerDTO find(int no) {
 		return idao.selectOne(no);
 	}
+	
+	public InfluencerDTO findName(String no) {
+		return idao.selectOneName(no);
+	}
 
 	public int insert(InfluencerDTO influencer) {
 		return idao.addTemp(influencer);

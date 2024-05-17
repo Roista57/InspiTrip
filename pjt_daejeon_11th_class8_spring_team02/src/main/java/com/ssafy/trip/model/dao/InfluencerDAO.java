@@ -11,6 +11,7 @@ import com.ssafy.trip.model.dto.VisitDTO;
 public interface InfluencerDAO {
 	
 	public InfluencerDTO selectOne(int no);
+	public InfluencerDTO selectOneName(String no);
 	public InfluencerDTO selectTempOne(int no);
 	public int addTemp(InfluencerDTO influencer);
 	public int acceptInfluencer(InfluencerDTO influencer);

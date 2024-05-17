@@ -3,6 +3,7 @@ package com.ssafy.trip.model.dto;
 public class InfluencerDTO {
 	private int no;
 	private String name;
+	private String youtubeId;
 	private String img;
 	private String content;
 	private String url;
@@ -10,9 +11,10 @@ public class InfluencerDTO {
 	public InfluencerDTO() {
 	}
 
-	public InfluencerDTO(int no, String name, String img, String content, String url) {
+	public InfluencerDTO(int no, String name, String youtubeId, String img, String content, String url) {
 		this.no = no;
 		this.name = name;
+		this.youtubeId = youtubeId;
 		this.img = img;
 		this.content = content;
 		this.url = url;
@@ -32,6 +34,14 @@ public class InfluencerDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getYoutubeId() {
+		return youtubeId;
+	}
+
+	public void setYoutubeId(String youtubeId) {
+		this.youtubeId = youtubeId;
 	}
 
 	public String getImg() {

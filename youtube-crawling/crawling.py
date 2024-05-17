@@ -14,6 +14,7 @@ import json
 from collections import Counter
 import mysql.connector
 from mysql.connector import Error
+import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -54,6 +55,9 @@ attr_desc = {
     'overview': '',
 }
 
+print_state = True
+
+
 # influence를 매개변수로 받아 채널에 있는 모든 영상의 제목과 영상 링크를 가져옴
 def get_influence_videos(influence):
     channel = 'https://www.youtube.com'
@@ -80,31 +84,6 @@ def get_influence_videos(influence):
     with open(f"influence/{influence}.txt", "w", encoding='utf-8') as file:
         for element in tqdm(elements, desc="총 영상"):
             file.write(f"{element.get_attribute('title')} | {element.get_attribute('href')}\n")
-
-    file_path = f"influence/{influence}.txt"
-    with open(file_path, "r", encoding='utf-8') as file:
-        # Read and process each line in the file
-        for line in file:
-            # Each line contains the title and URL separated by " | "
-            title, url = line.strip().split(" | ")
-            try:
-                get_script(url)
-                with open("filelists.txt", "a", encoding='utf-8') as outfile:
-                    outfile.write(f"('{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
-                                  f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
-                                  f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
-                                  f", '{attr_info['latitude']}', '{attr_info['longitude']}')\n")
-            except StaleElementReferenceException:
-                print(f"{url} >> Element has become stale. Skipping.")
-            except NoSuchElementException:
-                print("Element no longer exists.")
-            except TimeoutException:
-                print("Element loading timed out.")
-            except Exception as e:
-                print(e)
-
-    time.sleep(10)
-    # driver.quit()
 
 # 유튜브 영상 링크를 매개변수로 받아서 해당 영상의 스크립트를 읽어옴
 def get_script(url):
@@ -288,6 +267,93 @@ def get_codes_from_address(address):
             connection.close()
 
 
-influence = '@tzuyang6145'
-get_influence_videos(influence)
+def attr_insert_value(influence_id):
+    attr_url = 'http://localhost/attr/insert'
+    attr_data = {
+        'contentId': '0',
+        'contentTypeId': '39',
+        'title': attr_info['title'],
+        'address': attr_info['addr1'],
+        'image': attr_info['first_image'],
+        'sidoCode': attr_info['sido_code'],
+        'gunguCode': attr_info['gugun_code'],
+        'latitude': attr_info['latitude'],
+        'longitude': attr_info['longitude'],
+        'overview': '',
+    }
+    response = requests.post(attr_url, json=attr_data) # insert 한 뒤 저장한 attr_content_id의 값을 반환
+    attr_content_id = response.text  # 응답 내용 출력
+    print(attr_content_id)
+    time.sleep(0.3)
+    return attr_content_id
+
+
+def influence_create_visited(influence_id, attr_content_id, url):
+    visit_data = {
+        'mid': 'ssafy',
+        'ino': '',
+        'ano': '',
+        'url': '',
+    }
+    influencer_url = f"http://localhost/influencer/findname/{influence_id}"
+    response = requests.get(influencer_url)
+    influence_info = json.loads(response.text)
+    visit_data['ino'] = influence_info['no']
+    visit_data['ano'] = attr_content_id
+    visit_data['url'] = url
+    print(visit_data)
+    time.sleep(0.3)
+    return visit_data
+
+
+def influence_add_visited(data):
+    visit_add = f"http://localhost/influencer/visit"
+    response = requests.post(visit_add, json=data)
+    time.sleep(0.3)
+    return response.text
+
+
+def read_text_file(influence_id):
+    lines = []
+    file_path = f"influence/{influence_id}.txt"
+    with open(file_path, "r", encoding='utf-8') as file:
+        # Read and process each line in the file
+        for line in file:
+            lines.append(line.strip())
+    # 현재 날짜와 시간을 '년-월-일-시-분-초' 형식의 문자열로 가져옵니다.
+    now = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    for line in tqdm(lines, desc="작업 현황"):
+        # Each line contains the title and URL separated by " | "
+        title, url = line.strip().split(" | ")
+        try:
+            get_script(url)
+            attr_content_id = attr_insert_value(influence_id)
+            if attr_content_id != "" and attr_content_id != "fail":
+                data = influence_create_visited(influence_id, attr_content_id, url)
+                result = influence_add_visited(data)
+
+            with open(f"filelists-{now}.txt", "a", encoding='utf-8') as outfile:
+                outfile.write(
+                    f"{url} | '{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
+                    f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
+                    f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
+                    f", '{attr_info['latitude']}', '{attr_info['longitude']}' | {result}\n")
+
+
+        except StaleElementReferenceException:
+            print(f"{url} >> Element has become stale. Skipping.")
+        except NoSuchElementException:
+            print("Element no longer exists.")
+        except TimeoutException:
+            print("Element loading timed out.")
+        except Exception as e:
+            print(e)
+
+
+if __name__ == "__main__":
+    influence = '@tzuyang6145'
+    get_influence_videos(influence)
+    read_text_file(influence)
+
+
 
