@@ -27,6 +27,23 @@ public class AttractionService {
 	public List<GunguDto> gunguList(int sido) {
 		return adao.getGunguList(sido);
 	}
+	
+	public boolean insertAttraction(AttractionDto attractionDto) {
+		System.out.println(attractionDto.toString());
+		if(adao.insert(attractionDto) == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	public int selectAttraction(String title, String addr) {
+		String contentId = adao.searchAttractionContentId(title, addr);
+		System.out.println(contentId);
+		if(contentId != null) {
+			return Integer.parseInt(contentId);
+		}
+		return adao.getAttractionContentId();
+	}
 
 	public List<AttractionDto> getAttractionListBySidoGungu(SearchInfoDto attr) {
 		List<AttractionDto> result;

@@ -130,5 +130,21 @@
 		where v.ino =
 		#{ino}
 	</select>
+	
+	<insert id="insert" parameterType="com.ssafy.trip.model.dto.AttractionDto">
+		insert into attraction_info(content_id, content_type_id, title, addr1, first_image, readcount, sido_code, gugun_code, latitude, longitude)
+		values (#{contentId}, #{contentTypeId}, #{title}, #{address}, #{image}, 0, #{sidoCode}, #{gunguCode}, #{latitude}, #{longitude})
+	</insert>
+	
+	<select id="searchAttractionContentId" resultType="String">
+		select content_id
+		from attraction_info
+		where addr1 = #{addr} and title = #{title}
+	</select>
+	
+	<select id="getAttractionContentId" resultType="int">
+		select max(content_id)+1
+		from attraction_info
+	</select>
 
 </mapper>

@@ -43,6 +43,13 @@ public class InfluencerController {
 		InfluencerDTO result = iservice.find(no);
 		return result;
 	}
+	
+	@GetMapping("/findname/{name}")
+	@Operation(summary = "인플루언서 정보 조회", description = "인플루언서 정보를 입력받은 번호를 통하여 반환합니다.")
+	public InfluencerDTO getInfluencerName(@PathVariable("name") String name) {
+		InfluencerDTO result = iservice.findName(name);
+		return result;
+	}
 
 	@PostMapping("/add")
 	@Operation(summary = "인플루언서 추가", description = "인플루언서에 대한 추가 요청을 보냅니다.")

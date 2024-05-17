@@ -97,6 +97,10 @@ public class AttractionDto {
 	public void setOverview(String overview) {
 		this.overview = overview;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "AttractionDto [contentId=" + contentId + ", contentTypeId=" + contentTypeId + ", title=" + title
+				+ ", address=" + address + ", image=" + image + ", sidoCode=" + sidoCode + ", gunguCode=" + gunguCode
+				+ ", latitude=" + latitude + ", longitude=" + longitude + ", overview=" + overview + "]";
+	}
 }

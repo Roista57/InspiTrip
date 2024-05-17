@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.trip.model.dto.AttractionDto;
 import com.ssafy.trip.model.dto.GunguDto;
+import com.ssafy.trip.model.dto.MemberDTO;
 import com.ssafy.trip.model.dto.SearchInfoDto;
 import com.ssafy.trip.model.dto.SidoDto;
 import com.ssafy.trip.model.service.AttractionService;
@@ -45,6 +46,18 @@ public class AttractionController {
 	public List<GunguDto> gunguList(@PathVariable("sido") int sido) {
 		List<GunguDto> result = aservice.gunguList(sido);
 		return result;
+	}
+
+	// 음식점 추가
+	@PostMapping("/insert")
+	@Operation(summary = "음식점 추가", description = "입력된 정보를 통해 음식점을 DB에 추가합니다.")
+	public String regist(@RequestBody AttractionDto attractionDto) {
+		int contentId = aservice.selectAttraction(attractionDto.getTitle(), attractionDto.getAddress());
+		attractionDto.setContentId(contentId);
+		if (aservice.insertAttraction(attractionDto)) {
+			return attractionDto.getContentId()+"";
+		}
+		return "fail";
 	}
 
 	@PostMapping("/list/{type}")

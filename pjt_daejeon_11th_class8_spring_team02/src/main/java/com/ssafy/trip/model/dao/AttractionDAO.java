@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ssafy.trip.model.dto.AttractionDto;
 import com.ssafy.trip.model.dto.GunguDto;
+import com.ssafy.trip.model.dto.MemberDTO;
 import com.ssafy.trip.model.dto.SidoDto;
 
 @Mapper
@@ -15,6 +16,12 @@ public interface AttractionDAO {
 	public List<SidoDto> getSidoList();
 
 	public List<GunguDto> getGunguList(int sido);
+	
+	public int insert(AttractionDto attractionDto);
+	
+	public String searchAttractionContentId(@Param("title")String title, @Param("addr")String addr);
+	
+	public int getAttractionContentId();
 
 	public List<AttractionDto> getAttractionListBySidoGungu(@Param("sido") int sido, @Param("gungu") int gungu);
 
