@@ -24,7 +24,7 @@
 	</insert>
 
 	<insert id="acceptInfluencer">
-		insert into influencers(name,youtube_id, img, content, url)
+		insert into influencers(name, youtube_id, img, content, url)
 		values (#{name}, #{youtubeId}, #{img}, #{content}, #{url})
 	</insert>
 

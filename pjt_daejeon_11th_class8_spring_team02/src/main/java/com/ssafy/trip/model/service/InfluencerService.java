@@ -52,7 +52,8 @@ public class InfluencerService {
 	public int accept(int no) {
 		InfluencerDTO tmp = idao.selectTempOne(no);
 		String youtubeURL = tmp.getUrl();
-		tmp.setYoutubeId(extractChannelId(youtubeURL));
+        String[] parts = youtubeURL.split("/");
+		tmp.setYoutubeId(parts[parts.length-1]);
 		System.out.println(tmp.getYoutubeId());
 		idao.deleteTemp(no);
 		int result = idao.acceptInfluencer(tmp);
