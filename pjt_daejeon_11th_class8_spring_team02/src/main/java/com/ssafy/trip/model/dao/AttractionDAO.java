@@ -19,6 +19,8 @@ public interface AttractionDAO {
 	
 	public int insert(AttractionDto attractionDto);
 	
+	public int insertOverview(AttractionDto attractionDto);
+	
 	public String searchAttractionContentId(@Param("title")String title, @Param("addr")String addr);
 	
 	public int getAttractionContentId();

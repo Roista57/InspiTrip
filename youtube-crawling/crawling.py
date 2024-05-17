@@ -35,25 +35,8 @@ client = OpenAI(
 # WebDriver 설정 (Chrome 사용)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-attr_info = {
-    'content_type_id': 39,
-    'title': '',
-    'addr1': '',
-    'zipcode': '',
-    'tel': '',
-    'first_image': '',
-    'readcount': 0,
-    'sido_code': '',
-    'gugun_code': '',
-    'latitude': '',
-    'longitude': '',
-    'bookingUrl': '',
-}
-
-attr_desc = {
-    'content_id': '',
-    'overview': '',
-}
+attr_info = {}
+attr_desc = {}
 
 print_state = True
 
@@ -85,27 +68,52 @@ def get_influence_videos(influence):
         for element in tqdm(elements, desc="총 영상"):
             file.write(f"{element.get_attribute('title')} | {element.get_attribute('href')}\n")
 
+
+# 변수 초기화
+def initialize_global():
+    global attr_info
+    global attr_desc
+    attr_info = {
+        'content_type_id': 39,
+        'title': '',
+        'addr1': '',
+        'zipcode': '',
+        'tel': '',
+        'first_image': '',
+        'readcount': 0,
+        'sido_code': '',
+        'gugun_code': '',
+        'latitude': '',
+        'longitude': '',
+        'overview': '',
+        'bookingUrl': '',
+    }
+    attr_desc = {
+        'content_id': '',
+        'overview': '',
+    }
+
 # 유튜브 영상 링크를 매개변수로 받아서 해당 영상의 스크립트를 읽어옴
 def get_script(url):
     driver.get(url)
-    time.sleep(5)
+    time.sleep(3)
     more_button = driver.find_element(By.CSS_SELECTOR, '#expand')
     # 화면 중앙에 보이도록 스크롤
     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", more_button)
-    time.sleep(2)  # 화면이 재정렬될 시간 제공
+    time.sleep(1)  # 화면이 재정렬될 시간 제공
     more_button.click()
-    time.sleep(2)
+    time.sleep(1)
     # "스크립트 표시" 버튼 찾기
     driver.find_element(By.XPATH, '/html/body/ytd-app/div[1]/ytd-page-manager/ytd-watch-flexy/div[5]/div[1]/div/div[2]/ytd-watch-metadata/div/div[4]/div[1]/div/ytd-text-inline-expander/div[2]/ytd-structured-description-content-renderer/div/ytd-video-description-transcript-section-renderer/div[3]/div/ytd-button-renderer/yt-button-shape/button').click()
     time.sleep(1)
     script_container = driver.find_element(By.TAG_NAME, 'ytd-transcript-renderer')
     elements = script_container.find_elements(By.TAG_NAME, 'yt-formatted-string')
     text = '\n'.join(element.text for element in elements)
-    print(text)
+    # print(text)
 
     # json_string = '{ "address": "서울특별시 종로구 성균관로 41 1층", "title": "명륜진사갈비"}'
     json_string = extract_store_details(text)
-    print(json_string)
+    # print(json_string)
 
     data = json.loads(json_string)
     print(data)
@@ -158,7 +166,7 @@ def get_address(text):
                 data_list.append(f"{data['placeId']},{data['name']},{data['address']},{data['latitude']},{data['longitude']},{data['tel']},{data['bookingUrl']}")
 
             except NoSuchElementException:
-                print("해당 요소를 찾을 수 없습니다.")
+                print("get_address >> 해당 요소를 찾을 수 없습니다.")
 
         # Counter 객체를 사용하여 데이터 카운팅
         counter = Counter(data_list)
@@ -176,36 +184,64 @@ def get_address(text):
         attr_info['bookingUrl'] = split_common[6]
         get_map_info(placeId)
     else:
-        print("Error Code:" + rescode)
+        print("get_address >> Error Code:" + rescode)
 
 
-# 네이버 지도에 placeId를 입력하여 해당 가게에 대한 정보를 가져옵니다.
+# # 네이버 지도에 placeId를 입력하여 해당 가게에 대한 정보를 가져옵니다.
+# def get_map_info2(placeId):
+#     url = f"https://pcmap.place.naver.com/restaurant/1810003724/home{placeId}"
+#     driver.get(url)
+#     time.sleep(5)
+#     try:
+#         iframe = driver.find_element(By.ID, 'entryIframe')
+#         driver.switch_to.frame(iframe)
+#         driver.find_element(By.CSS_SELECTOR, '.PkgBl').click()
+#         time.sleep(2)
+#         elements = driver.find_elements(By.CSS_SELECTOR, '.vV_z_ > .Y31Sf > .nQ7Lh')
+#         road_address = elements[0].text.replace('도로명', '').replace('복사', '')
+#         time.sleep(2)
+#         # html_content = driver.execute_script("return document.documentElement.outerHTML;")
+#         # print(html_content)
+#         time.sleep(1)
+#         print("도로명 주소: "+road_address)
+#         attr_info['addr1'] = road_address
+#         print("지번: " + elements[1].text.replace('지번', '').replace('복사', ''))
+#         export_zipcode = elements[2].text.replace('우편번호', '').replace('우', '').replace('복사', '').replace('\n', '')
+#         print("우편번호: " + export_zipcode)
+#         attr_info['zipcode'] = export_zipcode
+#
+#         get_google_image()
+#         time.sleep(1000)
+#     except NoSuchElementException:
+#         print("해당 요소를 찾을 수 없습니다.")
+#     finally:
+#         codes = get_codes_from_address(attr_info['addr1'])
+#         print(codes)
+#         print(attr_info)
+
+
 def get_map_info(placeId):
-    url = f"https://map.naver.com/p/entry/place/{placeId}"
-    driver.get(url)
-    time.sleep(5)
+    home_url = f"https://pcmap.place.naver.com/restaurant/{placeId}/home"
+    information_url = f"https://pcmap.place.naver.com/restaurant/{placeId}/information"
     try:
-        iframe = driver.find_element(By.ID, 'entryIframe')
-        driver.switch_to.frame(iframe)
-        driver.find_element(By.CSS_SELECTOR, '.PkgBl').click()
-        time.sleep(2)
-        elements = driver.find_elements(By.CSS_SELECTOR, '.vV_z_ > .Y31Sf > .nQ7Lh')
-        road_address = elements[0].text.replace('도로명', '').replace('복사', '')
-        time.sleep(2)
-        # html_content = driver.execute_script("return document.documentElement.outerHTML;")
-        # print(html_content)
+        driver.get(home_url)
         time.sleep(1)
-        print("도로명 주소: "+road_address)
+        road_address = driver.find_element(By.CSS_SELECTOR,
+                                           '#app-root > div > div > div > div:nth-child(5) > div > div:nth-child(2) > div.place_section_content > div > div.O8qbU.tQY7D > div > a > span.LDgIH').text
         attr_info['addr1'] = road_address
-        print("지번: " + elements[1].text.replace('지번', '').replace('복사', ''))
-        export_zipcode = elements[2].text.replace('우편번호', '').replace('우', '').replace('복사', '').replace('\n', '')
-        print("우편번호: " + export_zipcode)
-        attr_info['zipcode'] = export_zipcode
-        get_google_image()
-        # time.sleep(1000)
+        print("도로명 주소: " + road_address)
+
+        driver.get(information_url)
+        time.sleep(1)
+        overview = driver.find_element(By.CSS_SELECTOR,
+                                       '#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.Od79H > div > div > div.Ve1Rp > div').text
+        attr_info['overview'] = overview
+        print("소개: " + overview)
+
     except NoSuchElementException:
-        print("해당 요소를 찾을 수 없습니다.")
+        print("get_map_info >> 해당 요소를 찾을 수 없습니다.")
     finally:
+        get_google_image()
         codes = get_codes_from_address(attr_info['addr1'])
         print(codes)
         print(attr_info)
@@ -213,21 +249,24 @@ def get_map_info(placeId):
 
 # 해당 가게에 대한 정보를 검색하여 가장 첫번째에 나오는 이미지를 가져옵니다.
 def get_google_image():
-    driver.get(f"https://www.google.co.kr/imghp?hl=ko&ogbl")
-    time.sleep(1)
-    driver.find_element(By.CSS_SELECTOR, '#APjFqb').send_keys(f"{attr_info['addr1']} {attr_info['title']}")
-    time.sleep(0.5)
-    driver.find_element(By.CSS_SELECTOR, '.Tg7LZd').click()
-    time.sleep(1)
-    image_container = driver.find_element(By.CSS_SELECTOR, '#rcnt')
-    img_a = driver.find_element(By.CSS_SELECTOR,
-                                '#rso > div > div > div.wH6SXe.u32vCb > div > div > div:nth-child(1) > div.czzyk.XOEbc > h3 > a').click()
-    time.sleep(2)
-    first_image = driver.find_element(By.CSS_SELECTOR,
-                                      '#Sva75c > div.A8mJGd.NDuZHe.OGftbe-N7Eqid-H9tDt > div.LrPjRb > div.AQyBn > div.tvh9oe.BIB1wf > c-wiz > div > div > div > div > div.v6bUne > div.p7sI2.PUxBg > a > img.sFlh5c.pT0Scc.iPVvYb').get_attribute(
-        'src')
-    print(first_image)
-    attr_info['first_image'] = first_image
+    try:
+        driver.get(f"https://www.google.co.kr/imghp?hl=ko&ogbl")
+        time.sleep(1)
+        driver.find_element(By.CSS_SELECTOR, '#APjFqb').send_keys(f"{attr_info['addr1']} {attr_info['title']}")
+        time.sleep(0.5)
+        driver.find_element(By.CSS_SELECTOR, '.Tg7LZd').click()
+        time.sleep(1)
+        image_container = driver.find_element(By.CSS_SELECTOR, '#rcnt')
+        img_a = driver.find_element(By.CSS_SELECTOR,
+                                    '#rso > div > div > div.wH6SXe.u32vCb > div > div > div:nth-child(1) > div.czzyk.XOEbc > h3 > a').click()
+        time.sleep(2)
+        first_image = driver.find_element(By.CSS_SELECTOR,
+                                          '#Sva75c > div.A8mJGd.NDuZHe.OGftbe-N7Eqid-H9tDt > div.LrPjRb > div.AQyBn > div.tvh9oe.BIB1wf > c-wiz > div > div > div > div > div.v6bUne > div.p7sI2.PUxBg > a > img.sFlh5c.pT0Scc.iPVvYb').get_attribute(
+            'src')
+        print(first_image)
+        attr_info['first_image'] = first_image
+    except NoSuchElementException:
+        print("get_google_image >> 해당 요소를 찾을 수 없습니다.")
 
 
 def get_codes_from_address(address):
@@ -258,9 +297,9 @@ def get_codes_from_address(address):
                 attr_info['gugun_code'] = gugun_result[0]
                 return {"sido_code": sido_result[0], "gugun_code": gugun_result[0]}
             else:
-                return "No matching records found."
+                return "get_codes_from_address >> No matching records found."
     except Error as e:
-        return f"Error: {str(e)}"
+        return f"get_codes_from_address >> Error: {str(e)}"
     finally:
         if connection.is_connected():
             cursor.close()
@@ -279,7 +318,7 @@ def attr_insert_value(influence_id):
         'gunguCode': attr_info['gugun_code'],
         'latitude': attr_info['latitude'],
         'longitude': attr_info['longitude'],
-        'overview': '',
+        'overview': attr_info['overview'],
     }
     response = requests.post(attr_url, json=attr_data) # insert 한 뒤 저장한 attr_content_id의 값을 반환
     attr_content_id = response.text  # 응답 내용 출력
@@ -326,34 +365,65 @@ def read_text_file(influence_id):
         # Each line contains the title and URL separated by " | "
         title, url = line.strip().split(" | ")
         try:
+            initialize_global()
             get_script(url)
-            attr_content_id = attr_insert_value(influence_id)
-            if attr_content_id != "" and attr_content_id != "fail":
-                data = influence_create_visited(influence_id, attr_content_id, url)
-                result = influence_add_visited(data)
+            if attr_info['addr1'] != "":
+                attr_content_id = attr_insert_value(influence_id)
+                if attr_content_id != "" and attr_content_id != "fail":
+                    data = influence_create_visited(influence_id, attr_content_id, url)
+                    result = influence_add_visited(data)
 
-            with open(f"filelists-{now}.txt", "a", encoding='utf-8') as outfile:
-                outfile.write(
-                    f"{url} | '{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
-                    f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
-                    f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
-                    f", '{attr_info['latitude']}', '{attr_info['longitude']}' | {result}\n")
-
-
+                with open(f"filelists-{now}.txt", "a", encoding='utf-8') as outfile:
+                    outfile.write(
+                        f"{url} | '{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
+                        f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
+                        f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
+                        f", '{attr_info['latitude']}', '{attr_info['longitude']}', '{attr_info['overview']}' | {result}\n")
         except StaleElementReferenceException:
             print(f"{url} >> Element has become stale. Skipping.")
         except NoSuchElementException:
-            print("Element no longer exists.")
+            print("read_text_file >> Element no longer exists.")
         except TimeoutException:
-            print("Element loading timed out.")
+            print("read_text_file >> Element loading timed out.")
         except Exception as e:
             print(e)
 
 
+def get_influencers_youtube_id():
+    # 데이터베이스 연결 시도
+    connection = None  # connection 초기화
+    try:
+        connection = mysql.connector.connect(**config)
+        if connection.is_connected():
+            cursor = connection.cursor()
+
+            # SQL 쿼리 준비 및 실행
+            query_influencers = "SELECT youtube_id FROM influencers"
+            cursor.execute(query_influencers)
+
+            # 모든 YouTube ID 가져오기
+            youtube_ids = cursor.fetchall()  # fetchall을 사용하여 모든 결과를 가져옵니다.
+            return youtube_ids  # 결과 리스트 반환
+        else:
+            return "No database connection could be established."
+    except Error as e:
+        return f"Error: {str(e)}"
+    finally:
+        # 연결이 열려있는 경우, 리소스 정리
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
 if __name__ == "__main__":
-    influence = '@tzuyang6145'
-    get_influence_videos(influence)
-    read_text_file(influence)
+    # Todo : DB에서 인플풀언서 데이터 리스트 받아서 처리
+    influencers = get_influencers_youtube_id()
+    print(influencers)
+    # influence = '@tzuyang6145'
+    for influence in influencers:
+        get_influence_videos(influence[0])
+        read_text_file(influence[0])
+
+    # get_map_info2('1810003724')
 
 
 

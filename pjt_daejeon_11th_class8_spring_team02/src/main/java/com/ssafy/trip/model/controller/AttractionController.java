@@ -47,7 +47,7 @@ public class AttractionController {
 		List<GunguDto> result = aservice.gunguList(sido);
 		return result;
 	}
-
+	
 	// 음식점 추가
 	@PostMapping("/insert")
 	@Operation(summary = "음식점 추가", description = "입력된 정보를 통해 음식점을 DB에 추가합니다.")

@@ -136,6 +136,11 @@
 		values (#{contentId}, #{contentTypeId}, #{title}, #{address}, #{image}, 0, #{sidoCode}, #{gunguCode}, #{latitude}, #{longitude})
 	</insert>
 	
+	<insert id="insertOverview" parameterType="com.ssafy.trip.model.dto.AttractionDto">
+		insert into attraction_description(content_id, overview)
+		values (#{contentId}, #{overview})
+	</insert>
+	
 	<select id="searchAttractionContentId" resultType="String">
 		select content_id
 		from attraction_info

@@ -31,6 +31,9 @@ public class AttractionService {
 	public boolean insertAttraction(AttractionDto attractionDto) {
 		System.out.println(attractionDto.toString());
 		if(adao.insert(attractionDto) == 1) {
+			if(adao.insertOverview(attractionDto) == 1) {
+				return true;
+			}
 			return true;
 		}
 		return false;
