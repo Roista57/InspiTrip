@@ -5,10 +5,13 @@ import MapCardComp from "@/components/map/MapCardComp.vue";
 import MapComp from "@/components/map/MapComp.vue";
 import { onMounted, watch } from "vue";
 import MapInfluencerCompVue from "@/components/map/MapInfluencerComp.vue";
+import router from "@/router";
+import { useMapStore } from "@/stores/map";
 
 const sidoGugun = usesidoGugunStore();
 
 const marker = useMarkerStore();
+const map = useMapStore();
 
 watch(
   () => marker.selectedMarker,
@@ -26,6 +29,32 @@ onMounted(() => {
   <div class="container-fluid bg-warning" height="900px">
     <div class="row" width="100%">
       <div class="col-5" height="900px">
+        <div class="d-flex gap-2 justify-content-center py-5">
+          <router-link :to="{ name: 'map-normal' }">
+            <button
+              :class="
+                map.isCard
+                  ? `btn btn-primary d-inline-flex align-items-center`
+                  : `btn btn-secondary d-inline-flex align-items-center`
+              "
+              type="button"
+            >
+              일반검색
+            </button></router-link
+          >
+          <router-link :to="{ name: 'map-influencer' }">
+            <button
+              :class="
+                map.isCard
+                  ? `btn btn-secondary d-inline-flex align-items-center`
+                  : `btn btn-primary d-inline-flex align-items-center`
+              "
+              type="button"
+            >
+              인플루언서 검색
+            </button></router-link
+          >
+        </div>
         <MapCardComp></MapCardComp>
       </div>
       <div class="col-7">
@@ -66,6 +95,15 @@ onMounted(() => {
             </div>
             <div class="col-sm-5 text-center">{{ marker.selectedMarker.overview }}</div>
             <div class="col-sm-1"></div>
+          </div>
+        </div>
+
+        <div class="container mt-4">
+          <div class="row">
+            <div class="col-2"></div>
+            <div class="radio card col-4">선택</div>
+            <div class="card col-4">선택</div>
+            <div class="col-2"></div>
           </div>
         </div>
 

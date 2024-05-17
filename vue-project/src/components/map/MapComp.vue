@@ -3,10 +3,15 @@ import { useMarkerStore } from "@/stores/marker";
 import { onMounted, ref, watch, computed } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 import { Modal } from "bootstrap";
+import { useInfluencerStore } from "@/stores/influencer";
+import { useMapStore } from "@/stores/map";
 
 const marker = useMarkerStore();
+const influencer = useInfluencerStore();
 
 const map = ref();
+
+const useMap = useMapStore();
 
 const coordinate = {
   lat: 37.566826,
@@ -31,6 +36,13 @@ watch(
     console.log(marker.markers);
     console.log("??");
     map.value.panTo(new kakao.maps.LatLng(marker.centerLat, marker.centerLng));
+  }
+);
+
+watch(
+  () => influencer.selectedInfluencer,
+  () => {
+    console.log(influencer.selectedInfluencer);
   }
 );
 
@@ -76,6 +88,19 @@ const onLoadKakaoMap = (mapRef) => {
     latlng.value = tmpLatlng;
   });
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+  var buttons = document.querySelectorAll(".btn-group-toggle .btn");
+
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      buttons.forEach(function (btn) {
+        btn.classList.remove("active");
+      });
+      button.classList.add("active");
+    });
+  });
+});
 </script>
 
 <template>
@@ -89,14 +114,35 @@ const onLoadKakaoMap = (mapRef) => {
     v-if="marker.level < 5"
     @onLoadKakaoMap="onLoadKakaoMap"
   >
-    <KakaoMapMarker
-      v-for="item in marker.markers"
-      :key="item.contentId"
-      :lat="item.latitude"
-      :lng="item.longitude"
-      :clickable="true"
-      @onClickKakaoMapMarker="onClickKakaoMapMarker(item)"
-    ></KakaoMapMarker>
+    <template v-if="useMap.isCard">
+      <KakaoMapMarker
+        v-for="item in marker.markers"
+        :key="item.contentId"
+        :lat="item.latitude"
+        :lng="item.longitude"
+        :clickable="true"
+        @onClickKakaoMapMarker="onClickKakaoMapMarker(item)"
+      ></KakaoMapMarker>
+    </template>
+    <template v-if="!useMap.isCard">
+      <KakaoMapMarker
+        v-for="item in marker.markers"
+        :key="item.contentId"
+        :lat="item.latitude"
+        :lng="item.longitude"
+        :clickable="true"
+        :image="{
+          imageSrc: influencer.selectedInfluencer.img,
+          imageWidth: 64,
+          imageHeight: 64,
+          imageOption: {
+            StyleSheet: 'rounded',
+          },
+        }"
+        @onClickKakaoMapMarker="onClickKakaoMapMarker(item)"
+      >
+      </KakaoMapMarker>
+    </template>
   </KakaoMap>
 
   <KakaoMap

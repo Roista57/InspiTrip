@@ -1,6 +1,7 @@
 import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useMapStore } from "./map";
 
 const URL = import.meta.env.VITE_VUE_API_URL;
 
@@ -8,6 +9,7 @@ export const useMarkerStore = defineStore("marker", () => {
   const markers = ref([]);
   const selectedType = ref(0);
   const level = ref(3);
+  const map = useMapStore();
 
   const centerLat = ref(37.566826);
   const centerLng = ref(126.9786567);
@@ -26,23 +28,33 @@ export const useMarkerStore = defineStore("marker", () => {
   );
 
   const getMarkerByLatLong = async (lat, lng) => {
-    await axios({
-      method: "POST",
-      url: URL + "attr/list/location",
-      data: {
-        contentId: 0,
-        contentTypeId: selectedType.value,
-        sidoCode: 0,
-        gunguCode: 0,
-        latitude: lat,
-        longitude: lng,
-        level: level.value,
-      },
-    }).then((resp) => {
-      console.log(resp.data);
-      markers.value = [];
-      markers.value = resp.data;
-    });
+    if (map.isCard) {
+      await axios({
+        method: "POST",
+        url: URL + "attr/list/location",
+        data: {
+          contentId: 0,
+          contentTypeId: selectedType.value,
+          sidoCode: 0,
+          gunguCode: 0,
+          latitude: lat,
+          longitude: lng,
+          level: level.value,
+        },
+      }).then((resp) => {
+        console.log(resp.data);
+        markers.value = [];
+        markers.value = resp.data;
+      });
+    }
+  };
+
+  const getMarkerByInfluencer = async (no) => {
+    if (!map.isCard) {
+      await axios(URL + "attr/visit/" + no).then((resp) => {
+        markers.value = resp.data;
+      });
+    }
   };
 
   const getMarkerBySido = (sido, gugun) => {
@@ -90,5 +102,6 @@ export const useMarkerStore = defineStore("marker", () => {
     markerInfluencer,
     selectedType,
     level,
+    getMarkerByInfluencer,
   };
 });

@@ -9,6 +9,7 @@ export const useInfluencerStore = defineStore("influencer", () => {
   const influencerList = ref([]);
   const newInfluencer = ref();
   const router = useRouter();
+  const selectedInfluencer = ref();
 
   const uploadImage = async (imageFile) => {
     console.log("uploadImage >> " + imageFile);
@@ -57,5 +58,5 @@ export const useInfluencerStore = defineStore("influencer", () => {
     });
   };
 
-  return { influencerList, newInfluencer, getInfluencers, registInfluencer };
+  return { influencerList, newInfluencer, getInfluencers, registInfluencer, selectedInfluencer };
 });

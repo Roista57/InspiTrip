@@ -15,6 +15,8 @@ import BoardUpdateComp from "@/components/board/boardUpdateComp.vue";
 import TheInfluencerView from "@/views/TheInfluencerView.vue";
 import InfluencerRegistComp from "@/components/influencer/InfluencerRegistComp.vue";
 import InfluencerListComp from "@/components/influencer/InfluencerListComp.vue";
+import MapInfluencerSearchComp from "@/components/map/MapInfluencerSearchComp.vue";
+import MapNoramlSearchCompVue from "@/components/map/MapNoramlSearchComp.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +62,19 @@ const router = createRouter({
       path: "/map",
       name: "map",
       component: TheMapView,
+      redirect: "/map/normal",
+      children: [
+        {
+          path: "normal",
+          name: "map-normal",
+          component: MapNoramlSearchCompVue,
+        },
+        {
+          path: "influencerSearch",
+          name: "map-influencer",
+          component: MapInfluencerSearchComp,
+        },
+      ],
     },
     {
       path: "/board",
