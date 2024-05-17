@@ -68,14 +68,14 @@ public class AttractionService {
 			rate = 0.045f;
 			break;
 		}
-//		case 7:{
-//			rate = 0.09f;
-//			break;
-//		}
-//		case 8:{
-//			rate = 0.18f;
-//			break;
-//		}
+		case 7:{
+			rate = 0.09f;
+			break;
+		}
+		case 8:{
+			rate = 0.18f;
+			break;
+		}
 		default:
 			rate = 0.0045f;
 			break;
