@@ -66,7 +66,7 @@ def get_influence_videos(influence):
 
     with open(f"influence/{influence}.txt", "w", encoding='utf-8') as file:
         for element in tqdm(elements, desc="총 영상"):
-            file.write(f"{element.get_attribute('title')} | {element.get_attribute('href')}\n")
+            file.write(f"{element.get_attribute('title')} $|$ {element.get_attribute('href')}\n")
 
 
 # 변수 초기화
@@ -361,32 +361,36 @@ def read_text_file(influence_id):
             lines.append(line.strip())
     # 현재 날짜와 시간을 '년-월-일-시-분-초' 형식의 문자열로 가져옵니다.
     now = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    cnt = 0
     for line in tqdm(lines, desc="작업 현황"):
-        # Each line contains the title and URL separated by " | "
-        title, url = line.strip().split(" | ")
-        try:
-            initialize_global()
-            get_script(url)
-            if attr_info['addr1'] != "":
-                attr_content_id = attr_insert_value(influence_id)
-                if attr_content_id != "" and attr_content_id != "fail":
-                    data = influence_create_visited(influence_id, attr_content_id, url)
-                    result = influence_add_visited(data)
+        if cnt < 100:
+            # Each line contains the title and URL separated by " | "
+            title, url = line.strip().split(" $|$ ")
+            try:
+                initialize_global()
+                get_script(url)
+                if attr_info['addr1'] != "":
+                    attr_content_id = attr_insert_value(influence_id)
+                    if attr_content_id != "" and attr_content_id != "fail":
+                        data = influence_create_visited(influence_id, attr_content_id, url)
+                        result = influence_add_visited(data)
 
-                with open(f"filelists-{now}.txt", "a", encoding='utf-8') as outfile:
-                    outfile.write(
-                        f"{url} | '{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
-                        f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
-                        f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
-                        f", '{attr_info['latitude']}', '{attr_info['longitude']}', '{attr_info['overview']}' | {result}\n")
-        except StaleElementReferenceException:
-            print(f"{url} >> Element has become stale. Skipping.")
-        except NoSuchElementException:
-            print("read_text_file >> Element no longer exists.")
-        except TimeoutException:
-            print("read_text_file >> Element loading timed out.")
-        except Exception as e:
-            print(e)
+                    with open(f"log/filelists-{now}.txt", "a", encoding='utf-8') as outfile:
+                        outfile.write(
+                            f"{url} | '{attr_info['content_type_id']}', '{attr_info['title']}', '{attr_info['addr1']}'"
+                            f", '{attr_info['zipcode']}', '{attr_info['tel']}', '{attr_info['first_image']}'"
+                            f", '{attr_info['readcount']}', '{attr_info['sido_code']}', '{attr_info['gugun_code']}'"
+                            f", '{attr_info['latitude']}', '{attr_info['longitude']}', '{attr_info['overview']}' | {result}\n")
+            except StaleElementReferenceException:
+                print(f"{url} >> Element has become stale. Skipping.")
+            except NoSuchElementException:
+                print("read_text_file >> Element no longer exists.")
+            except TimeoutException:
+                print("read_text_file >> Element loading timed out.")
+            except Exception as e:
+                print(e)
+            finally:
+                cnt += 1
 
 
 def get_influencers_youtube_id():
