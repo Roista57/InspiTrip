@@ -42,13 +42,6 @@ const modules = [
             },
         },
     },
-    {
-        name: "blotFormatter",
-        module: BlotFormatter,
-        options: {
-            /* options */
-        },
-    },
 ];
 </script>
 
@@ -85,6 +78,7 @@ const modules = [
             :options="globalOptions"
             v-model:content="boardStore.board.content"
             content-type="html"
+            disabled
         />
         <button type="button" class="btn btn-outline-primary" @click="boardUpdate">수정하기</button>
         <button type="button" class="btn btn-outline-danger" @click="boardInsert">삭제하기</button>
