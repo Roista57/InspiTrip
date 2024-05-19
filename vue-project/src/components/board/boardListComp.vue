@@ -17,9 +17,14 @@ onMounted(() => {
 
 const page = computed(() => {
     let pNumber = [];
-    for (let p = Math.floor((boardStore.page.endPage - 1) / 10) * 10 + 1; p <= boardStore.page.endPage; p++) {
-        pNumber.push(p);
+    if (boardStore.page.endPage != null) {
+        for (let p = Math.floor((boardStore.page.endPage - 1) / 10) * 10 + 1; p <= boardStore.page.endPage; p++) {
+            pNumber.push(p);
+        }
+    } else {
+        pNumber.push(1);
     }
+
     return pNumber;
 });
 
