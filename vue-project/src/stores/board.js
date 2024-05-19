@@ -25,6 +25,28 @@ export const useBoardStore = defineStore("board", () => {
         read_count: null,
     });
 
+    const upload_image = async (file) => {
+        console.log(file);
+        let resp_url = null;
+        const formData = new FormData();
+        formData.append("image", file);
+        await axios
+            .post("http://localhost:3000/upload/board", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((resp) => {
+                console.log(resp);
+                resp_url = `http://localhost:3000/board/${resp.data}`;
+                console.log(resp_url);
+            })
+            .catch((err) => {
+                console.error("Error:", err);
+            });
+        return resp_url;
+    };
+
     const getBoardList = () => {
         axios({
             url: `${VITE_VUE_API_URL}notice/list/${page.value.curPage}`,
@@ -108,5 +130,16 @@ export const useBoardStore = defineStore("board", () => {
             });
     };
 
-    return { page, boardList, getBoardList, board, boardInsert, boardDetail, getBoard, boardUpdate, page };
+    return {
+        page,
+        boardList,
+        getBoardList,
+        board,
+        boardInsert,
+        boardDetail,
+        getBoard,
+        boardUpdate,
+        page,
+        upload_image,
+    };
 });

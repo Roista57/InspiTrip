@@ -1,8 +1,14 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, readonly, ref } from "vue";
 import { RouterLink, useRouter, useRoute } from "vue-router";
 import { useBoardStore } from "@/stores/board";
 import { useMemberStore } from "@/stores/member";
+
+import { QuillEditor } from "@vueup/vue-quill";
+import BlotFormatter from "quill-blot-formatter";
+import ImageUploader from "quill-image-uploader";
+import { ImageDrop } from "quill-image-drop-module";
+import imageCompress from "quill-image-compress";
 
 const router = useRouter();
 const route = useRoute();
@@ -16,7 +22,44 @@ onMounted(() => {
 const boardUpdate = computed(() => {
     router.push({ name: "board-update", params: { no: route.params.no } });
 });
+
+const globalOptions = {
+    // debug: "info",
+    readOnly: true,
+    theme: "snow",
+};
+
+const modules = [
+    {
+        name: "imageUploader",
+        module: ImageUploader,
+        options: {
+            upload: (file) => {
+                console.log(file);
+                return new Promise(() => {
+                    fileList.value.push(file);
+                });
+            },
+        },
+    },
+];
 </script>
+
+<!-- <template>
+    <div>
+        <label for="email" class="form-label">제목</label>
+        <input type="email" class="form-control" :value="boardStore.board.title" disabled />
+        <label for="comment">작성자</label>
+        <input type="email" class="form-control" :value="boardStore.board.mid" disabled />
+        <label for="comment">작성 시간</label>
+        <input type="email" class="form-control" :value="boardStore.board.write_date" disabled />
+        <label for="comment">조회수</label>
+        <input type="email" class="form-control" :value="boardStore.board.read_count" disabled />
+        <textarea class="form-control" rows="5" v-model="boardStore.board.content" disabled></textarea>
+        <button type="button" class="btn btn-outline-primary" @click="boardUpdate">수정하기</button>
+        <button type="button" class="btn btn-outline-danger" @click="boardInsert">삭제하기</button>
+    </div>
+</template> -->
 
 <template>
     <div>
@@ -28,7 +71,15 @@ const boardUpdate = computed(() => {
         <input type="email" class="form-control" :value="boardStore.board.write_date" disabled />
         <label for="comment">조회수</label>
         <input type="email" class="form-control" :value="boardStore.board.read_count" disabled />
-        <textarea class="form-control" rows="5" v-model="boardStore.board.content" disabled></textarea>
+        <QuillEditor
+            theme="snow"
+            toolbar="full"
+            :modules="modules"
+            :options="globalOptions"
+            v-model:content="boardStore.board.content"
+            content-type="html"
+            disabled
+        />
         <button type="button" class="btn btn-outline-primary" @click="boardUpdate">수정하기</button>
         <button type="button" class="btn btn-outline-danger" @click="boardInsert">삭제하기</button>
     </div>

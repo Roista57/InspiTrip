@@ -17,11 +17,10 @@ import InfluencerRegistComp from "@/components/influencer/InfluencerRegistComp.v
 import InfluencerListComp from "@/components/influencer/InfluencerListComp.vue";
 import MapInfluencerSearchComp from "@/components/map/MapInfluencerSearchComp.vue";
 import MapNoramlSearchCompVue from "@/components/map/MapNoramlSearchComp.vue";
-import AlarmListComp from "@/components/alarm/AlarmListComp.vue"
+import AlarmListComp from "@/components/alarm/AlarmListComp.vue";
 import { useMemberStore } from "@/stores/member";
-
-
-
+import TheReviewView from "@/views/TheReviewView.vue";
+import ReviewInsertComp from "@/components/review/ReviewInsertComp.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -149,16 +148,78 @@ const router = createRouter({
       ],
     },
     {
+      path: "/review",
+      name: "review",
+      component: TheReviewView,
+      children: [
+        {
+          path: "insert",
+          name: "review-insert",
+          component: ReviewInsertComp,
+        },
+      ],
+    },
+    {
+      path: "/board",
+      name: "board",
+      component: TheBoardView,
+      children: [
+        {
+          path: "",
+          name: "board-list",
+          component: BoardListComp,
+        },
+        {
+          path: "insert",
+          name: "board-insert",
+          component: BoardInsertComp,
+        },
+        {
+          path: ":no",
+          name: "board-detail",
+          component: BoardDetailComp,
+        },
+        {
+          path: "update/:no",
+          name: "board-update",
+          component: BoardUpdateComp,
+        },
+      ],
+      // redirect: { name: "article-list" },
+      // children: [
+      //   {
+      //     path: "list",
+      //     name: "article-list",
+      //     component: () => import("@/components/board/BoardList.vue"),
+      //   },
+      //   {
+      //     path: "view/:articleno",
+      //     name: "article-view",
+      //     component: () => import("@/components/board/BoardDetail.vue"),
+      //   },
+      //   {
+      //     path: "write",
+      //     name: "article-write",
+      //     component: () => import("@/components/board/BoardWrite.vue"),
+      //   },
+      //   {
+      //     path: "modify/:articleno",
+      //     name: "article-modify",
+      //     component: () => import("@/components/board/BoardModify.vue"),
+      //   },
+      // ],
+    },
+    {
       path: "/alarm",
       name: "alarm",
       component: AlarmListComp,
-    }
+    },
   ],
 });
 
 router.beforeEach((to, from) => {
   const member = useMemberStore();
-  if(member.isLogin){
+  if (member.isLogin) {
     member.countAlarm();
   }
 });

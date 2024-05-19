@@ -17,8 +17,6 @@ const logined = computed(async () => {
 </script>
 
 <template>
-  <div class="b-example-divider"></div>
-
   <header class="p-3 mb border-bottom">
     <div class="container">
       <div
@@ -56,6 +54,13 @@ const logined = computed(async () => {
               :to="{ name: 'board-list' }"
               class="nav-link px-2 link-body-emphasis"
               >BOARD</router-link
+            >
+          </li>
+          <li>
+            <router-link
+              :to="{ name: 'review-insert' }"
+              class="nav-link px-2 link-body-emphasis"
+              >REVIEW</router-link
             >
           </li>
           <div class="dropdown text-end nav-link px-2 link-body-emphasis">
@@ -154,8 +159,6 @@ const logined = computed(async () => {
       </div>
     </div>
   </header>
-
-  <div class="b-example-divider"></div>
 </template>
 
 <style scoped></style>
