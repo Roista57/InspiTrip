@@ -17,6 +17,11 @@ import InfluencerRegistComp from "@/components/influencer/InfluencerRegistComp.v
 import InfluencerListComp from "@/components/influencer/InfluencerListComp.vue";
 import MapInfluencerSearchComp from "@/components/map/MapInfluencerSearchComp.vue";
 import MapNoramlSearchCompVue from "@/components/map/MapNoramlSearchComp.vue";
+import AlarmListComp from "@/components/alarm/AlarmListComp.vue"
+import { useMemberStore } from "@/stores/member";
+
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -143,7 +148,19 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/alarm",
+      name: "alarm",
+      component: AlarmListComp,
+    }
   ],
+});
+
+router.beforeEach((to, from) => {
+  const member = useMemberStore();
+  if(member.isLogin){
+    member.countAlarm();
+  }
 });
 
 export default router;

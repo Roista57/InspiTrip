@@ -56,8 +56,13 @@
 
 	<insert id="follow">
 		insert into followers(mid, ino, follow_date)
-		values (#{mid}, #{ino}, NOW())
+		values
+		(#{mid}, #{ino}, NOW())
 	</insert>
+	
+	<select id="getFollowersByInfluencerId" resultType="String">
+		select mid from followers where ino = #{ino};
+	</select>
 
 
 	<resultMap type="MemberDTO" id="MemberInfo">

@@ -19,7 +19,7 @@ const member = useMemberStore();
       <span> | </span>
       <router-link to="#">Member</router-link>
     </header> -->
-    <ProjectHeader :key="member.isLogin" />
+    <ProjectHeader :key="{isLogin: member.isLogin}" />
     <router-view></router-view>
   </div>
 </template>

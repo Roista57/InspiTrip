@@ -9,7 +9,18 @@ export const useInfluencerStore = defineStore("influencer", () => {
   const influencerList = ref([]);
   const newInfluencer = ref();
   const router = useRouter();
-  const selectedInfluencer = ref();
+  const selectedInfluencer = ref({
+    no:0,
+  });
+
+  const selectInfluencer = async(no) =>{
+    await axios(URL+"influencer/find/"+no)
+    .then(resp=>resp.data)
+    .then(data=>{
+      console.log(data)
+      selectedInfluencer.value=data;
+    })
+  }
 
   const uploadImage = async (imageFile) => {
     console.log("uploadImage >> " + imageFile);
@@ -51,12 +62,12 @@ export const useInfluencerStore = defineStore("influencer", () => {
       });
   };
 
-  const getInfluencers = () => {
-    axios(URL + "influencer/list").then((resp) => {
+  const getInfluencers = async () => {
+    await axios(URL + "influencer/list").then((resp) => {
       console.log(resp.data);
       influencerList.value = resp.data;
     });
   };
 
-  return { influencerList, newInfluencer, getInfluencers, registInfluencer, selectedInfluencer };
+  return { influencerList, newInfluencer, getInfluencers, registInfluencer, selectedInfluencer,selectInfluencer };
 });

@@ -4,16 +4,28 @@ import { onMounted } from "vue";
 import InfluencerListComp from "./MapInfluencerListComp.vue";
 import { useInfluencerStore } from "@/stores/influencer";
 import { useMarkerStore } from "@/stores/marker";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 
 const map = useMapStore();
 const influencer = useInfluencerStore();
 const marker = useMarkerStore();
+const router = useRouter();
+const route = useRoute();
 
-onMounted(() => {
-  influencer.selectedInfluencer = 0;
-  influencer.getInfluencers();
-  map.isCard = false;
+onBeforeRouteLeave((to, from) => {
   marker.markers = [];
+});
+
+onMounted(async () => {
+  map.isCard = false;
+  await influencer.getInfluencers();
+  console.log(influencer.selectedInfluencer);
+  if (influencer.selectedInfluencer.no !== 0) {
+    await marker.getMarkerByInfluencer(influencer.selectedInfluencer.no);
+    console.log(marker.markers);
+  } else {
+    marker.markers = [];
+  }
 });
 </script>
 

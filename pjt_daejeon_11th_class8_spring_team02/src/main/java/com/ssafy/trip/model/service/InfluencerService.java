@@ -8,14 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.trip.model.dao.AlarmDAO;
 import com.ssafy.trip.model.dao.InfluencerDAO;
+import com.ssafy.trip.model.dao.MemberDAO;
+import com.ssafy.trip.model.dto.AlarmDTO;
 import com.ssafy.trip.model.dto.InfluencerDTO;
 import com.ssafy.trip.model.dto.VisitDTO;
 
 @Service
 public class InfluencerService {
 	InfluencerDAO idao;
-
+	@Autowired
+	MemberDAO mdao;
+	@Autowired
+	AlarmDAO adao;
+	
 	public InfluencerService(InfluencerDAO idao) {
 		super();
 		this.idao = idao;
@@ -60,8 +67,16 @@ public class InfluencerService {
 		return result;
 	}
 
+	@Transactional
 	public int insertVisit(VisitDTO visit) {
-		return idao.addVisit(visit);
+		int result = idao.addVisit(visit);
+		int visitNo = visit.getNo();
+	 	List<String> members = mdao.getFollowersByInfluencerId(visit.getIno());
+		for(String member : members) {
+			AlarmDTO aDTO = new AlarmDTO(0, visitNo, member, false, null);
+			adao.insertAlarm(aDTO);
+		}
+		return result;
 	}
 	
 	public List<VisitDTO> selectVisits(int no){

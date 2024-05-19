@@ -51,12 +51,14 @@ export const useMarkerStore = defineStore("marker", () => {
 
   const getMarkerByInfluencer = async (no) => {
     if (!map.isCard) {
-      await axios(URL + "attr/visit/" + no).then((resp) => {
-        markers.value = resp.data;
-      });
+      try {
+        const response = await axios.get(URL + "attr/visit/" + no);
+        markers.value = response.data;
+      } catch (error) {
+        console.error("Error fetching markers:", error);
+      }
     }
   };
-
   const getMarkerBySido = (sido, gugun) => {
     axios({
       method: "POST",

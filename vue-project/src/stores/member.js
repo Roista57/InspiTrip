@@ -9,6 +9,7 @@ const { VITE_VUE_API_URL } = import.meta.env;
 export const useMemberStore = defineStore("member", () => {
   const router = useRouter();
   const token = ref("");
+  const alarms = ref([]);
 
   const isLogin = ref(false);
 
@@ -24,25 +25,32 @@ export const useMemberStore = defineStore("member", () => {
     img: null,
   });
 
-  const follow = (ino) =>{
-    if(isLogin.value){
+  const countAlarm = () => {
+    axios(VITE_VUE_API_URL+"member/alarms/"+member.value.id).
+    then(resp=>resp.data)
+    .then(data=>{
+      alarms.value = data;
+    })
+  };
+
+  const follow = (ino) => {
+    if (isLogin.value) {
       axios({
-        url:VITE_VUE_API_URL+`member/follow/${member.value.id}/${ino}`,
-        method:"POST",
+        url: VITE_VUE_API_URL + `member/follow/${member.value.id}/${ino}`,
+        method: "POST",
         headers: { Authorization: `Bearer ${token.value}` },
       })
-      .then((resp)=>resp.data).then(data=>{
-        console.log(data)
-        if(data=="already"){
-          window.alert("이미 팔로우 하셨습니다")
-        }
-        else if(data == "success"){
-          window.alert("팔로우 완료!")
-        }
-      })
+        .then((resp) => resp.data)
+        .then((data) => {
+          console.log(data);
+          if (data == "already") {
+            window.alert("이미 팔로우 하셨습니다");
+          } else if (data == "success") {
+            window.alert("팔로우 완료!");
+          }
+        });
     }
-
-  }
+  };
 
   const uploadImage = async () => {
     console.log("uploadImage >> " + imageFile.value);
@@ -183,7 +191,10 @@ export const useMemberStore = defineStore("member", () => {
         .then((response) => {
           console.log(response.data);
           alert("업데이트가 완료되었습니다.");
-          router.replace({ name: "member-detail", params: { id: member.value.id } });
+          router.replace({
+            name: "member-detail",
+            params: { id: member.value.id },
+          });
         })
         .catch((error) => {
           console.error("There was an error!", error);
@@ -207,6 +218,8 @@ export const useMemberStore = defineStore("member", () => {
     idCheckMember,
     idCheckState,
     imageFile,
-    follow
+    follow,
+    alarms,
+    countAlarm
   };
 });

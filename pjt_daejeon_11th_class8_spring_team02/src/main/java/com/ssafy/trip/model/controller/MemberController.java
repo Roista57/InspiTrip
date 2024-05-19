@@ -1,5 +1,7 @@
 package com.ssafy.trip.model.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.trip.model.dao.AlarmDAO;
+import com.ssafy.trip.model.dto.AlarmDTO;
 import com.ssafy.trip.model.dto.MemberDTO;
 import com.ssafy.trip.model.service.MemberService;
 import com.ssafy.trip.model.service.UserService;
@@ -104,5 +108,11 @@ public class MemberController {
 	@Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
 	public MemberDTO info(@PathVariable("memberId") String memberId) {
 		return mservice.getInfo(memberId);
+	}
+	
+	@GetMapping("/alarms/{memberId}")
+	@Operation(summary = "알람확인", description = "읽지 않은 알람을 확인합니다")
+	public List<AlarmDTO> alarms(@PathVariable("memberId") String memberId) {
+		return mservice.selectAlarms(memberId);
 	}
 }

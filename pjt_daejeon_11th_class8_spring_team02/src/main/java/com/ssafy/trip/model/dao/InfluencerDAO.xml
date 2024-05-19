@@ -39,7 +39,8 @@
 		where no = #{no}
 	</delete>
 
-	<insert id="addVisit" parameterType="com.ssafy.trip.model.dto.VisitDTO">
+	<insert id="addVisit" parameterType="com.ssafy.trip.model.dto.VisitDTO" useGeneratedKeys="true"
+        keyProperty="no" keyColumn="no">
 		insert into visits(mid, ino, ano, url)
 		values (#{mid},
 		#{ino}, #{ano}, #{url})

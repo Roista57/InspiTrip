@@ -1,15 +1,21 @@
 package com.ssafy.trip.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.trip.model.dao.AlarmDAO;
 import com.ssafy.trip.model.dao.MemberDAO;
+import com.ssafy.trip.model.dto.AlarmDTO;
 import com.ssafy.trip.model.dto.MemberDTO;
 
 @Service
 public class MemberService {
 	@Autowired
 	private MemberDAO mdao;
+	@Autowired
+	private AlarmDAO adao;
 
 	// 회원 가입
 	public boolean memberInsert(MemberDTO memberDTO) {
@@ -63,5 +69,9 @@ public class MemberService {
 			mdao.follow(memberId, influencerNo);
 			return "success";
 		}
+	}
+	
+	public List<AlarmDTO> selectAlarms(String mid){
+		return adao.selectAlarmsByMemberId(mid);
 	}
 }
