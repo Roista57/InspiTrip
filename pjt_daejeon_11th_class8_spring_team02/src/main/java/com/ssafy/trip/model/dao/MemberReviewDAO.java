@@ -9,6 +9,7 @@ import com.ssafy.trip.model.dto.ReviewImageDTO;
 
 public interface MemberReviewDAO {
 	int insert(MemberReviewDTO dto);
+	int	insertImage(ReviewImageDTO dto);
 	int update(MemberReviewDTO dto);
 	int delete(MemberReviewDTO dto);
 	MemberReviewDTO selectOne(@Param("ano")int ano, @Param("mid")String mid);

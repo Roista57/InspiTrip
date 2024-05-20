@@ -11,14 +11,17 @@ const inputImageList = ref([]);
 const rating = ref(0);
 
 const review = ref({
-  rating: 0,
+  no: "",
+  ano: "126509",
+  mid: "ssafy",
   content: "",
-  inputImageList: [],
+  grade: 0,
+  write_date: "",
 });
 
 const setRating = (rating) => {
   console.log(rating);
-  review.value.rating = rating;
+  review.value.grade = rating;
 };
 
 const previewImageList = ref([]);
@@ -26,7 +29,7 @@ const previewImageList = ref([]);
 // input element에서 파일을 선택했을 때 실행되는 함수
 const handleFileChange = (event) => {
   // 기존 이미지 리스트를 비우고
-  review.value.inputImageList = [];
+  inputImageList.value = [];
   previewImageList.value = [];
   // 선택한 모든 파일을 순회
   for (let file of event.target.files) {
@@ -34,7 +37,7 @@ const handleFileChange = (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       // 읽기 완료 후, 이미지 URL을 inputImageList에 추가
-      review.value.inputImageList.push(file);
+      inputImageList.value.push(file);
       previewImageList.value.push(e.target.result);
     };
     reader.readAsDataURL(file); // 데이터 URL 형태로 파일 읽기
@@ -43,12 +46,16 @@ const handleFileChange = (event) => {
 
 const arrayLength = computed(() => previewImageList.value.length);
 
-const insertReview = () => {
-  console.log(rating.value);
-  console.log(review.value);
+const insertReview = async () => {
+  reviewStore.inputImageList = inputImageList.value;
   reviewStore.review = review.value;
-  console.log(reviewStore.review);
-  // console.log(review.value);
+  const rno = await reviewStore.insertReview();
+  console.log(inputImageList.value);
+  for (let i = 0; i < inputImageList.value.length; i++) {
+    const image_name = await reviewStore.upload_image(inputImageList.value[i]);
+    await reviewStore.insertReviewImage(rno, image_name);
+  }
+  reviewStore.getReviewList();
 };
 </script>
 

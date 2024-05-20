@@ -14,6 +14,19 @@ public class ReviewService {
 	@Autowired
 	private MemberReviewDAO rdao;
 	
+	public int insert(MemberReviewDTO dto) {
+		if(rdao.insert(dto) > 0) {
+			return dto.getNo();
+		}
+		return 0;
+	}
+	
+	public boolean insertImage(ReviewImageDTO dto) {
+		if(rdao.insertImage(dto) > 0) {
+			return true;
+		}
+		return false;
+	}
 	
 	public List<MemberReviewDTO> selectAll(int ano){
 		return rdao.selectAll(ano);

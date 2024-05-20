@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.trip.model.dao.MemberReviewDAO">
-	<insert id="insert" parameterType="com.ssafy.trip.model.dto.MemberReviewDTO">
-		insert into member_reviews(ano, mid, content, write_date, garde)
-		values (#{mid}, #{ano}, #{content}, now(), #{grade})
+	<insert id="insert" parameterType="com.ssafy.trip.model.dto.MemberReviewDTO" useGeneratedKeys="true" keyProperty="no">
+		insert into member_reviews(ano, mid, content, write_date, grade)
+		values (#{ano}, #{mid}, #{content}, now(), #{grade})
+	</insert>
+	
+	<insert id="insertImage" parameterType="com.ssafy.trip.model.dto.ReviewImageDTO">
+		insert into member_review_files(rno, url)
+		values (#{rno}, #{url})
 	</insert>
 	
 	<select id="selectOne" resultMap="reviewInfo">

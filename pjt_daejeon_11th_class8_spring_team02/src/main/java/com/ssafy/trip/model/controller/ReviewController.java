@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +25,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class ReviewController {
 	@Autowired
 	private ReviewService rservice;
-
+	
+	@PostMapping("/add")
+	@Operation(summary="리뷰 추가", description = "관광지에 리뷰를 추가합니다.")
+	public String postReviewName(@RequestBody MemberReviewDTO review) {
+		System.out.println(review);
+		return rservice.insert(review)+"";
+	}
+	
+	@PostMapping("/image/add")
+	@Operation(summary="리뷰 추가", description = "관광지에 리뷰를 추가합니다.")
+	public String postReviewImageName(@RequestBody ReviewImageDTO dto) {
+		if(rservice.insertImage(dto)) {
+			return "ok";
+		}
+		return "fail";
+	}
+	
 	@GetMapping("/list/{ano}")
 	@Operation(summary = "관광지 리뷰 정보 리턴", description = "관광지의 ano에 작성된 모든 리뷰 정보를 불러옵니다.")
 	public List<MemberReviewDTO> getReviewName(@PathVariable("ano") int ano) {

@@ -7,6 +7,7 @@ import { ref, onMounted, watch } from "vue";
 import MapInfluencerCompVue from "@/components/map/MapInfluencerComp.vue";
 import ReviewListComp from "@/components/review/ReviewListComp.vue";
 import router from "@/router";
+import ReviewInsertComp from "@/components/review/ReviewInsertComp.vue";
 import { useMapStore } from "@/stores/map";
 
 const sidoGugun = usesidoGugunStore();
@@ -153,6 +154,7 @@ onMounted(() => {
           <div
             class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
           >
+            <ReviewInsertComp style="width: 70%"></ReviewInsertComp>
             <review-list-comp style="width: 70%"></review-list-comp>
           </div>
         </template>
