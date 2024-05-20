@@ -19,6 +19,13 @@
 		select *
 		from member_reviews
 		where ano = #{ano}
+		order by write_date desc
+	</select>
+	
+	<select id="getImage" resultMap="reviewImageInfo">
+		select *
+		from member_review_files
+		where rno = #{rno}
 	</select>
 	
 	<resultMap type="com.ssafy.trip.model.dto.MemberReviewDTO" id="reviewInfo">
@@ -27,6 +34,12 @@
 		<result column="mid" property="mid"/>
 		<result column="content" property="content"/>
 		<result column="write_date" property="writeDate"/>
-		<result column="garde" property="grade"/>
+		<result column="grade" property="grade"/>
+	</resultMap>
+	
+	<resultMap type="com.ssafy.trip.model.dto.ReviewImageDTO" id="reviewImageInfo">
+		<result column="no" property="no"/>
+		<result column="rno" property="rno"/>
+		<result column="url" property="url"/>
 	</resultMap>
 </mapper>

@@ -6,12 +6,12 @@ public class MemberReviewDTO {
 	private String mid;
 	private String content;
 	private String writeDate;
-	private String grade;
+	private int grade;
 
 	public MemberReviewDTO() {
 	}
 
-	public MemberReviewDTO(int no, int ano, String mid, String content, String writeDate, String grade) {
+	public MemberReviewDTO(int no, int ano, String mid, String content, String writeDate, int grade) {
 		this.no = no;
 		this.ano = ano;
 		this.mid = mid;
@@ -60,11 +60,17 @@ public class MemberReviewDTO {
 		this.writeDate = writeDate;
 	}
 
-	public String getGrade() {
+	public int getGrade() {
 		return grade;
 	}
 
-	public void setGrade(String grade) {
+	public void setGrade(int grade) {
 		this.grade = grade;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberReviewDTO [no=" + no + ", ano=" + ano + ", mid=" + mid + ", content=" + content + ", writeDate="
+				+ writeDate + ", grade=" + grade + "]";
 	}
 }

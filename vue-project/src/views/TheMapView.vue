@@ -3,8 +3,9 @@ import { usesidoGugunStore } from "@/stores/sidoGugun.js";
 import { useMarkerStore } from "@/stores/marker.js";
 import MapCardComp from "@/components/map/MapCardComp.vue";
 import MapComp from "@/components/map/MapComp.vue";
-import { onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import MapInfluencerCompVue from "@/components/map/MapInfluencerComp.vue";
+import ReviewListComp from "@/components/review/ReviewListComp.vue";
 import router from "@/router";
 import { useMapStore } from "@/stores/map";
 
@@ -12,6 +13,12 @@ const sidoGugun = usesidoGugunStore();
 
 const marker = useMarkerStore();
 const map = useMapStore();
+
+const div_state = ref(true);
+const isHovered_inf = ref(false);
+const isHovered_user = ref(false);
+const normalColor = "#EAEAEA"; // 일반 상태의 색상 코드
+const hoveredColor = "#D8D8D8"; // 호버 상태의 색상 코드
 
 watch(
   () => marker.selectedMarker,
@@ -104,21 +111,52 @@ onMounted(() => {
         <div class="container mt-4">
           <div class="row">
             <div class="col-2"></div>
-            <div class="card col-4">인플루언서</div>
-            <div class="card col-4">유저리뷰</div>
+            <div class="col-4" @click="div_state = true">
+              <a href="#" style="text-decoration-line: none">
+                <div
+                  class="card align-items-center"
+                  :style="{ backgroundColor: isHovered_inf ? hoveredColor : normalColor }"
+                  @mouseover="isHovered_inf = true"
+                  @mouseleave="isHovered_inf = false"
+                >
+                  인플루언서
+                </div>
+              </a>
+            </div>
+            <div class="col-4" @click="div_state = false">
+              <a href="#" style="text-decoration-line: none">
+                <div
+                  class="card align-items-center"
+                  :style="{ backgroundColor: isHovered_user ? hoveredColor : normalColor }"
+                  @mouseover="isHovered_user = true"
+                  @mouseleave="isHovered_user = false"
+                >
+                  유저리뷰
+                </div>
+              </a>
+            </div>
             <div class="col-2"></div>
           </div>
         </div>
+        <template v-if="div_state == true">
+          <div
+            class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
+          >
+            <MapInfluencerCompVue
+              v-for="item in marker.markerInfluencer"
+              :key="item.contentId"
+              :item="item"
+            />
+          </div>
+        </template>
+        <template v-if="div_state == false">
+          <div
+            class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
+          >
+            <review-list-comp style="width: 70%"></review-list-comp>
+          </div>
+        </template>
 
-        <div
-          class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
-        >
-          <MapInfluencerCompVue
-            v-for="item in marker.markerInfluencer"
-            :key="item.contentId"
-            :item="item"
-          />
-        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>

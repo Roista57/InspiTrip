@@ -1,70 +1,68 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useReviewStore } from "@/stores/review";
+import StarRating from "vue-star-rating";
+import axios from "axios";
 
 const reviewStore = useReviewStore();
+const images = ref([]);
+const props = defineProps({
+  reviewinfo: {
+    no: Number,
+    ano: Number,
+    mid: String,
+    content: String,
+    writeDate: String,
+    grade: Number,
+  },
+});
+
+onMounted(async () => {
+  images.value = await reviewStore.getImageList(props.reviewinfo.no);
+  console.log(images.value);
+});
+
+const rating = ref(props.reviewinfo.grade);
 
 // 이미지 파일 리스트를 저장할 ref
 const inputImageList = ref([]);
-
-const review = ref({
-  content: "",
-  inputImageList: [],
-});
-
 const previewImageList = ref([]);
 
-// input element에서 파일을 선택했을 때 실행되는 함수
-const handleFileChange = (event) => {
-  // 기존 이미지 리스트를 비우고
-  review.value.inputImageList = [];
-  previewImageList.value = [];
-  // 선택한 모든 파일을 순회
-  for (let file of event.target.files) {
-    // FileReader API를 사용하여 파일을 읽기
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      // 읽기 완료 후, 이미지 URL을 inputImageList에 추가
-      review.value.inputImageList.push(file);
-      previewImageList.value.push(e.target.result);
-    };
-    reader.readAsDataURL(file); // 데이터 URL 형태로 파일 읽기
-  }
-};
-
-const arrayLength = computed(() => previewImageList.value.length);
-
-const insertReview = () => {
-  reviewStore.review = review.value;
-  console.log(reviewStore.review);
-  // console.log(review.value);
-};
+const arrayLength = computed(() => images.value.length);
 </script>
 
 <template>
   <div class="review-component container mt-3">
     <div class="row">
       <div class="col">
-        <h2>리뷰</h2>
         <div class="card mb-3">
           <div class="card-body">
+            <div class="mb-3 d-flex justify-content-between">
+              <star-rating
+                v-model:rating="rating"
+                active-color="#FF9600"
+                v-bind:star-size="20"
+                read-only=" true"
+              ></star-rating>
+              {{ props.reviewinfo.writeDate }}
+            </div>
             <!-- 이미지가 하나라도 있으면 이미지 표시 -->
             <template v-if="arrayLength > 0">
               <div class="mb-3">
-                <template v-for="(imageSrc, index) in previewImageList" :key="index">
+                <template v-for="(image, index) in images" :key="index">
                   <img
-                    :src="imageSrc"
+                    :src="`http://localhost:3000/review/${image.url}`"
                     class="rounded"
                     style="width: 100px; height: 100px; margin-right: 10px"
                     data-bs-toggle="modal"
-                    :data-bs-target="`#myModal${index}`"
+                    :data-bs-target="`#imageModal${index}`"
                   />
                   <!-- 이미지 모달창 -->
-                  <div class="modal" :id="`myModal${index}`">
+                  <div class="modal" :id="`imageModal${index}`" @click="event.stopPropagation()">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <!-- Modal body -->
-                        <img :src="imageSrc" />
+                        <img :src="`http://localhost:3000/review/${image.url}`" />
                       </div>
                     </div>
                   </div>
@@ -77,7 +75,7 @@ const insertReview = () => {
                 cols="30"
                 rows="5"
                 style="width: 100%; resize: none"
-                v-model="review.content"
+                v-model="props.reviewinfo.content"
                 disabled
               ></textarea>
             </div>
