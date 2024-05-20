@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container mt-5">
+  <div id="app" class="container">
     <div
       id="carouselExampleIndicators"
       class="carousel slide"
@@ -42,8 +42,6 @@
             alt="London"
           />
           <div class="carousel-caption d-none d-md-block">
-            <h5>런던</h5>
-            <p>540여 개의 여행 상품</p>
           </div>
         </div>
         <div class="carousel-item">
@@ -53,15 +51,11 @@
             alt="Bangkok"
           />
           <div class="carousel-caption d-none d-md-block">
-            <h5>방콕</h5>
-            <p>700여 개의 여행 상품</p>
           </div>
         </div>
         <div class="carousel-item">
           <img src="https://source.unsplash.com/800x400/?paris" class="d-block w-100" alt="Paris" />
           <div class="carousel-caption d-none d-md-block">
-            <h5>파리</h5>
-            <p>860여 개의 여행 상품</p>
           </div>
         </div>
         <div class="carousel-item">
@@ -71,8 +65,6 @@
             alt="Barcelona"
           />
           <div class="carousel-caption d-none d-md-block">
-            <h5>바르셀로나</h5>
-            <p>350여 개의 여행 상품</p>
           </div>
         </div>
       </div>
@@ -98,6 +90,7 @@
     <div class="container mt-3">
       <div class="row">
         <div class="col-6">
+          <h6 class="text-center mb-4">인플루언서 랭킹</h6>
           <ul class="list-group">
             <li class="list-group-item d-flex">
               <div class="ranking-icon me-3">
@@ -122,13 +115,13 @@
             </li>
           </ul>
         </div>
-        <div class="col-6">
-          <h6 class="text-center mb-4">최신 공지글</h6>
+        <div class="col-1"></div>
+        <div class="col-5">
+          <h6 class="text-center mb-3">최신 공지글</h6>
           <div class="row" id="noticeList">
             <div class="card mb-4" v-for="notice in board.threeNotice" :key="notice.no">
               <div class="card-body">
                 <h5 class="card-title">{{ notice.title }}</h5>
-                <p class="card-text">{{ notice.content }}</p>
               </div>
             </div>
           </div>

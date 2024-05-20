@@ -62,7 +62,7 @@ watch(
           id="flexSwitchCheckDefault"
           v-model="toggleChecked"
         />
-        <label class="form-check-label" for="flexSwitchCheckDefault">Toggle</label>
+        <label class="form-check-label" for="flexSwitchCheckDefault">팔로우한 인플루언서만 보기</label>
       </div>
     </div>
     <div class="row scrollable-div overflow-auto">

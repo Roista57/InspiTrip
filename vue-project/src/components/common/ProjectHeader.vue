@@ -17,7 +17,7 @@ const logined = computed(async () => {
 </script>
 
 <template>
-  <header class="p-3 mb border-bottom">
+  <header class="p-1 mb border-bottom">
     <div class="container">
       <div
         class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
@@ -26,7 +26,7 @@ const logined = computed(async () => {
           href="/"
           class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none"
         >
-          <img src="/src/assets/bird.webp" width="64px" height="64px" alt="mdo" />
+          <img src="/src/assets/logo.jpg" width="64px" height="64px" alt="mdo" />
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -45,18 +45,13 @@ const logined = computed(async () => {
               >BOARD</router-link
             >
           </li>
-          <li>
-            <router-link :to="{ name: 'review-insert' }" class="nav-link px-2 link-body-emphasis"
-              >REVIEW</router-link
-            >
-          </li>
           <div class="dropdown text-end nav-link px-2 link-body-emphasis">
             <p
               class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Influencer
+              INFLUENCER
             </p>
             <ul class="dropdown-menu text-small">
               <li>
