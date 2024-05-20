@@ -22,6 +22,7 @@ const selectInfluencer = async () => {
     :class="
       influencer.selectedInfluencer.no == item.no ? `card shadow-sm bg-success` : `card shadow-sm`
     "
+    style="max-height: 75px"
   >
     <div @click="selectInfluencer" class="card-body d-flex">
       <div>

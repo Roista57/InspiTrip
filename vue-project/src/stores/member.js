@@ -39,7 +39,7 @@ export const useMemberStore = defineStore("member", () => {
   });
 
   const checkAlarm = async (no) => {
-    await axios(VITE_VUE_API_URL + `alarms/${no}`);
+    await axios.post(VITE_VUE_API_URL + `member/alarms/${no}`);
   };
 
   const follow = (ino) => {
@@ -231,5 +231,6 @@ export const useMemberStore = defineStore("member", () => {
     alarms,
     countAlarm,
     hasAlarm,
+    checkAlarm,
   };
 });

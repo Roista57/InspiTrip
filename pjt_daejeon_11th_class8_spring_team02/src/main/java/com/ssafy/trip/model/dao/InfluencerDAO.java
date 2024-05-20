@@ -20,4 +20,6 @@ public interface InfluencerDAO {
 	public int addVisit(VisitDTO visit);
 	public List<VisitDTO> selectList(int ano);
 	public List<InfluencerDTO> selectAll();
+	public List<InfluencerDTO> selectByFollow(String id);
+	
 }

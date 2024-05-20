@@ -1,7 +1,7 @@
 package com.ssafy.trip.model.service;
 
 import java.util.List;
-
+import java.util.Set;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,8 @@ public class InfluencerService {
 	MemberDAO mdao;
 	@Autowired
 	AlarmDAO adao;
+	@Autowired
+	ReadCountService rservice;
 	
 	public InfluencerService(InfluencerDAO idao) {
 		super();
@@ -88,4 +90,20 @@ public class InfluencerService {
 		return idao.selectAll();
 	}
 	
+	public List<InfluencerDTO> selectByFollow(String userId){
+		return idao.selectByFollow(userId);
+	}
+	
+    public int rankUp(int id) {
+        if (id != 0) {
+            rservice.incrementReadCount(id);
+            int readCount = rservice.getReadCount(id);
+            rservice.addToReadCountRank(id, readCount);
+        }
+        return 1;
+    }
+    
+    public Set<String> rank(){
+    	return rservice.getReadCountRank();
+    }
 }

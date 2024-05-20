@@ -3,6 +3,7 @@ package com.ssafy.trip.model.controller;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -103,7 +104,30 @@ public class InfluencerController {
 		return list;
 	}
 	
+	@GetMapping("/list/{userId}")
+	@Operation(summary = "인플루언서 팔로우 조회", description = "특정 유저가 팔로우한 인플루언서들에 대한 정보를 조회합니다.")
+	public List<InfluencerDTO> influencers(@PathVariable("userId") String userId){
+		List<InfluencerDTO> list = iservice.selectByFollow(userId);
+		return list;
+	}
 	
+	@PostMapping("/rankup/{no}")
+	@Operation(summary = "랭크업", description = "인플루언서가 랭크업됩니다.")
+	public String rankUp(@PathVariable("no") int no){
+		int result = iservice.rankUp(no);
+		if(result ==1) {
+			return "ok";
+		}
+		else {
+			return "fail";
+		}
+	}
+	
+	@GetMapping("/rank")
+	@Operation(summary = "랭크", description = "인플루언서가 랭크를 가져옵니다.")
+	public Set<String> rank(){
+		return iservice.rank();
+	}
 	private ResponseEntity<String> exceptionHandling(Exception e) {
 		e.printStackTrace();
 //		return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

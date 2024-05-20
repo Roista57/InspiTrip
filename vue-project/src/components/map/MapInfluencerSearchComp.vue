@@ -1,20 +1,25 @@
 <script setup>
 import { useMapStore } from "@/stores/map";
-import { onMounted } from "vue";
+import { onMounted, ref, watch } from "vue";
 import InfluencerListComp from "./MapInfluencerListComp.vue";
 import { useInfluencerStore } from "@/stores/influencer";
 import { useMarkerStore } from "@/stores/marker";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import { Modal } from "bootstrap";
+import { useMemberStore } from "@/stores/member";
 
 const map = useMapStore();
 const influencer = useInfluencerStore();
 const marker = useMarkerStore();
+const member = useMemberStore();
 const router = useRouter();
 const route = useRoute();
 
 onBeforeRouteLeave((to, from) => {
   marker.markers = [];
+  influencer.selectedInfluencer = {
+    no: 0,
+  };
 });
 
 onMounted(async () => {
@@ -30,11 +35,36 @@ onMounted(async () => {
     marker.markers = [];
   }
 });
+const toggleChecked = ref(false);
+
+watch(
+  () => toggleChecked.value,
+  () => {
+    if (toggleChecked.value) {
+      influencer.getInfluencersByFollow(member.member.id);
+    } else {
+      influencer.getInfluencers();
+    }
+  }
+);
 </script>
 
 <template>
   <div class="container">
-    <input type="checkbox" checked data-toggle="toggle" data-size="sm" />
+    <div class="d-flex justify-content-between align-items-center p-3">
+      <!-- 검색창 -->
+      <input type="text" class="form-control w-50" placeholder="Search" />
+      <!-- 토글 버튼 -->
+      <div class="form-check form-switch" v-if="member.isLogin">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="flexSwitchCheckDefault"
+          v-model="toggleChecked"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault">Toggle</label>
+      </div>
+    </div>
     <div class="row scrollable-div overflow-auto">
       <InfluencerListComp
         v-for="item in influencer.influencerList"
