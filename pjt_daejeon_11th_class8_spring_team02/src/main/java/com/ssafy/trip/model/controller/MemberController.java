@@ -110,9 +110,18 @@ public class MemberController {
 		return mservice.getInfo(memberId);
 	}
 	
-	@GetMapping("/alarms/{memberId}")
-	@Operation(summary = "알람확인", description = "읽지 않은 알람을 확인합니다")
-	public List<AlarmDTO> alarms(@PathVariable("memberId") String memberId) {
+	@GetMapping("/alarms/{no}")
+	@Operation(summary = "알람 리스트 확인", description = "읽지 않은 알람을 확인합니다")
+	public List<AlarmDTO> alarms(@PathVariable("no") String memberId) {
 		return mservice.selectAlarms(memberId);
+	}
+	
+	@PostMapping("/alarms/{no}")
+	@Operation(summary = "알람 체크", description = "알람을 읽음 표시 합니다")
+	public String readAlarm(@PathVariable("no") int no) {
+		if(mservice.readAlarm(no) == 0) {
+			return "false";
+		}
+		return "ok";
 	}
 }

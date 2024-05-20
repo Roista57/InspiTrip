@@ -26,40 +26,27 @@ const logined = computed(async () => {
           href="/"
           class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none"
         >
-          <img
-            src="https://edu.ssafy.com/asset/images/header-logo.jpg"
-            alt="mdo"
-          />
+          <img src="https://edu.ssafy.com/asset/images/header-logo.jpg" alt="mdo" />
         </a>
 
-        <ul
-          class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
-        >
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <router-link
-              :to="{ name: 'main' }"
-              class="nav-link px-2 link-secondary"
+            <router-link :to="{ name: 'main' }" class="nav-link px-2 link-secondary"
               >HOME</router-link
             >
           </li>
           <li>
-            <router-link
-              :to="{ name: 'map' }"
-              class="nav-link px-2 link-body-emphasis"
+            <router-link :to="{ name: 'map' }" class="nav-link px-2 link-body-emphasis"
               >MAP</router-link
             >
           </li>
           <li>
-            <router-link
-              :to="{ name: 'board-list' }"
-              class="nav-link px-2 link-body-emphasis"
+            <router-link :to="{ name: 'board-list' }" class="nav-link px-2 link-body-emphasis"
               >BOARD</router-link
             >
           </li>
           <li>
-            <router-link
-              :to="{ name: 'review-insert' }"
-              class="nav-link px-2 link-body-emphasis"
+            <router-link :to="{ name: 'review-insert' }" class="nav-link px-2 link-body-emphasis"
               >REVIEW</router-link
             >
           </li>
@@ -73,16 +60,12 @@ const logined = computed(async () => {
             </p>
             <ul class="dropdown-menu text-small">
               <li>
-                <router-link
-                  :to="{ name: 'influencer-regist' }"
-                  class="dropdown-item"
+                <router-link :to="{ name: 'influencer-regist' }" class="dropdown-item"
                   >인플루언서 등록</router-link
                 >
               </li>
               <li>
-                <router-link
-                  :to="{ name: 'influencer-list' }"
-                  class="dropdown-item"
+                <router-link :to="{ name: 'influencer-list' }" class="dropdown-item"
                   >인플루언서 목록</router-link
                 >
               </li>
@@ -93,11 +76,7 @@ const logined = computed(async () => {
         <div class="pe-3">
           <img
             v-if="member.isLogin"
-            :src="
-              member.alarms.length === 0
-                ? `/src/assets/alarm_off.png`
-                : `/src/assets/alarm_on.png`
-            "
+            :src="!member.hasAlarm ? `/src/assets/alarm_off.png` : `/src/assets/alarm_on.png`"
             width="32"
             height="32"
             class="rounded-circle"
@@ -131,9 +110,7 @@ const logined = computed(async () => {
           </a>
           <ul v-if="member.isLogin" class="dropdown-menu text-small">
             <li>
-              <router-link
-                :to="{ name: 'member-detail', params: { id: id } }"
-                class="dropdown-item"
+              <router-link :to="{ name: 'member-detail', params: { id: id } }" class="dropdown-item"
                 >회원정보</router-link
               >
             </li>
@@ -150,9 +127,7 @@ const logined = computed(async () => {
               >
             </li>
             <li>
-              <router-link :to="{ name: 'member-login' }" class="dropdown-item"
-                >로그인</router-link
-              >
+              <router-link :to="{ name: 'member-login' }" class="dropdown-item">로그인</router-link>
             </li>
           </ul>
         </div>

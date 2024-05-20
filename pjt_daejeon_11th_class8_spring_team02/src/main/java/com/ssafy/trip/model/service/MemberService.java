@@ -74,4 +74,8 @@ public class MemberService {
 	public List<AlarmDTO> selectAlarms(String mid){
 		return adao.selectAlarmsByMemberId(mid);
 	}
+	
+	public int readAlarm(int no) {
+		return adao.readAlarm(no);
+	}
 }

@@ -5,6 +5,7 @@ import InfluencerListComp from "./MapInfluencerListComp.vue";
 import { useInfluencerStore } from "@/stores/influencer";
 import { useMarkerStore } from "@/stores/marker";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
+import { Modal } from "bootstrap";
 
 const map = useMapStore();
 const influencer = useInfluencerStore();
@@ -23,6 +24,8 @@ onMounted(async () => {
   if (influencer.selectedInfluencer.no !== 0) {
     await marker.getMarkerByInfluencer(influencer.selectedInfluencer.no);
     console.log(marker.markers);
+    let myModal = new Modal(document.getElementById("exampleModal"));
+    myModal.show();
   } else {
     marker.markers = [];
   }

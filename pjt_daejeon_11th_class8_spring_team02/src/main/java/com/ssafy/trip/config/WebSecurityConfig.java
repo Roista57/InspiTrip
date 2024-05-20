@@ -39,7 +39,7 @@ public class WebSecurityConfig {
 
 		return httpSecurity.httpBasic(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(requests -> {
-					requests.requestMatchers("/member/login", "/member/regist", "/member/check/{memberId}", "/member/upload", "/member/alarms/{memberId}").permitAll();
+					requests.requestMatchers("/member/login", "/member/regist", "/member/check/{memberId}", "/member/upload", "/member/alarms/{no}").permitAll();
 					requests.requestMatchers("/member/**").authenticated();
 					requests.anyRequest().permitAll();
 				})

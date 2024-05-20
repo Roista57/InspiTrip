@@ -93,6 +93,14 @@ export const useMarkerStore = defineStore("marker", () => {
     });
   };
 
+  const selectById = async (id) => {
+    await axios(URL + `attr/attraction/${id}`)
+      .then((resp) => resp.data)
+      .then((data) => {
+        selectedMarker.value = data;
+      });
+  };
+
   return {
     markers,
     centerLat,
@@ -105,5 +113,6 @@ export const useMarkerStore = defineStore("marker", () => {
     selectedType,
     level,
     getMarkerByInfluencer,
+    selectById,
   };
 });

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { method } from "lodash";
@@ -26,11 +26,20 @@ export const useMemberStore = defineStore("member", () => {
   });
 
   const countAlarm = () => {
-    axios(VITE_VUE_API_URL+"member/alarms/"+member.value.id).
-    then(resp=>resp.data)
-    .then(data=>{
-      alarms.value = data;
-    })
+    axios(VITE_VUE_API_URL + "member/alarms/" + member.value.id)
+      .then((resp) => resp.data)
+      .then((data) => {
+        alarms.value = data;
+      });
+  };
+
+  const hasAlarm = computed(() => {
+    console.log("ㅇㅇ");
+    return alarms.value.some((item) => item.checked === false);
+  });
+
+  const checkAlarm = async (no) => {
+    await axios(VITE_VUE_API_URL + `alarms/${no}`);
   };
 
   const follow = (ino) => {
@@ -220,6 +229,7 @@ export const useMemberStore = defineStore("member", () => {
     imageFile,
     follow,
     alarms,
-    countAlarm
+    countAlarm,
+    hasAlarm,
   };
 });

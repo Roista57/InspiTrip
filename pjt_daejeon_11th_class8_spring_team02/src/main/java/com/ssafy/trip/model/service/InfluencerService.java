@@ -67,13 +67,14 @@ public class InfluencerService {
 		return result;
 	}
 
+	
 	@Transactional
 	public int insertVisit(VisitDTO visit) {
 		int result = idao.addVisit(visit);
 		int visitNo = visit.getNo();
 	 	List<String> members = mdao.getFollowersByInfluencerId(visit.getIno());
 		for(String member : members) {
-			AlarmDTO aDTO = new AlarmDTO(0, visitNo, member, false, null);
+			AlarmDTO aDTO = new AlarmDTO(0, visitNo, member, false, null,0,0,null,null,null);
 			adao.insertAlarm(aDTO);
 		}
 		return result;

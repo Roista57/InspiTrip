@@ -7,4 +7,5 @@ import com.ssafy.trip.model.dto.AlarmDTO;
 public interface AlarmDAO {
 	public int insertAlarm(AlarmDTO alarm);
 	public List<AlarmDTO> selectAlarmsByMemberId(String mid);
+	public int readAlarm(int no);
 }
