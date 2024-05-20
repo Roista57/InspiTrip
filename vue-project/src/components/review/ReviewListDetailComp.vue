@@ -29,9 +29,29 @@ const inputImageList = ref([]);
 const previewImageList = ref([]);
 
 const arrayLength = computed(() => images.value.length);
+
+const showPopup = ref(false);
+const url = ref("");
+
+const openPop = (src) => {
+  showPopup.value = true;
+  url.value = src;
+};
 </script>
 
 <template>
+  <div v-if="showPopup" class="popup">
+    <div class="popup-content">
+      <img
+        :src="url"
+        class="rounded"
+        style="width: 100px; height: 100px; margin-right: 10px"
+        @click="openPop"
+      />
+      <button @click="showPopup = false">닫기</button>
+    </div>
+  </div>
+
   <div class="review-component container mt-3">
     <div class="row">
       <div class="col">
@@ -54,18 +74,8 @@ const arrayLength = computed(() => images.value.length);
                     :src="`http://localhost:3000/review/${image.url}`"
                     class="rounded"
                     style="width: 100px; height: 100px; margin-right: 10px"
-                    data-bs-toggle="modal"
-                    :data-bs-target="`#imageModal${index}`"
+                    @click="openPop(`http://localhost:3000/review/${image.url}`)"
                   />
-                  <!-- 이미지 모달창 -->
-                  <div class="modal" :id="`imageModal${index}`" @click="event.stopPropagation()">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <!-- Modal body -->
-                        <img :src="`http://localhost:3000/review/${image.url}`" />
-                      </div>
-                    </div>
-                  </div>
                 </template>
               </div>
             </template>
@@ -87,4 +97,23 @@ const arrayLength = computed(() => images.value.length);
   </div>
 </template>
 
-<style scoped></style>
+<style>
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+</style>
