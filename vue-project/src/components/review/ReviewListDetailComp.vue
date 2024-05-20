@@ -1,25 +1,16 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useReviewStore } from "@/stores/review";
-import StarRating from "vue-star-rating";
 
 const reviewStore = useReviewStore();
 
 // 이미지 파일 리스트를 저장할 ref
 const inputImageList = ref([]);
 
-const rating = ref(0);
-
 const review = ref({
-  rating: 0,
   content: "",
   inputImageList: [],
 });
-
-const setRating = (rating) => {
-  console.log(rating);
-  review.value.rating = rating;
-};
 
 const previewImageList = ref([]);
 
@@ -44,8 +35,6 @@ const handleFileChange = (event) => {
 const arrayLength = computed(() => previewImageList.value.length);
 
 const insertReview = () => {
-  console.log(rating.value);
-  console.log(review.value);
   reviewStore.review = review.value;
   console.log(reviewStore.review);
   // console.log(review.value);
@@ -59,18 +48,6 @@ const insertReview = () => {
         <h2>리뷰</h2>
         <div class="card mb-3">
           <div class="card-body">
-            <div class="mb-3">
-              <star-rating
-                v-model="rating"
-                @update:rating="setRating"
-                active-color="#FF9600"
-                v-bind:star-size="30"
-              ></star-rating>
-            </div>
-            <!-- 이미지 파일만 선택 가능하며, 여러 파일 업로드 허용 -->
-            <div class="mb-3">
-              <input type="file" accept="image/*" multiple @change="handleFileChange" />
-            </div>
             <!-- 이미지가 하나라도 있으면 이미지 표시 -->
             <template v-if="arrayLength > 0">
               <div class="mb-3">
@@ -94,19 +71,15 @@ const insertReview = () => {
                 </template>
               </div>
             </template>
-
             <!-- textarea를 card-body의 크기에 맞춰서 전체 폭을 사용하도록 수정 -->
-            <div class="mb-3">
+            <div>
               <textarea
                 cols="30"
                 rows="5"
-                style="width: 100%"
-                placeholder="리뷰 내용을 작성해주세요."
+                style="width: 100%; resize: none"
                 v-model="review.content"
+                disabled
               ></textarea>
-            </div>
-            <div class="d-flex justify-content-end">
-              <button @click="insertReview">작성하기</button>
             </div>
           </div>
         </div>

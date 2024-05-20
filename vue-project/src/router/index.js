@@ -21,6 +21,7 @@ import AlarmListComp from "@/components/alarm/AlarmListComp.vue";
 import { useMemberStore } from "@/stores/member";
 import TheReviewView from "@/views/TheReviewView.vue";
 import ReviewInsertComp from "@/components/review/ReviewInsertComp.vue";
+import ReviewListDetailComp from "@/components/review/ReviewListDetailComp.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -156,6 +157,11 @@ const router = createRouter({
           path: "insert",
           name: "review-insert",
           component: ReviewInsertComp,
+        },
+        {
+          path: "detail",
+          name: "review-detail",
+          component: ReviewListDetailComp,
         },
       ],
     },

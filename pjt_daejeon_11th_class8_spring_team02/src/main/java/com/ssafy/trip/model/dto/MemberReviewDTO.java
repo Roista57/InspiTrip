@@ -2,7 +2,7 @@ package com.ssafy.trip.model.dto;
 
 public class MemberReviewDTO {
 	private int no;
-	private int rno;
+	private int ano;
 	private String mid;
 	private String content;
 	private String writeDate;
@@ -11,9 +11,9 @@ public class MemberReviewDTO {
 	public MemberReviewDTO() {
 	}
 
-	public MemberReviewDTO(int no, int rno, String mid, String content, String writeDate, String grade) {
+	public MemberReviewDTO(int no, int ano, String mid, String content, String writeDate, String grade) {
 		this.no = no;
-		this.rno = rno;
+		this.ano = ano;
 		this.mid = mid;
 		this.content = content;
 		this.writeDate = writeDate;
@@ -28,12 +28,12 @@ public class MemberReviewDTO {
 		this.no = no;
 	}
 
-	public int getRno() {
-		return rno;
+	public int getAno() {
+		return ano;
 	}
 
-	public void setRno(int rno) {
-		this.rno = rno;
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 
 	public String getMid() {
@@ -67,5 +67,4 @@ public class MemberReviewDTO {
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
-
 }
