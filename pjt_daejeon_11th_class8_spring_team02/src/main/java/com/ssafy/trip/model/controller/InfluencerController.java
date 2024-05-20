@@ -125,9 +125,10 @@ public class InfluencerController {
 	
 	@GetMapping("/rank")
 	@Operation(summary = "랭크", description = "인플루언서가 랭크를 가져옵니다.")
-	public Set<String> rank(){
+	public List<InfluencerDTO> rank(){
 		return iservice.rank();
 	}
+	
 	private ResponseEntity<String> exceptionHandling(Exception e) {
 		e.printStackTrace();
 //		return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

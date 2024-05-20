@@ -18,6 +18,7 @@ const router = useRouter();
 const readAlarm = async () => {
   await Influencer.selectInfluencer(props.item.ino);
   await marker.getMarkerByInfluencer(props.item.ino);
+  await marker.selectOneById(props.item.ano);
   await marker.selectById(props.item.ano);
   await member.checkAlarm(props.item.no);
   router.push({ name: "map-influencer", params: { alarm: true } });

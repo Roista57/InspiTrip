@@ -1,5 +1,6 @@
 package com.ssafy.trip.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.net.URL;
@@ -103,7 +104,12 @@ public class InfluencerService {
         return 1;
     }
     
-    public Set<String> rank(){
-    	return rservice.getReadCountRank();
+    public List<InfluencerDTO> rank(){
+    	Set<String> _set = rservice.getReadCountRank();
+    	List<InfluencerDTO> result = new ArrayList<>();
+    	for(String str : _set) {
+    		result.add(idao.selectOne(Integer.parseInt(str)));
+    	}
+    	return result;
     }
 }

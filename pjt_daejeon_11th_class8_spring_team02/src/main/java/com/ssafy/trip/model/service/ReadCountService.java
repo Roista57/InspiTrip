@@ -32,4 +32,10 @@ public class ReadCountService {
     public Set<String> getReadCountRank() {
         return redisTemplate.opsForZSet().reverseRange("readcount_rank", 0, -1);
     }
+    
+    public void resetReadCounts() {
+        // Delete all keys related to read counts
+        redisTemplate.delete(redisTemplate.keys("readcount:*"));
+        redisTemplate.delete("readcount_rank");
+    }
 }

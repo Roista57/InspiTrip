@@ -76,6 +76,29 @@ export const useInfluencerStore = defineStore("influencer", () => {
     });
   };
 
+  const rank = ref([
+    {
+      name: "",
+      img: "/src/assets/noImage.png",
+    },
+    {
+      name: "",
+      img: "/src/assets/noImage.png",
+    },
+    {
+      name: "",
+      img: "/src/assets/noImage.png",
+    },
+  ]);
+
+  const getRank = () => {
+    axios(URL + "influencer/rank")
+      .then((resp) => resp.data)
+      .then((data) => {
+        rank.value = data;
+      });
+  };
+
   return {
     influencerList,
     newInfluencer,
@@ -84,5 +107,7 @@ export const useInfluencerStore = defineStore("influencer", () => {
     selectedInfluencer,
     selectInfluencer,
     getInfluencersByFollow,
+    getRank,
+    rank,
   };
 });

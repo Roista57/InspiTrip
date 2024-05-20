@@ -93,6 +93,13 @@ export const useMarkerStore = defineStore("marker", () => {
     });
   };
 
+  const selectOneById = async (ano) => {
+    await axios.post(URL + "influencer/visit/" + ano).then((resp) => {
+      console.log(resp.data);
+      markerInfluencer.value = resp.data;
+    });
+  };
+
   const selectById = async (id) => {
     await axios(URL + `attr/attraction/${id}`)
       .then((resp) => resp.data)
@@ -114,5 +121,6 @@ export const useMarkerStore = defineStore("marker", () => {
     level,
     getMarkerByInfluencer,
     selectById,
+    selectOneById,
   };
 });

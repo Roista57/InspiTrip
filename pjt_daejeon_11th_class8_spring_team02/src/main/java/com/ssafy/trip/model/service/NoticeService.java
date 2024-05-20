@@ -69,4 +69,7 @@ public class NoticeService {
 		return ndao.update(nDto);
 	}
 
+	public List<NoticeDTO> listThree(){
+		return ndao.selectListThree();
+	}
 }

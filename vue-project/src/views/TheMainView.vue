@@ -1,6 +1,11 @@
 <template>
   <div id="app" class="container mt-5">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div
+      id="carouselExampleIndicators"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      style="height: 500px"
+    >
       <div class="carousel-indicators">
         <button
           type="button"
@@ -90,14 +95,94 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-6">
+          <ul class="list-group">
+            <li class="list-group-item d-flex">
+              <div class="ranking-icon me-3">
+                <img src="/src/assets/first.jpg" height="48px" alt="" />
+              </div>
+              <img :src="influencer.rank[0].img" height="48px" alt="" class="rounded-circle" />
+              <div class="align-self-center ms-3">{{ influencer.rank[0].name }}</div>
+            </li>
+            <li class="list-group-item d-flex">
+              <div class="ranking-icon me-3">
+                <img src="/src/assets/second.jpg" height="48px" alt="" />
+              </div>
+              <img :src="influencer.rank[1].img" height="48px" alt="" class="rounded-circle" />
+              <div class="align-self-center ms-3">{{ influencer.rank[1].name }}</div>
+            </li>
+            <li class="list-group-item d-flex">
+              <div class="ranking-icon me-3">
+                <img src="/src/assets/third.jpg" height="48px" alt="" />
+              </div>
+              <img :src="influencer.rank[2].img" height="48px" alt="" class="rounded-circle" />
+              <div class="align-self-center ms-3">{{ influencer.rank[2].name }}</div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6">
+          <h6 class="text-center mb-4">최신 공지글</h6>
+          <div class="row" id="noticeList">
+            <div class="card mb-4" v-for="notice in board.threeNotice" :key="notice.no">
+              <div class="card-body">
+                <h5 class="card-title">{{ notice.title }}</h5>
+                <p class="card-text">{{ notice.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { useBoardStore } from "@/stores/board";
+import { useInfluencerStore } from "@/stores/influencer";
+import { onMounted } from "vue";
 
-<style>
+const influencer = useInfluencerStore();
+const board = useBoardStore();
+
+onMounted(() => {
+  influencer.getRank();
+  board.getThree();
+  console.log(influencer.rank);
+});
+</script>
+
+<style scoped>
 .carousel-item img {
   height: 500px;
   object-fit: cover;
+}
+
+.ranking-icon {
+  font-size: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.list-group-item {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 1rem 1.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.list-group-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15);
 }
 </style>

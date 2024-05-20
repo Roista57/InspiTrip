@@ -91,7 +91,12 @@ public class NoticeController {
 
 		NoticeDTO result = nservice.selectOne(no, userId);
 		return result;
-
+	}
+	
+	@GetMapping("/list/three")
+	@Operation(summary = "게시글 3개 조회", description = "최신 게시글을 3개 조회합니다.")
+	public List<NoticeDTO> listThree() {
+		return nservice.listThree();
 	}
 
 	private ResponseEntity<String> exceptionHandling(Exception e) {
