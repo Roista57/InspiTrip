@@ -10,11 +10,17 @@ import "bootstrap";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
+import VueCookies from "vue-cookies";
+
 useKakao(import.meta.env.VITE_KAKAO_MAP_SERVICE_KEY, ["clusterer"]);
 const app = createApp(App);
 // register QuillEditor component
 app.component("QuillEditor", QuillEditor);
 app.use(createPinia());
+
+// Register VueCookies
+app.use(VueCookies);
+app.$cookies.config("7d");
 
 // Register other plugins or utilities
 useKakao(import.meta.env.VITE_KAKAO_MAP_SERVICE_KEY, ["clusterer"]);

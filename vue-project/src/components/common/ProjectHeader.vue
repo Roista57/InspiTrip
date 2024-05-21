@@ -14,6 +14,10 @@ const logined = computed(async () => {
   console.log(member.isLogin);
   return member.isLogin;
 });
+
+const logout = computed(() => {
+  member.logoutMember();
+});
 </script>
 
 <template>
@@ -110,9 +114,10 @@ const logined = computed(async () => {
               >
             </li>
             <li>
-              <router-link :to="{ name: 'member-logout' }" class="dropdown-item"
+              <a href="#" class="dropdown-item" @click="logout">로그아웃</a>
+              <!-- <router-link :to="{ name: 'member-logout' }" class="dropdown-item"
                 >로그아웃</router-link
-              >
+              > -->
             </li>
           </ul>
           <ul v-if="!member.isLogin" class="dropdown-menu text-small">

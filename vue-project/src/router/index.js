@@ -5,7 +5,6 @@ import TheMapView from "@/views/TheMapView.vue";
 import UpdateComp from "@/components/member/updateComp.vue";
 import RegistComp from "@/components/member/registComp.vue";
 import LoginComp from "@/components/member/loginComp.vue";
-import LogoutComp from "@/components/member/logoutComp.vue";
 import DetailComp from "@/components/member/detailComp.vue";
 import BoardListComp from "@/components/board/boardListComp.vue";
 import TheBoardView from "../views/TheBoardView.vue";
@@ -40,11 +39,6 @@ const router = createRouter({
           path: "login",
           name: "member-login",
           component: LoginComp,
-        },
-        {
-          path: "logout",
-          name: "member-logout",
-          component: LogoutComp,
         },
         {
           path: "regist",
