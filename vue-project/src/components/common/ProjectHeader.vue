@@ -15,6 +15,7 @@ const logined = computed(async () => {
   console.log(member.isLogin);
   return member.isLogin;
 });
+
 onMounted(async () => {
   await member.getMember();
   imgRef.value = member.member.img;
@@ -102,13 +103,13 @@ const handleImageError = (event) => {
           >
             <img
               v-if="member.isLogin"
-              :src="imgRef"
+              :src="member.member.img"
               @error="handleImageError"
               alt="mdo"
               width="32"
               height="32"
               class="rounded-circle"
-              :key="imgRef"
+              :key="member.member.img"
             />
             <img
               v-if="!member.isLogin"

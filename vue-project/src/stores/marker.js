@@ -11,6 +11,7 @@ export const useMarkerStore = defineStore("marker", () => {
   const selectedType = ref(0);
   const level = ref(3);
   const map = useMapStore();
+  const div_status = ref(true);
 
   const centerLat = ref(37.566826);
   const centerLng = ref(126.9786567);
@@ -34,6 +35,7 @@ export const useMarkerStore = defineStore("marker", () => {
       const review = useReviewStore();
       console.log("선택");
       review.getReviewListByAno(selectedMarker.value.contentId);
+      div_status.value = true;
     }
   );
 
@@ -132,5 +134,6 @@ export const useMarkerStore = defineStore("marker", () => {
     getMarkerByInfluencer,
     selectById,
     selectOneById,
+    div_status,
   };
 });

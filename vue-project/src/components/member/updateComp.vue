@@ -9,10 +9,11 @@ const memberImage = ref(); // 이미지 file을 담는 변수
 const imageSrc = ref(""); //이미지 태그에서 사용하는 변수
 
 // 업데이트
-const updateMember = computed(() => {
+const updateMember = computed(async () => {
   console.log("updateMember >> " + memberImage);
   memberStore.imageFile = memberImage.value;
-  memberStore.updateMember();
+  await memberStore.updateMember();
+  memberStore.getMember();
 });
 
 function handleImageUpload(event) {

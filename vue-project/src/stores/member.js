@@ -193,7 +193,7 @@ export const useMemberStore = defineStore(
       if (token != "") {
         await uploadImage();
         console.log("registMember >> " + member.value);
-        axios({
+        await axios({
           url: `${VITE_VUE_API_URL}member/update`,
           method: "POST",
           headers: { Authorization: `Bearer ${token.value}` },

@@ -23,8 +23,12 @@ const isHovered_user = ref(false);
 const normalColor = "#EAEAEA"; // 일반 상태의 색상 코드
 const hoveredColor = "#D8D8D8"; // 호버 상태의 색상 코드
 
-const handleImageError = (event) => {
-  event.target.src = "/src/assets/noImage.png";
+const handleImageError = (item) => {
+  if (item.image == "") {
+    event.target.src = "/src/assets/noImage.png";
+  } else {
+    event.target.src = item.image;
+  }
   // 필요하다면 추가적으로 이미지 교체 실패시 다른 대체 이미지를 설정할 수 있습니다.
 };
 
@@ -109,7 +113,7 @@ const stateChage = (data) => {
             <div class="col-sm-5">
               <img
                 :src="`http://localhost:3000/attr/${marker.selectedMarker.contentId}/first_image.webp`"
-                @error="handleImageError"
+                @error="handleImageError(marker.selectedMarker)"
                 alt="이미지가없습니다"
                 style="height: 300px; max-width: 300px"
               />
@@ -124,7 +128,7 @@ const stateChage = (data) => {
         <div class="container mt-4">
           <div class="row">
             <div class="col-2"></div>
-            <div class="col-4" @click="div_state = true">
+            <div class="col-4" @click="marker.div_status = true">
               <a href="#" style="text-decoration-line: none">
                 <div
                   class="card align-items-center"
@@ -136,7 +140,7 @@ const stateChage = (data) => {
                 </div>
               </a>
             </div>
-            <div class="col-4" @click="div_state = false">
+            <div class="col-4" @click="marker.div_status = false">
               <a href="#" style="text-decoration-line: none">
                 <div
                   class="card align-items-center"
@@ -151,7 +155,7 @@ const stateChage = (data) => {
             <div class="col-2"></div>
           </div>
         </div>
-        <template v-if="div_state == true">
+        <template v-if="marker.div_status == true">
           <div
             class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
           >
@@ -167,7 +171,7 @@ const stateChage = (data) => {
             </template>
           </div>
         </template>
-        <template v-if="div_state == false">
+        <template v-if="marker.div_status == false">
           <div
             class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
           >
