@@ -123,9 +123,11 @@
           <h6 class="text-center mb-3">최신 공지글</h6>
           <div class="row" id="noticeList">
             <div class="card mb-4" v-for="notice in board.threeNotice" :key="notice.no">
-              <div class="card-body">
-                <h5 class="card-title">{{ notice.title }}</h5>
-              </div>
+              <a href="#" class="page-link" @click="moveBoardDetail(notice)">
+                <div class="card-body">
+                  <h5 class="card-title">{{ notice.title }}</h5>
+                </div>
+              </a>
             </div>
           </div>
         </div>
@@ -137,9 +139,12 @@
 <script setup>
 import { useBoardStore } from "@/stores/board";
 import { useInfluencerStore } from "@/stores/influencer";
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const influencer = useInfluencerStore();
+const boardStore = useBoardStore();
 const board = useBoardStore();
 
 onMounted(() => {
@@ -147,6 +152,11 @@ onMounted(() => {
   board.getThree();
   console.log(influencer.rank);
 });
+
+const moveBoardDetail = (notice) => {
+  console.log(notice.no);
+  boardStore.boardDetail(notice.no);
+};
 </script>
 
 <style scoped>
