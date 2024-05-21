@@ -3,11 +3,11 @@ import { computed, ref } from "vue";
 import { useReviewStore } from "@/stores/review";
 import StarRating from "vue-star-rating";
 import { useMemberStore } from "@/stores/member";
-
-const emit = defineEmits(["state"]);
+import { useMarkerStore } from "@/stores/marker";
 
 const reviewStore = useReviewStore();
 const member = useMemberStore();
+const marker = useMarkerStore();
 
 // 이미지 파일 리스트를 저장할 ref
 const inputImageList = ref([]);
@@ -16,7 +16,7 @@ const rating = ref(0);
 
 const review = ref({
   no: "",
-  ano: "126509",
+  ano: "",
   mid: "ssafy",
   content: "",
   grade: 0,
@@ -59,8 +59,7 @@ const insertReview = async () => {
     const image_name = await reviewStore.upload_image(inputImageList.value[i]);
     await reviewStore.insertReviewImage(rno, image_name);
   }
-  // reviewStore.getReviewList();
-  emit("state", rno);
+  reviewStore.getReviewListByAno(marker.selectedMarker.contentId);
 };
 </script>
 

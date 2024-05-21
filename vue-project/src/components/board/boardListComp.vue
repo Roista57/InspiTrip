@@ -3,9 +3,11 @@ import { computed, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useBoardStore } from "@/stores/board";
 import boardListItemComp from "./boardListItemComp.vue";
+import { useMemberStore } from "@/stores/member";
 
 const router = useRouter();
 const boardStore = useBoardStore();
+const memberStore = useMemberStore();
 
 onMounted(() => {
   boardStore.getBoardList();
@@ -54,6 +56,14 @@ const next = computed(() => {
     boardStore.getBoardList();
   }
 });
+
+// 유저의 로그인 정보를 확인
+const memberCheck = computed(() => {
+  if (memberStore.isLogin) {
+    return true;
+  }
+  return false;
+});
 </script>
 
 <template>
@@ -87,7 +97,9 @@ const next = computed(() => {
         </li>
         <li class="page-item"><a class="page-link" href="#" @click="next">Next</a></li>
       </ul>
-      <button type="button" class="btn btn-outline-primary" @click="boardInsert">글쓰기</button>
+      <template v-if="memberCheck == true">
+        <button type="button" class="btn btn-outline-primary" @click="boardInsert">글쓰기</button>
+      </template>
     </div>
   </div>
 </template>

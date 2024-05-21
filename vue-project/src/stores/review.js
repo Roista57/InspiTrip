@@ -8,7 +8,7 @@ const { VITE_VUE_API_URL } = import.meta.env;
 export const useReviewStore = defineStore("review", () => {
   const review = ref({
     no: "",
-    ano: "126509",
+    ano: "",
     mid: "",
     content: "",
     write_date: "",

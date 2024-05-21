@@ -124,12 +124,41 @@ export const useBoardStore = defineStore("board", () => {
       });
   };
 
+  const boardDetailReadCount = (no) => {
+    console.log("boardDetailReadCount >> " + no);
+    axios({
+      url: `${VITE_VUE_API_URL}notice/readcount/${no}`,
+      method: "PUT",
+    })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const boardUpdate = () => {
     console.log("Update: " + board);
     axios({
       url: `${VITE_VUE_API_URL}notice/update`,
       method: "POST",
       data: board.value,
+    })
+      .then((resp) => {
+        console.log(resp);
+        router.push({ name: "board-detail", params: { no: board.value.no } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const boardDelete = (no) => {
+    console.log("Delete : " + no);
+    axios({
+      url: `${VITE_VUE_API_URL}notice/delete/${no}`,
+      method: "DELETE",
     })
       .then((resp) => {
         console.log(resp);
@@ -153,5 +182,7 @@ export const useBoardStore = defineStore("board", () => {
     upload_image,
     getThree,
     threeNotice,
+    boardDetailReadCount,
+    boardDelete,
   };
 });

@@ -214,7 +214,23 @@ export const useMemberStore = defineStore(
         alert("잘못된 정보가 기입되어 있는지 확인해주세요.");
       }
     };
-    const deleteMember = () => {};
+    const deleteMember = () => {
+      console.log(`Bearer ${token.value}`);
+      axios({
+        url: `${VITE_VUE_API_URL}member/delete`,
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token.value}` },
+        data: member.value,
+      })
+        .then((resp) => {
+          if (resp.data == "ok") {
+            logoutMember();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     return {
       member,

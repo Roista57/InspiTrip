@@ -16,15 +16,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <template v-if="reviewStore.reviewList != null">
-    <div calss="text-center scrollable-div overflow-auto">
-      <ReviewListDetailComp
-        v-for="(review, index) in reviewStore.reviewList"
-        :key="index"
-        :reviewinfo="review"
-      ></ReviewListDetailComp>
-    </div>
-  </template>
+  <div calss="text-center scrollable-div overflow-auto">
+    <ReviewListDetailComp
+      v-for="(review, index) in reviewStore.reviewList"
+      :key="index"
+      :reviewinfo="review"
+    ></ReviewListDetailComp>
+  </div>
 </template>
 
 <style scoped></style>

@@ -12,6 +12,7 @@ public interface NoticeDAO {
 	List<NoticeDTO> selectList(@Param("sr") int startRow,@Param("cc") int count);
 	NoticeDTO selectOne(int bno);
 	int update(NoticeDTO noticeDTO);
+	int readcountUp(int no);
 	List<NoticeDTO> selectListThree();
 	
 	public int delete(int no);
