@@ -134,11 +134,15 @@ const router = createRouter({
           path: "regist",
           name: "influencer-regist",
           component: InfluencerRegistComp,
-          beforeEnter: (to, from, next) => {
+          beforeEnter: (to, from) => {
             const member = useMemberStore();
             if (!member.isLogin) {
               alert("로그인 이후 사용해주세요.");
               router.push({ path: from });
+              return false;
+            } else {
+              console.log(to);
+              return true;
             }
           },
         },
