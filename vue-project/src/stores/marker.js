@@ -2,6 +2,7 @@ import { ref, computed, watch } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 import { useMapStore } from "./map";
+import { useReviewStore } from "./review";
 
 const URL = import.meta.env.VITE_VUE_API_URL;
 
@@ -24,6 +25,15 @@ export const useMarkerStore = defineStore("marker", () => {
     () => {
       console.log(selectedType.value);
       getMarkerByLatLong(centerLat.value, centerLng.value);
+    }
+  );
+
+  watch(
+    () => selectedMarker.value,
+    () => {
+      const review = useReviewStore();
+      console.log("선택");
+      review.getReviewListByAno(selectedMarker.value.contentId);
     }
   );
 

@@ -148,9 +148,9 @@ export const useMemberStore = defineStore(
         });
     };
 
-    const getMember = () => {
+    const getMember = async () => {
       console.log(`Bearer ${token.value}`);
-      axios({
+      await axios({
         url: `${VITE_VUE_API_URL}member/info/${member.value.id}`,
         method: "POST",
         headers: { Authorization: `Bearer ${token.value}` },

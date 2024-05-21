@@ -99,6 +99,10 @@ export const useInfluencerStore = defineStore("influencer", () => {
       });
   };
 
+  const rankUp = (no) => {
+    axios.post(URL + "influencer/rankup" + no);
+  };
+
   return {
     influencerList,
     newInfluencer,
@@ -109,5 +113,6 @@ export const useInfluencerStore = defineStore("influencer", () => {
     getInfluencersByFollow,
     getRank,
     rank,
+    rankUp,
   };
 });

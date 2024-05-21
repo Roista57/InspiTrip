@@ -9,6 +9,7 @@ import ReviewListComp from "@/components/review/ReviewListComp.vue";
 import router from "@/router";
 import ReviewInsertComp from "@/components/review/ReviewInsertComp.vue";
 import { useMapStore } from "@/stores/map";
+import { onBeforeRouteLeave } from "vue-router";
 
 const sidoGugun = usesidoGugunStore();
 

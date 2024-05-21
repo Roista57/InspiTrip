@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 
 const member = useMemberStore();
 const router = useRouter();
+const imgRef = ref();
 
 const id = computed(() => {
   return member.member.id ? member.member.id : " ";
@@ -13,6 +14,10 @@ const id = computed(() => {
 const logined = computed(async () => {
   console.log(member.isLogin);
   return member.isLogin;
+});
+onMounted(async () => {
+  await member.getMember();
+  imgRef.value = member.member.img;
 });
 
 const logout = computed(() => {
@@ -92,11 +97,12 @@ const logout = computed(() => {
           >
             <img
               v-if="member.isLogin"
-              src="https://avatars.githubusercontent.com/u/64695312?v=4"
+              :src="imgRef"
               alt="mdo"
               width="32"
               height="32"
               class="rounded-circle"
+              :key="imgRef"
             />
             <img
               v-if="!member.isLogin"

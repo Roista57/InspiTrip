@@ -12,6 +12,7 @@ const marker = useMarkerStore();
 const selectInfluencer = async () => {
   influencer.selectedInfluencer = props.item;
   await marker.getMarkerByInfluencer(props.item.no);
+  influencer.rankUp(props.item.no);
   marker.centerLat = marker.markers[0].latitude;
   marker.centerLng = marker.markers[0].longitude;
 };
