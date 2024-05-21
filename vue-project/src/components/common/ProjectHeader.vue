@@ -23,6 +23,11 @@ onMounted(async () => {
 const logout = computed(() => {
   member.logoutMember();
 });
+
+const handleImageError = (event) => {
+  event.target.src = "/src/assets/default.jpg";
+  // 필요하다면 추가적으로 이미지 교체 실패시 다른 대체 이미지를 설정할 수 있습니다.
+};
 </script>
 
 <template>
@@ -98,6 +103,7 @@ const logout = computed(() => {
             <img
               v-if="member.isLogin"
               :src="imgRef"
+              @error="handleImageError"
               alt="mdo"
               width="32"
               height="32"

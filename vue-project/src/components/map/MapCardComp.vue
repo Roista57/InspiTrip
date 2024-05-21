@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { usesidoGugunStore } from "@/stores/sidoGugun";
 import { useMarkerStore } from "@/stores/marker";
 import { useMapStore } from "@/stores/map";
@@ -11,10 +11,20 @@ const map = useMapStore();
 const select = (select) => {
   marker.selectOne(select);
 };
-const handleImageError = (event) => {
-  event.target.src = "/src/assets/noImage.png";
+const handleImageError = (item) => {
+  if (item.image == "") {
+    event.target.src = "/src/assets/noImage.png";
+  } else {
+    event.target.src = item.image;
+  }
   // 필요하다면 추가적으로 이미지 교체 실패시 다른 대체 이미지를 설정할 수 있습니다.
 };
+
+// const test = (item) => {
+//   if (item.image == null) {
+//     //no image
+//   } else if()
+// };
 </script>
 
 <template>
@@ -26,7 +36,7 @@ const handleImageError = (event) => {
           <img
             class="card-img-top mt-1"
             :src="`http://localhost:3000/attr/${item.contentId}/first_image.webp`"
-            @error="handleImageError"
+            @error="handleImageError(item)"
             :alt="item.alt || '이미지가 없습니다'"
             style="height: 200px"
           />
