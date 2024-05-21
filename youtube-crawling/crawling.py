@@ -112,18 +112,20 @@ def get_script(url):
     # print(text)
 
     # json_string = '{ "address": "서울특별시 종로구 성균관로 41 1층", "title": "명륜진사갈비"}'
-    json_string = extract_store_details(text)
-    # print(json_string)
+    if text != '':
+        json_string = extract_store_details(text)
+        if json_string != 'null':
+            # print(json_string)
+            data = json.loads(json_string)
+            # print(data)
 
-    data = json.loads(json_string)
-    print(data)
+            query = f"{data['address']} {data['title']}"
+            # print(f"{data['address']} {data['title']}")
+            get_address(query)
 
-    query = f"{data['address']} {data['title']}"
-    print(f"{data['address']} {data['title']}")
-    get_address(query)
+            time.sleep(1)
 
-    time.sleep(1)
-    # driver.quit()
+
 
 
 # 영상의 스크립트를 GPT-3.5를 이용해서 JSON 형식의 도로명 주소와 가게 이름을 추출
@@ -152,7 +154,7 @@ def get_address(text):
         items = data['items']
 
         for item in items:
-            print(item['link'])
+            # print(item['link'])
             driver.get(item['link'])
             time.sleep(1)
             try:
@@ -161,19 +163,20 @@ def get_address(text):
                 # html_content = driver.execute_script("return document.documentElement.outerHTML;")
                 # print(html_content)
                 map_info = driver.find_element(By.CSS_SELECTOR, 'div.se-module.se-module-map-text > a')
-                print(map_info.get_attribute('data-linkdata'))
+                # print(map_info.get_attribute('data-linkdata'))
                 data = json.loads(map_info.get_attribute('data-linkdata'))
                 data_list.append(f"{data['placeId']},{data['name']},{data['address']},{data['latitude']},{data['longitude']},{data['tel']},{data['bookingUrl']}")
 
             except NoSuchElementException:
-                print("get_address >> 해당 요소를 찾을 수 없습니다.")
+                print()
+                # print("get_address >> 해당 요소를 찾을 수 없습니다.")
 
         # Counter 객체를 사용하여 데이터 카운팅
         counter = Counter(data_list)
 
         # 가장 많이 나타나는 데이터 찾기
         most_common_data = counter.most_common(1)[0][0]
-        print(most_common_data)
+        # print(most_common_data)
         split_common = most_common_data.split(',')
 
         placeId = split_common[0]
@@ -229,22 +232,22 @@ def get_map_info(placeId):
         road_address = driver.find_element(By.CSS_SELECTOR,
                                            '#app-root > div > div > div > div:nth-child(5) > div > div:nth-child(2) > div.place_section_content > div > div.O8qbU.tQY7D > div > a > span.LDgIH').text
         attr_info['addr1'] = road_address
-        print("도로명 주소: " + road_address)
+        # print("도로명 주소: " + road_address)
 
         driver.get(information_url)
         time.sleep(1)
         overview = driver.find_element(By.CSS_SELECTOR,
                                        '#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.Od79H > div > div > div.Ve1Rp > div').text
         attr_info['overview'] = overview
-        print("소개: " + overview)
+        # print("소개: " + overview)
 
     except NoSuchElementException:
         print("get_map_info >> 해당 요소를 찾을 수 없습니다.")
     finally:
         get_google_image()
         codes = get_codes_from_address(attr_info['addr1'])
-        print(codes)
-        print(attr_info)
+        # print(codes)
+        # print(attr_info)
 
 
 # 해당 가게에 대한 정보를 검색하여 가장 첫번째에 나오는 이미지를 가져옵니다.
@@ -263,10 +266,11 @@ def get_google_image():
         first_image = driver.find_element(By.CSS_SELECTOR,
                                           '#Sva75c > div.A8mJGd.NDuZHe.OGftbe-N7Eqid-H9tDt > div.LrPjRb > div.AQyBn > div.tvh9oe.BIB1wf > c-wiz > div > div > div > div > div.v6bUne > div.p7sI2.PUxBg > a > img.sFlh5c.pT0Scc.iPVvYb').get_attribute(
             'src')
-        print(first_image)
+        # print(first_image)
         attr_info['first_image'] = first_image
     except NoSuchElementException:
-        print("get_google_image >> 해당 요소를 찾을 수 없습니다.")
+        print()
+        # print("get_google_image >> 해당 요소를 찾을 수 없습니다.")
 
 
 def get_codes_from_address(address):
@@ -322,7 +326,7 @@ def attr_insert_value(influence_id):
     }
     response = requests.post(attr_url, json=attr_data) # insert 한 뒤 저장한 attr_content_id의 값을 반환
     attr_content_id = response.text  # 응답 내용 출력
-    print(attr_content_id)
+    # print(attr_content_id)
     time.sleep(0.3)
     return attr_content_id
 
@@ -340,7 +344,7 @@ def influence_create_visited(influence_id, attr_content_id, url):
     visit_data['ino'] = influence_info['no']
     visit_data['ano'] = attr_content_id
     visit_data['url'] = url
-    print(visit_data)
+    # print(visit_data)
     time.sleep(0.3)
     return visit_data
 
@@ -352,7 +356,7 @@ def influence_add_visited(data):
     return response.text
 
 
-def read_text_file(influence_id):
+def read_text_file(influence_id, max):
     lines = []
     file_path = f"influence/{influence_id}.txt"
     with open(file_path, "r", encoding='utf-8') as file:
@@ -363,7 +367,7 @@ def read_text_file(influence_id):
     now = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     cnt = 0
     for line in tqdm(lines, desc="작업 현황"):
-        if cnt < 100:
+        if cnt < max:
             # Each line contains the title and URL separated by " | "
             title, url = line.strip().split(" $|$ ")
             try:
@@ -422,11 +426,18 @@ if __name__ == "__main__":
     # Todo : DB에서 인플풀언서 데이터 리스트 받아서 처리
     influencers = get_influencers_youtube_id()
     # influence = '@tzuyang6145'
-    for influence in influencers:
+    for i in range(6, len(influencers)):
+        influence = influencers[i]
         influence = influence[0].replace("'", "").replace("(", "").replace(")", "")
         print(influence)
         get_influence_videos(influence)
-        read_text_file(influence)
+        read_text_file(influence, 100)
+
+    # for influence in influencers:
+    #     influence = influence[0].replace("'", "").replace("(", "").replace(")", "")
+    #     print(influence)
+    #     get_influence_videos(influence)
+    #     read_text_file(influence, 200)
 
     # get_map_info2('1810003724')
 
