@@ -85,8 +85,8 @@ const searchSido = () => {
 
 <template>
   <div
-    class="d-flex flex-column justify-content-between"
-    style="height: 150px; background-color: white"
+    class="d-flex flex-column justify-content-between bg-success bg-opacity-50"
+    style="height: 150px"
   >
     <div class="row pt-4">
       <div class="col-5">

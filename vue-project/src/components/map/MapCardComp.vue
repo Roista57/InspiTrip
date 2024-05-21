@@ -18,7 +18,7 @@ const handleImageError = (event) => {
 </script>
 
 <template>
-  <div class="container" style="height: 820px; background-image: url('/src/assets/background.jpg')">
+  <div class="container bg-success bg-opacity-25" style="height: 820px">
     <router-view></router-view>
     <div class="overflow-auto mt-3" style="max-width: 800px; height: 620px">
       <div class="row d-flex justify-content-center" style="max-width: 720px">

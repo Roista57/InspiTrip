@@ -50,7 +50,7 @@ watch(
 </script>
 
 <template>
-  <div class="container" style="background-color: white; height: 150px">
+  <div class="container bg-success bg-opacity-50" style="height: 150px">
     <div class="d-flex justify-content-between align-items-center p-3">
       <!-- 검색창 -->
       <input type="text" class="form-control w-50" placeholder="Search" />
@@ -67,7 +67,7 @@ watch(
         >
       </div>
     </div>
-    <div class="row scrollable-div overflow-auto">
+    <div class="row scrollable-div overflow-auto bg-success bg-opacity-10" style="height: 80px">
       <InfluencerListComp
         v-for="item in influencer.influencerList"
         :key="item.no"
