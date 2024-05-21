@@ -34,12 +34,16 @@
 
 	<update id="update">
 		update notices
-		set title = #{title}
-		, content =
-		#{content}
+		set title = #{title} , content = #{content}, write_date = now()
 		where no = #{no}
 	</update>
-
+	
+	<update id="readcountUp">
+		update notices
+		set read_count = read_count + 1
+		where no = #{no}
+	</update>
+	
 	<select id="selectListThree">
 		select *
 		from notices

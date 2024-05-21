@@ -16,6 +16,7 @@ const boardStore = useBoardStore();
 const memberStore = useMemberStore();
 
 onMounted(() => {
+  boardStore.boardDetailReadCount(route.params.no);
   boardStore.boardDetail(route.params.no);
 });
 
@@ -43,23 +44,23 @@ const modules = [
     },
   },
 ];
-</script>
 
-<!-- <template>
-    <div>
-        <label for="email" class="form-label">제목</label>
-        <input type="email" class="form-control" :value="boardStore.board.title" disabled />
-        <label for="comment">작성자</label>
-        <input type="email" class="form-control" :value="boardStore.board.mid" disabled />
-        <label for="comment">작성 시간</label>
-        <input type="email" class="form-control" :value="boardStore.board.write_date" disabled />
-        <label for="comment">조회수</label>
-        <input type="email" class="form-control" :value="boardStore.board.read_count" disabled />
-        <textarea class="form-control" rows="5" v-model="boardStore.board.content" disabled></textarea>
-        <button type="button" class="btn btn-outline-primary" @click="boardUpdate">수정하기</button>
-        <button type="button" class="btn btn-outline-danger" @click="boardInsert">삭제하기</button>
-    </div>
-</template> -->
+// 유저의 로그인 정보를 확인
+const memberCheck = computed(() => {
+  if (memberStore.isLogin) {
+    if (memberStore.member.id == boardStore.board.mid) {
+      return true;
+    }
+    return false;
+  }
+  return false;
+});
+
+const boardDelete = computed(() => {
+  alert("삭제하시겠습니까?");
+  boardStore.boardDelete(boardStore.board.no);
+});
+</script>
 
 <template>
   <div>
@@ -81,8 +82,10 @@ const modules = [
       disabled
       style="min-height: 300px"
     />
-    <button type="button" class="btn btn-outline-primary" @click="boardUpdate">수정하기</button>
-    <button type="button" class="btn btn-outline-danger" @click="boardInsert">삭제하기</button>
+    <template v-if="memberCheck == true">
+      <button type="button" class="btn btn-outline-primary" @click="boardUpdate">수정하기</button>
+      <button type="button" class="btn btn-outline-danger" @click="boardDelete">삭제하기</button>
+    </template>
   </div>
 </template>
 

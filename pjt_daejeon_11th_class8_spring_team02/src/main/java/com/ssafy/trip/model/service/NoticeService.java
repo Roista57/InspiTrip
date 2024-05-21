@@ -56,9 +56,13 @@ public class NoticeService {
 	}
 
 	@Transactional
-	public NoticeDTO selectOne(int no, String userId) {
+	public NoticeDTO selectOne(int no) {
 		NoticeDTO board = ndao.selectOne(no);
 		return board;
+	}
+	
+	public int readcountUp(int no) {
+		return ndao.readcountUp(no);
 	}
 
 	public int delete(int no) {

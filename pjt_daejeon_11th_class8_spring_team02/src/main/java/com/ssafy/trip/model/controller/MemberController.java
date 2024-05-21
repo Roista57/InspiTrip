@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,11 +78,11 @@ public class MemberController {
 	}
 
 	// 회원 정보 삭제
-	@PostMapping("/delete")
+	@DeleteMapping("/delete")
 	@Operation(summary = "회원 삭제", description = "회원 정보를 삭제합니다.")
-	public String delete(@RequestBody MemberDTO memberDTO, HttpSession session) {
+	public String delete(@RequestBody MemberDTO memberDTO) {
+		System.out.println(memberDTO.toString());
 		if (mservice.memberDelete(memberDTO)) { // 성공
-			session.invalidate();
 			return "ok";
 		}
 		return "fail"; // 실패

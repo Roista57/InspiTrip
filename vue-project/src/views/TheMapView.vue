@@ -171,11 +171,14 @@ const stateChage = (data) => {
             class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
           >
             <ReviewInsertComp
-              :key="loading"
+              :contentId="marker.selectedMarker.contentId"
               @state="stateChage"
               style="width: 70%"
             ></ReviewInsertComp>
-            <review-list-comp :key="loading" style="width: 70%"></review-list-comp>
+            <review-list-comp
+              :contentId="marker.selectedMarker.contentId"
+              style="width: 70%"
+            ></review-list-comp>
           </div>
         </template>
 

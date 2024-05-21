@@ -24,6 +24,13 @@ const gender = computed(() => {
     return "2";
   }
 });
+
+const memberDelete = computed(() => {
+  const userChoice = confirm("삭제하시겠습니까?");
+  if (userChoice) {
+    memberStore.deleteMember();
+  }
+});
 </script>
 
 <template>
@@ -113,7 +120,9 @@ const gender = computed(() => {
           </div>
           <div>
             <button type="button" class="btn btn-outline-success" @click="update">수정하기</button>
-            <button type="button" class="btn btn-outline-danger">삭제하기</button>
+            <button type="button" class="btn btn-outline-danger" @click="memberDelete">
+              삭제하기
+            </button>
           </div>
         </form>
       </div>
