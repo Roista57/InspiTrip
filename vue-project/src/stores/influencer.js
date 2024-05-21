@@ -100,7 +100,7 @@ export const useInfluencerStore = defineStore("influencer", () => {
   };
 
   const rankUp = (no) => {
-    axios.post(URL + "influencer/rankup" + no);
+    axios.post(URL + "influencer/rankup/" + no);
   };
 
   return {
