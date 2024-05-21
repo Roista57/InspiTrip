@@ -41,8 +41,7 @@
             class="d-block w-100"
             alt="London"
           />
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+          <div class="carousel-caption d-none d-md-block"></div>
         </div>
         <div class="carousel-item">
           <img
@@ -50,13 +49,11 @@
             class="d-block w-100"
             alt="Bangkok"
           />
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+          <div class="carousel-caption d-none d-md-block"></div>
         </div>
         <div class="carousel-item">
           <img src="https://source.unsplash.com/800x400/?paris" class="d-block w-100" alt="Paris" />
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+          <div class="carousel-caption d-none d-md-block"></div>
         </div>
         <div class="carousel-item">
           <img
@@ -64,8 +61,7 @@
             class="d-block w-100"
             alt="Barcelona"
           />
-          <div class="carousel-caption d-none d-md-block">
-          </div>
+          <div class="carousel-caption d-none d-md-block"></div>
         </div>
       </div>
       <button
@@ -91,7 +87,7 @@
       <div class="row">
         <div class="col-6">
           <h6 class="text-center mb-4">인플루언서 랭킹</h6>
-          <ul class="list-group">
+          <ul class="list-group" v-if="influencer.rank.length >= 3">
             <li class="list-group-item d-flex">
               <div class="ranking-icon me-3">
                 <img src="/src/assets/first.jpg" height="48px" alt="" />
@@ -114,6 +110,13 @@
               <div class="align-self-center ms-3">{{ influencer.rank[2].name }}</div>
             </li>
           </ul>
+          <div
+            class="border text-center align-content-center"
+            v-if="influencer.rank.length < 3"
+            style="height: 300px"
+          >
+            <h2>랭킹 집계중입니다</h2>
+          </div>
         </div>
         <div class="col-1"></div>
         <div class="col-5">

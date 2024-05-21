@@ -50,7 +50,7 @@ watch(
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" style="background-color: white; height: 150px">
     <div class="d-flex justify-content-between align-items-center p-3">
       <!-- 검색창 -->
       <input type="text" class="form-control w-50" placeholder="Search" />
@@ -62,7 +62,9 @@ watch(
           id="flexSwitchCheckDefault"
           v-model="toggleChecked"
         />
-        <label class="form-check-label" for="flexSwitchCheckDefault">팔로우한 인플루언서만 보기</label>
+        <label class="form-check-label" for="flexSwitchCheckDefault"
+          >팔로우한 인플루언서만 보기</label
+        >
       </div>
     </div>
     <div class="row scrollable-div overflow-auto">
@@ -76,8 +78,4 @@ watch(
   </div>
 </template>
 
-<style scoped>
-.scrollable-div {
-  height: 150px; /* 원하는 높이로 설정 */
-}
-</style>
+<style scoped></style>

@@ -14,7 +14,7 @@ public class BatchScheduler {
     @Autowired
     private ReadCountService readCountService;
 
-    @Scheduled(cron = "0 21 14 * * ?")  // 매일 오후 2시 17분에 실행
+    @Scheduled(cron = "20 28 09 * * ?")  // 매일 오후 2시 17분에 실행
     public void resetReadCountsJob() {
         readCountService.resetReadCounts();
     }

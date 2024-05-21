@@ -84,7 +84,10 @@ const searchSido = () => {
 </script>
 
 <template>
-  <div class="d-flex flex-column justify-content-between" style="height: 150px">
+  <div
+    class="d-flex flex-column justify-content-between"
+    style="height: 150px; background-color: white"
+  >
     <div class="row pt-4">
       <div class="col-5">
         <select

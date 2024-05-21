@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap5-toggle": "^5.0.4",
     "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "quill-blot-formatter": "^1.0.5",
     "quill-image-compress": "^1.2.32",
     "quill-image-drop-module": "^1.0.3",

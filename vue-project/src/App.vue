@@ -8,18 +8,7 @@ const member = useMemberStore();
 
 <template>
   <div>
-    <!-- <header>
-      <router-link :to="{ name: 'main' }">Main</router-link>
-      <span> | </span>
-      <router-link :to="{ name: 'map' }">Map</router-link>
-      <span> | </span>
-      <router-link :to="{ name: 'board-list' }">Board</router-link>
-      <span> | </span>
-      <router-link :to="{ name: 'member' }">Member</router-link>
-      <span> | </span>
-      <router-link to="#">Member</router-link>
-    </header> -->
-    <ProjectHeader :key="{isLogin: member.isLogin}" />
+    <ProjectHeader :key="{ isLogin: member.isLogin }" />
     <router-view></router-view>
   </div>
 </template>
