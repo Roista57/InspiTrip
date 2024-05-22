@@ -15,4 +15,6 @@ public interface MemberReviewDAO {
 	MemberReviewDTO selectOne(@Param("ano")int ano, @Param("mid")String mid);
 	List<MemberReviewDTO> selectAll(int ano);
 	List<ReviewImageDTO> getImage(int rno);
+	
+	public double getAvg(int ano);
 }

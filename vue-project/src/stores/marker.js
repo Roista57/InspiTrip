@@ -46,6 +46,7 @@ export const useMarkerStore = defineStore("marker", () => {
     () => {
       const review = useReviewStore();
       console.log("선택");
+      review.getAvg(selectedMarker.value.contentId);
       review.getReviewListByAno(selectedMarker.value.contentId);
       div_status.value = true;
     }

@@ -10,11 +10,13 @@ import router from "@/router";
 import ReviewInsertComp from "@/components/review/ReviewInsertComp.vue";
 import { useMapStore } from "@/stores/map";
 import { onBeforeRouteLeave } from "vue-router";
+import { useReviewStore } from "@/stores/review";
 
 const sidoGugun = usesidoGugunStore();
 
 const marker = useMarkerStore();
 const map = useMapStore();
+const review = useReviewStore();
 
 const loading = ref();
 const div_state = ref(true);
@@ -22,6 +24,13 @@ const isHovered_inf = ref(false);
 const isHovered_user = ref(false);
 const normalColor = "#EAEAEA"; // 일반 상태의 색상 코드
 const hoveredColor = "#D8D8D8"; // 호버 상태의 색상 코드
+
+onBeforeRouteLeave((to, from) => {
+  const backdrop = document.querySelector(".modal-backdrop");
+  if (backdrop) {
+    backdrop.remove();
+  }
+});
 
 const handleImageError = (item) => {
   if (item.image == "") {
@@ -175,6 +184,9 @@ const stateChage = (data) => {
           <div
             class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
           >
+            <div style="width: 65%">
+              <h4>평점 : {{ review.avg }}</h4>
+            </div>
             <ReviewInsertComp @state="stateChage" style="width: 70%"></ReviewInsertComp>
             <review-list-comp style="width: 70%"></review-list-comp>
           </div>
@@ -182,7 +194,6 @@ const stateChage = (data) => {
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>

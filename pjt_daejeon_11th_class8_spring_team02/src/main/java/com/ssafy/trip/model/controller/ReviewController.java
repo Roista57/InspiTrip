@@ -62,4 +62,11 @@ public class ReviewController {
 		System.out.println("/image/{rno} >> " + imageList.size());
 		return imageList;
 	}
+	
+	@GetMapping("/avg/{ano}")
+	@Operation(summary = "관광지 평점", description = "유저 리뷰들로부터 평점의 평균을 받아옵니다")
+	public double getAvg(@PathVariable("ano") int ano) {
+		return rservice.getRating(ano);
+	}
+	
 }

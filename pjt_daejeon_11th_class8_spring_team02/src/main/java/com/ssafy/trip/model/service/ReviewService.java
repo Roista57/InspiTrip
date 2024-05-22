@@ -35,4 +35,8 @@ public class ReviewService {
 	public List<ReviewImageDTO> getImage(int rno){
 		return rdao.getImage(rno);
 	}
+	
+	public double getRating(int ano) {
+		return rdao.getAvg(ano);
+	}
 }

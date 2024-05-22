@@ -21,6 +21,17 @@ export const useReviewStore = defineStore("review", () => {
   const reviewList = ref([]);
   const reviewImageList = ref([]);
 
+  const avg = ref();
+  const getAvg = (ano) => {
+    axios(`${VITE_VUE_API_URL}review/avg/${ano}`)
+      .then((resp) => {
+        avg.value = resp.data;
+      })
+      .catch(() => {
+        avg.value = 0;
+      });
+  };
+
   const insertReview = async () => {
     const marker = useMarkerStore();
     review.value.ano = marker.selectedMarker.contentId;
@@ -135,5 +146,7 @@ export const useReviewStore = defineStore("review", () => {
     upload_image,
     reviewImageList,
     getReviewListByAno,
+    getAvg,
+    avg,
   };
 });
