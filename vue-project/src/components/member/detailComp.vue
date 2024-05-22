@@ -116,7 +116,7 @@ const memberDelete = computed(() => {
             />
           </div>
           <div class="input-groupt">
-            <img :src="memberStore.member.img" alt="없어요" style="width: 100px; height: 100px" />
+            <img :src="memberStore.member.img" style="width: 100px; height: 100px" />
           </div>
           <div>
             <button type="button" class="btn btn-outline-success" @click="update">수정하기</button>

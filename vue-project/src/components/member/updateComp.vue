@@ -119,7 +119,7 @@ const cancel = () => {
             />
           </div>
           <div class="input-groupt">
-            <img :src="imageSrc" alt="없어요" style="width: 100px; height: 100px" />
+            <img :src="imageSrc" style="width: 100px; height: 100px" />
           </div>
           <div class="input-group">
             <span class="input-group-text centered-text" style="width: 100px">이미지</span>
