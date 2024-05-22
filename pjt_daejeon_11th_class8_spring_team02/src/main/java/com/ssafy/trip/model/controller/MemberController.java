@@ -117,6 +117,15 @@ public class MemberController {
 		return mservice.selectAlarms(memberId);
 	}
 	
+	@DeleteMapping("/alarms/{no}")
+	@Operation(summary = "알람 삭제", description = "알람을 삭제 합니다")
+	public String deleteAlarm(@PathVariable("no") int no) {
+		if(mservice.deleteAlarm(no) == 0) {
+			return "false";
+		}
+		return "ok";
+	}
+	
 	@PostMapping("/alarms/{no}")
 	@Operation(summary = "알람 체크", description = "알람을 읽음 표시 합니다")
 	public String readAlarm(@PathVariable("no") int no) {

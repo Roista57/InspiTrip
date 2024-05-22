@@ -69,6 +69,17 @@ export const useInfluencerStore = defineStore("influencer", () => {
     });
   };
 
+  const getInfluencersByWord = async (word) => {
+    await axios({
+      url: URL + "influencer/list/word",
+      method: "POST",
+      data: { name: word },
+    }).then((resp) => {
+      console.log(resp.data);
+      influencerList.value = resp.data;
+    });
+  };
+
   const getInfluencersByFollow = async (id) => {
     await axios(URL + "influencer/list/" + id).then((resp) => {
       console.log(resp.data);
@@ -114,5 +125,6 @@ export const useInfluencerStore = defineStore("influencer", () => {
     getRank,
     rank,
     rankUp,
+    getInfluencersByWord,
   };
 });

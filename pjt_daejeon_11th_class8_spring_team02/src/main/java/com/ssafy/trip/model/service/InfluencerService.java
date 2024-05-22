@@ -91,6 +91,10 @@ public class InfluencerService {
 		return idao.selectAll();
 	}
 	
+	public List<InfluencerDTO> selectByName(String word){
+		return idao.selectByName(word);
+	}
+	
 	public List<InfluencerDTO> selectByFollow(String userId){
 		return idao.selectByFollow(userId);
 	}

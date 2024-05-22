@@ -23,17 +23,27 @@ const readAlarm = async () => {
   await member.checkAlarm(props.item.no);
   router.push({ name: "map-influencer", params: { alarm: true } });
 };
+
+const read = async () => {
+  await member.checkAlarm(props.item.no);
+  member.countAlarm();
+};
+const deleteAlarm = async () => {
+  await member.deleteAlarm(props.item.no);
+  member.countAlarm();
+};
 </script>
 
 <template>
   <div class="notification-item" :class="{ read: item.checked }" @click="readAlarm">
-    <input type="checkbox" class="form-check-input me-2" v-model="item.checked" />
     <img :src="item.img" alt="Avatar" />
     <div class="content">
       <p class="mb-0">{{ item.iname }}</p>
       <p class="mb-0 text-muted">{{ item.aname }}</p>
     </div>
     <span class="timestamp text-muted">2024-05-17 08:11:39</span>
+    <div class="btn" @click.stop="read">읽음확인</div>
+    <div class="btn" @click.stop="deleteAlarm">삭제</div>
   </div>
 </template>
 

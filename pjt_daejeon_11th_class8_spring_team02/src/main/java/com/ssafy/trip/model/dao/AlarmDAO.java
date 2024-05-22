@@ -8,4 +8,5 @@ public interface AlarmDAO {
 	public int insertAlarm(AlarmDTO alarm);
 	public List<AlarmDTO> selectAlarmsByMemberId(String mid);
 	public int readAlarm(int no);
+	public int deleteAlarm(int no);
 }

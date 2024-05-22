@@ -90,18 +90,7 @@ const insertReview = async () => {
                     :src="imageSrc"
                     class="rounded"
                     style="width: 100px; height: 100px; margin-right: 10px"
-                    data-bs-toggle="modal"
-                    :data-bs-target="`#myModal${index}`"
                   />
-                  <!-- 이미지 모달창 -->
-                  <div class="modal" :id="`myModal${index}`">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <!-- Modal body -->
-                        <img :src="imageSrc" />
-                      </div>
-                    </div>
-                  </div>
                 </template>
               </div>
             </template>

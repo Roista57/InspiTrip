@@ -78,4 +78,7 @@ public class MemberService {
 	public int readAlarm(int no) {
 		return adao.readAlarm(no);
 	}
+	public int deleteAlarm(int no) {
+		return adao.deleteAlarm(no);
+	}
 }

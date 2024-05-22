@@ -37,6 +37,13 @@ onMounted(async () => {
 });
 const toggleChecked = ref(false);
 
+const keyword = ref("");
+
+const changeKeyword = (e) => {
+  keyword.value = e.target.value;
+  influencer.getInfluencersByWord(keyword.value);
+};
+
 watch(
   () => toggleChecked.value,
   () => {
@@ -47,13 +54,22 @@ watch(
     }
   }
 );
+let compositionData = "";
 </script>
 
 <template>
   <div class="container bg-success bg-opacity-50" style="height: 150px">
     <div class="d-flex justify-content-between align-items-center p-3">
       <!-- 검색창 -->
-      <input type="text" class="form-control w-50" placeholder="Search" />
+      <input
+        type="text"
+        class="form-control w-50"
+        :value="keyword"
+        @input="changeKeyword"
+        id="inputField"
+        placeholder="Search"
+      />
+
       <!-- 토글 버튼 -->
       <div class="form-check form-switch" v-if="member.isLogin">
         <input

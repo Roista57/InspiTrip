@@ -44,6 +44,10 @@ export const useMemberStore = defineStore(
       await axios.post(VITE_VUE_API_URL + `member/alarms/${no}`);
     };
 
+    const deleteAlarm = async (no) => {
+      await axios.delete(VITE_VUE_API_URL + `member/alarms/${no}`);
+    };
+
     const follow = (ino) => {
       if (isLogin.value) {
         axios({
@@ -250,6 +254,7 @@ export const useMemberStore = defineStore(
       countAlarm,
       hasAlarm,
       checkAlarm,
+      deleteAlarm,
     };
   },
   {

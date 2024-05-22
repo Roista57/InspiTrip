@@ -7,7 +7,8 @@
 		values (#{vno}, #{mid})
 	</insert>
 	<select id="selectAlarmsByMemberId">
-		select a.no, a.vno, a.mid, a.checked, a.created_at as createdAt, v.ino,
+		select a.no, a.vno, a.mid, a.checked, a.created_at as
+		createdAt, v.ino,
 		v.ano, i.name as iName, i.img, ai.title as aName
 		FROM
 		alarm a
@@ -24,4 +25,9 @@
 		SET checked = true
 		WHERE no = #{no}
 	</update>
+	<delete id="deleteAlarm">
+		delete
+		from alarm
+		WHERE no = #{no}
+	</delete>
 </mapper>
