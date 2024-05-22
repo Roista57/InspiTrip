@@ -85,7 +85,7 @@ const searchSido = () => {
 
 <template>
   <div
-    class="d-flex flex-column justify-content-between bg-success bg-opacity-50"
+    class="ps-4 d-flex flex-column justify-content-between bg-success bg-opacity-50"
     style="height: 150px"
   >
     <div class="row pt-4">
@@ -118,16 +118,26 @@ const searchSido = () => {
       </div>
     </div>
     <div class="pb-4">
-      <span class="m-1" v-for="content in contentTypes" :key="content.value">
-        <input
-          type="radio"
-          name="type"
-          :id="content.contentType"
-          :value="content.value"
-          v-model="selectedType"
-        />
-        <label :for="content.contentType">{{ content.contentType }} </label>
-      </span>
+      <div
+        class="btn-group"
+        role="group"
+        aria-label="Basic radio toggle button group"
+        style="background-color: white"
+      >
+        <template v-for="content in contentTypes" :key="content.value">
+          <input
+            type="radio"
+            class="btn-check"
+            :id="content.contentType"
+            :value="content.value"
+            autocomplete="off"
+            v-model="selectedType"
+          />
+          <label class="btn btn-outline-primary" :for="content.contentType"
+            >{{ content.contentType }}
+          </label>
+        </template>
+      </div>
     </div>
   </div>
 </template>
