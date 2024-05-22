@@ -19,6 +19,7 @@
 		JOIN
 		attraction_info ai ON v.ano = ai.content_id
 		where a.mid = #{mid}
+		order by a.no desc;
 	</select>
 
 	<update id="readAlarm">
