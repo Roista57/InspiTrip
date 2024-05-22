@@ -8,6 +8,10 @@ const influencer = useInfluencerStore();
 onMounted(() => {
   influencer.getInfluencerTempList();
 });
+
+const len = computed(() => {
+  return influencer.tempList.length;
+});
 </script>
 
 <template>
@@ -26,6 +30,12 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
+          <template v-if="len == 0">
+            <tr>
+              <td colspan="6">새로운 요청이 없습니다.</td>
+            </tr>
+          </template>
+
           <InfluencerAcceptItemComp
             v-for="temp in influencer.tempList"
             :key="temp.no"

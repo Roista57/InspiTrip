@@ -104,14 +104,28 @@ export const useInfluencerStore = defineStore("influencer", () => {
       });
   };
 
-  const getInfluencerTempAccept = () => {
-    axios({
-      url: URL + `influencer/accept/list`,
-      method: "GET",
+  const influencerTempAccept = async (no) => {
+    await axios({
+      url: URL + `influencer/accept/${no}`,
+      method: "POST",
       headers: { Authorization: `Bearer ${member.token}` },
     })
       .then((resp) => {
-        tempList.value = resp.data;
+        console.log(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const influencerTempRefuse = async (no) => {
+    await axios({
+      url: URL + `influencer/refuse/${no}`,
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${member.token}` },
+    })
+      .then((resp) => {
+        console.log(resp.data);
       })
       .catch((err) => {
         console.log(err);
@@ -159,5 +173,7 @@ export const useInfluencerStore = defineStore("influencer", () => {
     getInfluencersByWord,
     getInfluencerTempList,
     tempList,
+    influencerTempAccept,
+    influencerTempRefuse,
   };
 });

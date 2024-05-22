@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,8 +73,8 @@ public class InfluencerController {
 		return iservice.tempList();
 	}
 
-	@GetMapping("/accept/{no}")
-	@Operation(summary = "인플루언서 승락", description = "인플루언서 추가 요청을 승락합니다. admin만 진행할 수 있도록 수정할 예정입니다..")
+	@PostMapping("/accept/{no}")
+	@Operation(summary = "인플루언서 요청 승락", description = "인플루언서 추가 요청을 승락합니다.")
 	public ResponseEntity<?> accept(@PathVariable("no") int no) {
 		try {
 			iservice.accept(no);
@@ -83,6 +84,15 @@ public class InfluencerController {
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
+	}
+	
+	@DeleteMapping("/refuse/{no}")
+	@Operation(summary = "인플루언서 요청 거절", description = "인플루언서 추가 요청을 거절합니다.")
+	public String refuse(@PathVariable("no") int no) {
+		if(iservice.refuse(no)) {
+			return "ok";
+		}
+		return "fail";
 	}
 
 	@PostMapping("/visit")

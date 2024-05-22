@@ -121,4 +121,13 @@ public class InfluencerService {
     public List<InfluencerTempDTO> tempList(){
     	return idao.tempSelectAll();
     }
+    
+	public boolean refuse(int no) {
+		if(idao.deleteTemp(no) > 0) {
+			return true;
+		}
+		return false;
+	}
+    
+    
 }

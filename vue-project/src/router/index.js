@@ -177,56 +177,6 @@ const router = createRouter({
       ],
     },
     {
-      path: "/board",
-      name: "board",
-      component: TheBoardView,
-      children: [
-        {
-          path: "",
-          name: "board-list",
-          component: BoardListComp,
-        },
-        {
-          path: "insert",
-          name: "board-insert",
-          component: BoardInsertComp,
-        },
-        {
-          path: ":no",
-          name: "board-detail",
-          component: BoardDetailComp,
-        },
-        {
-          path: "update/:no",
-          name: "board-update",
-          component: BoardUpdateComp,
-        },
-      ],
-      // redirect: { name: "article-list" },
-      // children: [
-      //   {
-      //     path: "list",
-      //     name: "article-list",
-      //     component: () => import("@/components/board/BoardList.vue"),
-      //   },
-      //   {
-      //     path: "view/:articleno",
-      //     name: "article-view",
-      //     component: () => import("@/components/board/BoardDetail.vue"),
-      //   },
-      //   {
-      //     path: "write",
-      //     name: "article-write",
-      //     component: () => import("@/components/board/BoardWrite.vue"),
-      //   },
-      //   {
-      //     path: "modify/:articleno",
-      //     name: "article-modify",
-      //     component: () => import("@/components/board/BoardModify.vue"),
-      //   },
-      // ],
-    },
-    {
       path: "/alarm",
       name: "alarm",
       component: AlarmListComp,
