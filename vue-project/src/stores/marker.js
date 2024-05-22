@@ -13,6 +13,18 @@ export const useMarkerStore = defineStore("marker", () => {
   const map = useMapStore();
   const div_status = ref(true);
 
+  const limit = ref(0);
+
+  const computedObj = computed(
+    () => {
+      console.log("에엥");
+      return markers.value.slice(0, limit.value);
+    },
+    {
+      immediate: true,
+    }
+  );
+
   const centerLat = ref(37.566826);
   const centerLng = ref(126.9786567);
 
@@ -135,5 +147,7 @@ export const useMarkerStore = defineStore("marker", () => {
     selectById,
     selectOneById,
     div_status,
+    limit,
+    computedObj,
   };
 });

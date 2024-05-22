@@ -25,12 +25,29 @@ const handleImageError = (item) => {
 //     //no image
 //   } else if()
 // };
+
+/***/
+
+onMounted(() => {
+  const scrollableElement = document.querySelector("#scrollable");
+  watch(
+    () => marker.markers,
+    () => {
+      scrollToTop(scrollableElement);
+    }
+  );
+});
+
+function scrollToTop(element) {
+  // 요소의 scrollTop 속성을 0으로 설정하여 스크롤을 맨 위로 이동
+  element.scrollTop = 0;
+}
 </script>
 
 <template>
   <div class="container bg-success bg-opacity-25" style="height: 820px">
     <router-view></router-view>
-    <div class="overflow-auto mt-3" style="max-width: 800px; height: 620px">
+    <div class="overflow-auto mt-3" id="scrollable" style="max-width: 800px; height: 620px">
       <div class="row d-flex justify-content-center" style="max-width: 720px">
         <div class="card col-5 m-3" v-for="item in marker.markers" :key="item.contentId">
           <img
@@ -53,6 +70,7 @@ const handleImageError = (item) => {
             >
           </div>
         </div>
+        <div id="listEnd"></div>
       </div>
     </div>
   </div>
