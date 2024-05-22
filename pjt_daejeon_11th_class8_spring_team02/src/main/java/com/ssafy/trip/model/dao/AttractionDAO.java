@@ -41,4 +41,6 @@ public interface AttractionDAO {
 	public AttractionDto getAttraction(int contentId);
 
 	public List<AttractionDto> getAttractionListByInfluencer(int ino);
+	
+	public AttractionDto getRand();
 }

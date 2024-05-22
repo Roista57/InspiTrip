@@ -126,5 +126,10 @@ public class AttractionService {
 		AttractionDto result = adao.getAttraction(contentId);
 		return result;
 	}
-
+	
+	public AttractionDto getRand()
+	{
+		AttractionDto result = adao.getRand();
+		return result;
+	}
 }

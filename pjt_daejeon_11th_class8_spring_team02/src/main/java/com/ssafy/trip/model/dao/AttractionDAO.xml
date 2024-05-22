@@ -47,9 +47,11 @@
 		ai.addr1,
 		ai.first_image,
 		ai.sido_code, ai.gugun_code, ai.latitude,
-		ai.longitude, ad.overview
+		ai.longitude,
+		ad.overview
 		from attraction_info ai left join
-		attraction_description ad on
+		attraction_description ad
+		on
 		ai.content_id = ad.content_id
 		where
 		ai.sido_code = #{sido} and
@@ -130,26 +132,40 @@
 		where v.ino =
 		#{ino}
 	</select>
-	
-	<insert id="insert" parameterType="com.ssafy.trip.model.dto.AttractionDto">
-		insert into attraction_info(content_id, content_type_id, title, addr1, first_image, readcount, sido_code, gugun_code, latitude, longitude)
-		values (#{contentId}, #{contentTypeId}, #{title}, #{address}, #{image}, 0, #{sidoCode}, #{gunguCode}, #{latitude}, #{longitude})
+
+	<insert id="insert"
+		parameterType="com.ssafy.trip.model.dto.AttractionDto">
+		insert into attraction_info(content_id, content_type_id,
+		title, addr1, first_image, readcount, sido_code, gugun_code, latitude,
+		longitude)
+		values (#{contentId}, #{contentTypeId}, #{title},
+		#{address}, #{image}, 0, #{sidoCode}, #{gunguCode}, #{latitude},
+		#{longitude})
 	</insert>
-	
-	<insert id="insertOverview" parameterType="com.ssafy.trip.model.dto.AttractionDto">
+
+	<insert id="insertOverview"
+		parameterType="com.ssafy.trip.model.dto.AttractionDto">
 		insert into attraction_description(content_id, overview)
 		values (#{contentId}, #{overview})
 	</insert>
-	
+
 	<select id="searchAttractionContentId" resultType="String">
-		select content_id
+		select
+		content_id
 		from attraction_info
-		where addr1 = #{addr} and title = #{title}
+		where addr1 = #{addr} and title =
+		#{title}
 	</select>
-	
+
 	<select id="getAttractionContentId" resultType="int">
-		select max(content_id)+1
+		select
+		max(content_id)+1
 		from attraction_info
 	</select>
 
+	<select id="getRand"  resultMap="aDto">
+		SELECT * FROM attraction_info
+		ORDER BY RAND()
+		LIMIT 1;
+	</select>
 </mapper>

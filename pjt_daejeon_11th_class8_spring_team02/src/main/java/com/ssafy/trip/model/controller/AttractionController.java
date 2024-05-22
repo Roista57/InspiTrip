@@ -87,5 +87,11 @@ public class AttractionController {
 	public AttractionDto attraction(@PathVariable("content_id") int contentId) {
 		return aservice.getAttraction(contentId);
 	}
+	
+	@GetMapping("/attraction/rand")
+	@Operation(summary = "랜덤조회", description = "랜덤 관광지를 하나 조회합니다.")
+	public AttractionDto attractionRand() {
+		return aservice.getRand();
+	}
 
 }

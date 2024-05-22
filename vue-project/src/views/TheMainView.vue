@@ -36,31 +36,19 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img
-            src="https://source.unsplash.com/800x400/?london"
-            class="d-block w-100"
-            alt="London"
-          />
+          <img :src="`/src/assets/back/${result[0]}.jpg`" class="d-block w-100" alt="London" />
           <div class="carousel-caption d-none d-md-block"></div>
         </div>
         <div class="carousel-item">
-          <img
-            src="https://source.unsplash.com/800x400/?bangkok"
-            class="d-block w-100"
-            alt="Bangkok"
-          />
+          <img :src="`/src/assets/back/${result[1]}.jpg`" class="d-block w-100" alt="Bangkok" />
           <div class="carousel-caption d-none d-md-block"></div>
         </div>
         <div class="carousel-item">
-          <img src="https://source.unsplash.com/800x400/?paris" class="d-block w-100" alt="Paris" />
+          <img :src="`/src/assets/back/${result[2]}.jpg`" class="d-block w-100" alt="Paris" />
           <div class="carousel-caption d-none d-md-block"></div>
         </div>
         <div class="carousel-item">
-          <img
-            src="https://source.unsplash.com/800x400/?barcelona"
-            class="d-block w-100"
-            alt="Barcelona"
-          />
+          <img :src="`/src/assets/back/${result[3]}.jpg`" class="d-block w-100" alt="Barcelona" />
           <div class="carousel-caption d-none d-md-block"></div>
         </div>
       </div>
@@ -139,15 +127,27 @@
 <script setup>
 import { useBoardStore } from "@/stores/board";
 import { useInfluencerStore } from "@/stores/influencer";
-import { onMounted, computed } from "vue";
+import { onMounted, computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const influencer = useInfluencerStore();
 const boardStore = useBoardStore();
 const board = useBoardStore();
+const result = ref([]);
+function getRandomNumbers() {
+  const numbers = Array.from({ length: 9 }, (_, i) => i + 1); // 1부터 9까지의 숫자를 배열에 담음
 
-onMounted(() => {
+  for (let i = 0; i < 4; i++) {
+    const randomIndex = Math.floor(Math.random() * numbers.length); // 배열에서 랜덤한 인덱스 선택
+    const selectedNumber = numbers[randomIndex]; // 선택된 숫자
+    result.value.push(selectedNumber); // 결과 배열에 추가
+    numbers.splice(randomIndex, 1); // 선택된 숫자 배열에서 제거
+  }
+}
+onMounted(async () => {
+  result.value = [];
+  getRandomNumbers();
   influencer.getRank();
   board.getThree();
   console.log(influencer.rank);
@@ -162,7 +162,7 @@ const moveBoardDetail = (notice) => {
 <style scoped>
 .carousel-item img {
   height: 500px;
-  object-fit: cover;
+  object-fit: fill;
 }
 
 .ranking-icon {

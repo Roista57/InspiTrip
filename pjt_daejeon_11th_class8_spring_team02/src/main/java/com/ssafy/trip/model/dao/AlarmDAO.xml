@@ -17,7 +17,8 @@
 		JOIN
 		influencers i ON v.ino = i.no
 		JOIN
-		attraction_info ai ON v.ano = ai.content_id;
+		attraction_info ai ON v.ano = ai.content_id
+		where a.mid = #{mid}
 	</select>
 
 	<update id="readAlarm">
