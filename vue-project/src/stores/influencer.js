@@ -2,6 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { useMemberStore } from "./member";
 
 const URL = import.meta.env.VITE_VUE_API_URL;
 
@@ -9,9 +10,11 @@ export const useInfluencerStore = defineStore("influencer", () => {
   const influencerList = ref([]);
   const newInfluencer = ref();
   const router = useRouter();
+  const member = useMemberStore();
   const selectedInfluencer = ref({
     no: 0,
   });
+  const tempList = ref([]);
 
   const selectInfluencer = async (no) => {
     await axios(URL + "influencer/find/" + no)
@@ -76,6 +79,34 @@ export const useInfluencerStore = defineStore("influencer", () => {
     });
   };
 
+  const getInfluencerTempList = () => {
+    axios({
+      url: URL + `influencer/accept/list`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${member.token}` },
+    })
+      .then((resp) => {
+        tempList.value = resp.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getInfluencerTempAccept = () => {
+    axios({
+      url: URL + `influencer/accept/list`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${member.token}` },
+    })
+      .then((resp) => {
+        tempList.value = resp.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const rank = ref([
     {
       name: "",
@@ -114,5 +145,7 @@ export const useInfluencerStore = defineStore("influencer", () => {
     getRank,
     rank,
     rankUp,
+    getInfluencerTempList,
+    tempList,
   };
 });

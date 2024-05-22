@@ -69,9 +69,14 @@ const handleImageError = (event) => {
               INFLUENCER
             </p>
             <ul class="dropdown-menu text-small">
+              <li v-if="member.member.id == 'ssafy'">
+                <router-link :to="{ name: 'influencer-accept' }" class="dropdown-item"
+                  >인풀러언서 요청 목록</router-link
+                >
+              </li>
               <li>
                 <router-link :to="{ name: 'influencer-regist' }" class="dropdown-item"
-                  >인플루언서 등록</router-link
+                  >인플루언서 요청</router-link
                 >
               </li>
               <li>

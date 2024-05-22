@@ -61,6 +61,19 @@
 		on i.no = f.ino
 	</select>
 	
+	<select id="tempSelectAll" resultMap="influencerTemp">
+		select *
+		from influencers_temp
+	</select>
+	
+	<resultMap type="com.ssafy.trip.model.dto.InfluencerTempDTO" id="influencerTemp">
+		<result column="no" property="no"/>
+		<result column="name" property="name"/>
+		<result column="img" property="img"/>
+		<result column="content" property="content"/>
+		<result column="url" property="url"/>
+	</resultMap>
+	
 	<resultMap type="com.ssafy.trip.model.dto.InfluencerDTO" id="influencerInfo">
 		<result column="no" property="no"/>
 		<result column="name" property="name"/>
