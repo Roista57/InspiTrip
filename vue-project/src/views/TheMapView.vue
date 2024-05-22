@@ -11,6 +11,7 @@ import ReviewInsertComp from "@/components/review/ReviewInsertComp.vue";
 import { useMapStore } from "@/stores/map";
 import { onBeforeRouteLeave } from "vue-router";
 import { useReviewStore } from "@/stores/review";
+import StarRating from "vue-star-rating";
 
 const sidoGugun = usesidoGugunStore();
 
@@ -56,6 +57,10 @@ const stateChage = (data) => {
   console.log("stateChage >> " + data);
   loading.value = data;
 };
+
+const setAvgRating = computed(() => {
+  return review.avg;
+});
 </script>
 
 <template>
@@ -116,7 +121,16 @@ const stateChage = (data) => {
         </div>
 
         <div class="container">
-          <div class="modal-body">{{ marker.selectedMarker.title }}</div>
+          <div class="modal-body d-flex justify-content-between">
+            {{ marker.selectedMarker.title }}
+            <star-rating
+              v-bind:increment="0.01"
+              v-model:rating="setAvgRating"
+              active-color="#FF9600"
+              v-bind:star-size="25"
+              read-only=" true"
+            ></star-rating>
+          </div>
           <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-5">
@@ -184,9 +198,6 @@ const stateChage = (data) => {
           <div
             class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
           >
-            <div style="width: 65%">
-              <h4>평점 : {{ review.avg }}</h4>
-            </div>
             <ReviewInsertComp @state="stateChage" style="width: 70%"></ReviewInsertComp>
             <review-list-comp style="width: 70%"></review-list-comp>
             <template v-if="review.reviewList.length == 0">
