@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div calss="text-center scrollable-div overflow-auto">
+  <div calss="text-center scrollable-div overflow-auto" :key="reviewStore.reviewList">
     <ReviewListDetailComp
       v-for="(review, index) in reviewStore.reviewList"
       :key="index"

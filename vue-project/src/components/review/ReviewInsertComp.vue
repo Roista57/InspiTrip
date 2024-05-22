@@ -12,8 +12,6 @@ const marker = useMarkerStore();
 // 이미지 파일 리스트를 저장할 ref
 const inputImageList = ref([]);
 
-const rating = ref(0);
-
 const review = ref({
   no: "",
   ano: "",
@@ -53,6 +51,7 @@ const arrayLength = computed(() => previewImageList.value.length);
 const insertReview = async () => {
   reviewStore.inputImageList = inputImageList.value;
   reviewStore.review = review.value;
+  console.log(reviewStore.review);
   const rno = await reviewStore.insertReview();
   console.log(inputImageList.value);
   for (let i = 0; i < inputImageList.value.length; i++) {
