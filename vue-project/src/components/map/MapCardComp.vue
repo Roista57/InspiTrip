@@ -33,9 +33,30 @@ onMounted(() => {
   watch(
     () => marker.markers,
     () => {
+      marker.limit = 20;
       scrollToTop(scrollableElement);
     }
   );
+
+  //
+
+  const listEnd = document.querySelector("#listEnd"); // 관찰할 대상(요소)
+  const options = {
+    root: null, // 뷰포트를 기준으로 타켓의 가시성 검사
+    rootMargin: "0px 0px 0px 0px", // 확장 또는 축소 X
+    threshold: 0, // 타켓의 가시성 0%일 때 옵저버 실행
+  };
+
+  const onIntersect = (entries, observer) => {
+    entries.forEach(async (entry) => {
+      if (entry.isIntersecting) {
+        marker.limit += 50;
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(onIntersect, options); // 관찰자 초기화
+  observer.observe(listEnd); // 관찰할 대상(요소) 등록
 });
 
 function scrollToTop(element) {
@@ -49,7 +70,7 @@ function scrollToTop(element) {
     <router-view></router-view>
     <div class="overflow-auto mt-3" id="scrollable" style="max-width: 800px; height: 620px">
       <div class="row d-flex justify-content-center" style="max-width: 720px">
-        <div class="card col-5 m-3" v-for="item in marker.markers" :key="item.contentId">
+        <div class="card col-5 m-3" v-for="item in marker.computedObj" :key="item.contentId">
           <img
             class="card-img-top mt-1"
             :src="`http://localhost:3000/attr/${item.contentId}/first_image.webp`"
@@ -70,7 +91,7 @@ function scrollToTop(element) {
             >
           </div>
         </div>
-        <div id="listEnd"></div>
+        <div class="btn" id="listEnd">&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</div>
       </div>
     </div>
   </div>

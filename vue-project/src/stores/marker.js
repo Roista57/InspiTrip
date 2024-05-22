@@ -17,7 +17,7 @@ export const useMarkerStore = defineStore("marker", () => {
 
   const computedObj = computed(
     () => {
-      console.log("에엥");
+      console.log(markers.value.slice(0, limit.value));
       return markers.value.slice(0, limit.value);
     },
     {
