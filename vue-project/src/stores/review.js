@@ -91,22 +91,22 @@ export const useReviewStore = defineStore("review", () => {
     return resp_url;
   };
 
-  const getReviewList = async () => {
-    let list = [];
-    const test_contentId = 126509;
-    await axios({
-      method: "GET",
-      url: `${VITE_VUE_API_URL}review/list/${test_contentId}`,
-    })
-      .then((resp) => {
-        console.log(resp);
-        list = resp.data;
-        reviewList.value = list;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const getReviewList = async () => {
+  //   let list = [];
+  //   const test_contentId = 126509;
+  //   await axios({
+  //     method: "GET",
+  //     url: `${VITE_VUE_API_URL}review/list/${test_contentId}`,
+  //   })
+  //     .then((resp) => {
+  //       console.log(resp);
+  //       list = resp.data;
+  //       reviewList.value = list;
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const getReviewListByAno = async (contentId) => {
     let list = [];
@@ -138,7 +138,6 @@ export const useReviewStore = defineStore("review", () => {
   return {
     review,
     insertReview,
-    getReviewList,
     reviewList,
     getImageList,
     inputImageList,

@@ -189,6 +189,9 @@ const stateChage = (data) => {
             </div>
             <ReviewInsertComp @state="stateChage" style="width: 70%"></ReviewInsertComp>
             <review-list-comp style="width: 70%"></review-list-comp>
+            <template v-if="review.reviewList.length == 0">
+              <div style="width: 27%">작성된 리뷰가 없습니다</div>
+            </template>
           </div>
         </template>
 

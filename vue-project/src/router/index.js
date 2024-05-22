@@ -40,21 +40,61 @@ const router = createRouter({
           path: "login",
           name: "member-login",
           component: LoginComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (member.isLogin) {
+              alert("이미 로그인 하셨습니다.");
+              router.push({ name: "main" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
         {
           path: "regist",
           name: "member-regist",
           component: RegistComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (member.isLogin) {
+              alert("이미 로그인 하셨습니다.");
+              router.push({ name: "main" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
         {
           path: "update",
           name: "member-update",
           component: UpdateComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (!member.isLogin) {
+              alert("로그인 이후 사용해주세요.");
+              router.push({ name: "main" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
         {
           path: ":id",
           name: "member-detail",
           component: DetailComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (!member.isLogin) {
+              alert("로그인 이후 사용해주세요.");
+              router.push({ name: "main" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
       ],
     },
@@ -90,6 +130,16 @@ const router = createRouter({
           path: "insert",
           name: "board-insert",
           component: BoardInsertComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (!member.isLogin) {
+              alert("로그인 이후 사용해주세요.");
+              router.push({ name: "board-list" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
         {
           path: ":no",
@@ -100,6 +150,16 @@ const router = createRouter({
           path: "update/:no",
           name: "board-update",
           component: BoardUpdateComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (!member.isLogin) {
+              alert("로그인 이후 사용해주세요.");
+              router.push({ name: "board-list" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
       ],
       // redirect: { name: "article-list" },
@@ -156,6 +216,16 @@ const router = createRouter({
           path: "accept",
           name: "influencer-accept",
           component: InfluencerAcceptComp,
+          beforeEnter: (to, from) => {
+            const member = useMemberStore();
+            if (member.member.id != "ssafy") {
+              alert("관리자만 사용 가능합니다");
+              router.push({ name: "main" });
+              return false;
+            } else {
+              return true;
+            }
+          },
         },
       ],
     },
@@ -180,6 +250,16 @@ const router = createRouter({
       path: "/alarm",
       name: "alarm",
       component: AlarmListComp,
+      beforeEnter: (to, from) => {
+        const member = useMemberStore();
+        if (!member.isLogin) {
+          alert("로그인 이후 사용해주세요");
+          router.push({ name: "main" });
+          return false;
+        } else {
+          return true;
+        }
+      },
     },
   ],
 });

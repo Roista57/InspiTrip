@@ -57,7 +57,7 @@ const handleImageError = (event) => {
           </li>
           <li>
             <router-link :to="{ name: 'board-list' }" class="nav-link px-2 link-body-emphasis"
-              >BOARD</router-link
+              >NOTICE</router-link
             >
           </li>
           <div class="dropdown text-end nav-link px-2 link-body-emphasis">
