@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.trip.model.dto.InfluencerDTO;
+import com.ssafy.trip.model.dto.InfluencerTempDTO;
 import com.ssafy.trip.model.dto.VisitDTO;
 import com.ssafy.trip.model.service.InfluencerService;
 
@@ -63,6 +64,12 @@ public class InfluencerController {
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
+	}
+	
+	@GetMapping("/accept/list")
+	@Operation(summary = "인플루언서 요청 목록", description = "사용자가 요청한 인플루언서 요청들에 대한 목록을 보여줍니다.")
+	public List<InfluencerTempDTO> acceptList() {
+		return iservice.tempList();
 	}
 
 	@GetMapping("/accept/{no}")

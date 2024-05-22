@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.trip.model.dto.InfluencerDTO;
+import com.ssafy.trip.model.dto.InfluencerTempDTO;
 import com.ssafy.trip.model.dto.VisitDTO;
 
 @Mapper
@@ -22,5 +23,7 @@ public interface InfluencerDAO {
 	public List<InfluencerDTO> selectAll();
 	public List<InfluencerDTO> selectByName(String word);
 	public List<InfluencerDTO> selectByFollow(String id);
+	
+	public List<InfluencerTempDTO> tempSelectAll();
 	
 }

@@ -14,6 +14,7 @@ import com.ssafy.trip.model.dao.InfluencerDAO;
 import com.ssafy.trip.model.dao.MemberDAO;
 import com.ssafy.trip.model.dto.AlarmDTO;
 import com.ssafy.trip.model.dto.InfluencerDTO;
+import com.ssafy.trip.model.dto.InfluencerTempDTO;
 import com.ssafy.trip.model.dto.VisitDTO;
 
 @Service
@@ -115,5 +116,9 @@ public class InfluencerService {
     		result.add(idao.selectOne(Integer.parseInt(str)));
     	}
     	return result;
+    }
+    
+    public List<InfluencerTempDTO> tempList(){
+    	return idao.tempSelectAll();
     }
 }
