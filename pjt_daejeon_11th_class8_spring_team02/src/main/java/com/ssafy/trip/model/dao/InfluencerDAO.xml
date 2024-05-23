@@ -74,6 +74,7 @@
 		join followers
 		f
 		on i.no = f.ino
+		where f.mid = #{id}
 	</select>
 	
 	<select id="tempSelectAll" resultMap="influencerTemp">
