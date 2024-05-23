@@ -92,6 +92,7 @@ const memberDelete = computed(() => {
                   name="gender"
                   value="1"
                   v-model="gender"
+                  disabled
                 />남자
                 <label class="form-check-label"></label>
               </div>
@@ -102,6 +103,7 @@ const memberDelete = computed(() => {
                   name="gender"
                   value="2"
                   v-model="gender"
+                  disabled
                 />여자
                 <label class="form-check-label"></label>
               </div>

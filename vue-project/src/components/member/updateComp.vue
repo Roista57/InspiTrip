@@ -98,6 +98,7 @@ const cancel = () => {
                   name="gender"
                   value="m"
                   v-model="memberStore.member.gender"
+                  required
                 />남자
                 <label class="form-check-label"></label>
               </div>
@@ -108,6 +109,7 @@ const cancel = () => {
                   name="gender"
                   value="f"
                   v-model="memberStore.member.gender"
+                  required
                 />여자
                 <label class="form-check-label"></label>
               </div>
