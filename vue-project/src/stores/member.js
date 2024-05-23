@@ -158,17 +158,13 @@ export const useMemberStore = defineStore(
         url: `${VITE_VUE_API_URL}member/info/${member.value.id}`,
         method: "POST",
         headers: { Authorization: `Bearer ${token.value}` },
-      })
-        .then((resp) => {
-          console.log("getMember 성공");
-          member.value = resp.data;
-          console.log(resp.data);
-          console.log("log >> " + member.value.gender);
-          console.log("member: " + member.value);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      }).then((resp) => {
+        console.log("getMember 성공");
+        member.value = resp.data;
+        console.log(resp.data);
+        console.log("log >> " + member.value.gender);
+        console.log("member: " + member.value);
+      });
     };
 
     // 회원 가입

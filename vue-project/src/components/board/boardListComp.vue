@@ -69,7 +69,7 @@ const memberCheck = computed(() => {
 <template>
   <div>
     <div class="container mt-3">
-      <h2>Hover Rows</h2>
+      <h2>InspiTrip</h2>
       <table class="table table-hover">
         <thead>
           <tr>

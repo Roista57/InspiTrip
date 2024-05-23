@@ -70,13 +70,18 @@ const router = createRouter({
           path: "update",
           name: "member-update",
           component: UpdateComp,
-          beforeEnter: (to, from) => {
+          beforeEnter: async (to, from) => {
             const member = useMemberStore();
             if (!member.isLogin) {
               alert("로그인 이후 사용해주세요.");
               router.push({ name: "main" });
               return false;
             } else {
+              await member.getMember().catch(() => {
+                alert("로그인이 만료되었습니다.");
+                member.logoutMember();
+                return false;
+              });
               return true;
             }
           },
@@ -85,13 +90,18 @@ const router = createRouter({
           path: ":id",
           name: "member-detail",
           component: DetailComp,
-          beforeEnter: (to, from) => {
+          beforeEnter: async (to, from) => {
             const member = useMemberStore();
             if (!member.isLogin) {
               alert("로그인 이후 사용해주세요.");
               router.push({ name: "main" });
               return false;
             } else {
+              await member.getMember().catch(() => {
+                alert("로그인이 만료되었습니다.");
+                member.logoutMember();
+                return false;
+              });
               return true;
             }
           },
@@ -250,13 +260,18 @@ const router = createRouter({
       path: "/alarm",
       name: "alarm",
       component: AlarmListComp,
-      beforeEnter: (to, from) => {
+      beforeEnter: async (to, from) => {
         const member = useMemberStore();
         if (!member.isLogin) {
           alert("로그인 이후 사용해주세요");
           router.push({ name: "main" });
           return false;
         } else {
+          await member.getMember().catch(() => {
+            alert("로그인이 만료되었습니다.");
+            member.logoutMember();
+            return false;
+          });
           return true;
         }
       },
