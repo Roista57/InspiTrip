@@ -12,10 +12,12 @@ const marker = useMarkerStore();
 // 이미지 파일 리스트를 저장할 ref
 const inputImageList = ref([]);
 
+const resetableRating = ref(0);
+
 const review = ref({
   no: "",
   ano: "",
-  mid: "ssafy",
+  mid: member.member.id,
   content: "",
   grade: 0,
   write_date: "",
@@ -49,6 +51,16 @@ const handleFileChange = (event) => {
 const arrayLength = computed(() => previewImageList.value.length);
 
 const insertReview = async () => {
+  review.value.grade = resetableRating.value;
+  console.log(resetableRating.value);
+  let resetReview = {
+    no: "",
+    ano: "",
+    mid: member.member.id,
+    content: "",
+    grade: 0,
+    write_date: "",
+  };
   reviewStore.inputImageList = inputImageList.value;
   reviewStore.review = review.value;
   console.log(reviewStore.review);
@@ -59,6 +71,9 @@ const insertReview = async () => {
     await reviewStore.insertReviewImage(rno, image_name);
   }
   reviewStore.getReviewListByAno(marker.selectedMarker.contentId);
+  review.value = resetReview;
+  resetableRating.value = 0;
+  console.log(resetableRating.value);
 };
 </script>
 
@@ -71,8 +86,7 @@ const insertReview = async () => {
           <div class="card-body">
             <div class="mb-3">
               <star-rating
-                v-model="rating"
-                @update:rating="setRating"
+                v-model:rating="resetableRating"
                 active-color="#FF9600"
                 v-bind:star-size="30"
               ></star-rating>

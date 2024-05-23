@@ -72,7 +72,7 @@ const openPop = (src) => {
                 v-model:rating="rating"
                 active-color="#FF9600"
                 v-bind:star-size="20"
-                read-only=" true"
+                :read-only="true"
               ></star-rating>
               {{ props.reviewinfo.writeDate }}
             </div>

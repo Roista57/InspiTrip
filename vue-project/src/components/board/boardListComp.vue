@@ -59,7 +59,7 @@ const next = computed(() => {
 
 // 유저의 로그인 정보를 확인
 const memberCheck = computed(() => {
-  if (memberStore.isLogin) {
+  if (memberStore.isLogin && memberStore.member.id == "ssafy") {
     return true;
   }
   return false;
