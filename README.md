@@ -14,14 +14,15 @@ __ __ __ __ __ __ __
 
 # 2. 아키텍쳐
 
-![제목_없음-2024-05-20-2345](/uploads/9c88697be5179095001303ff901d46cb/제목_없음-2024-05-20-2345.png)
+![image.png](./image.png)
 
 - SpringBoot를 이용하여 백엔드를 구축
 - MyBatis를 RDBMS로 이용하고 Mybatis를 이용하여 Mapping
 - Vue3로 SPA구축. Bootstrap5로 디자인.
-- 
+- Redis를 이용하여 인플루언서 랭킹 시스템 구현. Docker환경에서 작동
+- Node.js의 express 라이브러리 이용하여 이미지 서버 구현
 
-![anima9](/uploads/2a2ea62eaef6fcbd0535285f00a1aef4/anima9.gif)
+
 
 router을 이용하여 페이지를 랜더링합니다.
 
