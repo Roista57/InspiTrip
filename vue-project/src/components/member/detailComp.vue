@@ -84,25 +84,27 @@ const memberDelete = computed(() => {
           </div>
           <div class="input-group">
             <span class="input-group-text centered-text" style="width: 100px">성별</span>
-            <div class="form-check">
-              <input
-                type="radio"
-                class="form-check-input"
-                name="gender"
-                value="1"
-                v-model="gender"
-              />남자
-              <label class="form-check-label"></label>
-            </div>
-            <div class="form-check">
-              <input
-                type="radio"
-                class="form-check-input"
-                name="gender"
-                value="2"
-                v-model="gender"
-              />여자
-              <label class="form-check-label"></label>
+            <div class="row align-content-center" style="margin-left: 5px">
+              <div class="form-check mr-2 col-6">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="gender"
+                  value="1"
+                  v-model="gender"
+                />남자
+                <label class="form-check-label"></label>
+              </div>
+              <div class="form-check mr-2 col-6">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="gender"
+                  value="2"
+                  v-model="gender"
+                />여자
+                <label class="form-check-label"></label>
+              </div>
             </div>
           </div>
           <div class="input-group">

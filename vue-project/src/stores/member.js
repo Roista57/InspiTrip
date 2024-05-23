@@ -191,7 +191,9 @@ export const useMemberStore = defineStore(
     };
     const updateMember = async () => {
       if (token != "") {
-        await uploadImage();
+        if (imageFile.value.name != null) {
+          await uploadImage();
+        }
         console.log("registMember >> " + member.value);
         await axios({
           url: `${VITE_VUE_API_URL}member/update`,
