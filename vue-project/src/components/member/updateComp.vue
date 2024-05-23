@@ -11,7 +11,9 @@ const imageSrc = ref(""); //이미지 태그에서 사용하는 변수
 // 업데이트
 const updateMember = computed(async () => {
   console.log("updateMember >> " + memberImage);
-  memberStore.imageFile = memberImage.value;
+  if (memberImage.value != null) {
+    memberStore.imageFile = memberImage.value;
+  }
   await memberStore.updateMember();
   memberStore.getMember();
 });
