@@ -121,4 +121,4 @@
 
 ### 데이터베이스
 
-![image.png](./imgs/database.jpg)
+![image.png](./imgs/database.JPG)
